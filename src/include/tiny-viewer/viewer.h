@@ -59,12 +59,6 @@ namespace ns_viewer {
         void Run();
 
         void KeyBoardCallBack() const;
-
-    public:
-        friend std::ostream &operator<<(std::ostream &os, const Viewer &viewer) {
-            os << "lines: " << viewer._lines.cbegin()->second.GetId();
-            return os;
-        }
     };
 }
 

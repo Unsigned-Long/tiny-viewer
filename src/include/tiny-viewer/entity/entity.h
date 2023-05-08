@@ -9,7 +9,7 @@
 #include "string"
 #include "set"
 #include "tiny-viewer/colour.hpp"
-#include "tiny-viewer/macro.hpp"
+#include "macro.hpp"
 
 namespace ns_viewer {
 
