@@ -1,0 +1,34 @@
+{
+    "Configor": {
+        "Window": {
+            "Name": "Tiny Viewer",
+            "ScreenShotSaveDir": "../scene-shot",
+            "BackGroundColor": {
+                "red": 1.0,
+                "green": 1.0,
+                "blue": 1.0,
+                "alpha": 1.0
+            }
+        },
+        "Camera": {
+            "Width": 640,
+            "Height": 480,
+            "Fx": 420.0,
+            "Fy": 420.0,
+            "Cx": 320.0,
+            "Cy": 240.0,
+            "Near": 0.01,
+            "Far": 100.0,
+            "InitPos": [
+                2.0,
+                2.0,
+                2.0
+            ],
+            "InitViewPoint": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        }
+    }
+}

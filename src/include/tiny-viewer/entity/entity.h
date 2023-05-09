@@ -11,6 +11,7 @@
 #include "set"
 #include "macro.hpp"
 #include "pangolin/gl/colour.h"
+#include "cereal/cereal.hpp"
 
 namespace ns_viewer {
     using ColourWheel = pangolin::ColourWheel;

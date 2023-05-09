@@ -6,12 +6,8 @@
 int main(int argc, char **argv) {
     try {
         using namespace ns_viewer;
-        // configor
-        ViewerConfigor configor;
-        configor.ScreenShotSaveDir = "../scene-shot";
-
         // viewer
-        Viewer viewer(configor);
+        Viewer viewer("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
 
         // add entities
         viewer.AddEntity(Line::Create({1.0, 1.0, 1.0}, {3.0, 4.0, 5.0}, Colour::Red().WithAlpha(0.3f)));

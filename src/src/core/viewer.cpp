@@ -7,10 +7,33 @@
 #include "pangolin/display/display.h"
 #include "pangolin/display/view.h"
 #include "pangolin/handler/handler.h"
-#include "pangolin/gl/gl.h"
 #include "pangolin/gl/gldraw.h"
 
 namespace ns_viewer {
+
+    // --------------
+    // ViewerConfigor
+    // --------------
+    ViewerConfigor::ViewerConfigor() = default;
+
+    ViewerConfigor ViewerConfigor::LoadConfigure(const std::string &filename) {
+        std::ifstream file(filename);
+        cereal::JSONInputArchive archive(file);
+        ViewerConfigor configor;
+        archive(cereal::make_nvp("Configor", configor));
+        return configor;
+    }
+
+    bool ViewerConfigor::SaveConfigure(const std::string &filename) {
+        std::ofstream file(filename);
+        cereal::JSONOutputArchive archive(file);
+        archive(cereal::make_nvp("Configor", *this));
+        return true;
+    }
+
+    // ------
+    // Viewer
+    // ------
 
     std::mutex Viewer::MUTEX = {};
 
@@ -24,6 +47,8 @@ namespace ns_viewer {
         return std::make_shared<Viewer>(configor);
     }
 
+    Viewer::Viewer(const std::string &configPath) : Viewer(ViewerConfigor::LoadConfigure(configPath)) {}
+
     Viewer::~Viewer() {
         if (_thread != nullptr) {
             _thread->join();
@@ -31,7 +56,7 @@ namespace ns_viewer {
     }
 
     void Viewer::RunInSingleThread() {
-        if (std::filesystem::exists(_configor.ScreenShotSaveDir)) {
+        if (std::filesystem::exists(_configor.Window.ScreenShotSaveDir)) {
             std::cout
                     << "\033[92m\033[3m[Viewer] adjust the camera and press 's' key to save the current scene.\033[0m"
                     << std::endl;
@@ -40,7 +65,7 @@ namespace ns_viewer {
     }
 
     void Viewer::RunInMultiThread() {
-        if (std::filesystem::exists(_configor.ScreenShotSaveDir)) {
+        if (std::filesystem::exists(_configor.Window.ScreenShotSaveDir)) {
             std::cout
                     << "\033[92m\033[3m[Viewer] adjust the camera and press 's' key to save the current scene.\033[0m"
                     << std::endl;
@@ -53,7 +78,7 @@ namespace ns_viewer {
     // -----------------
     void Viewer::InitViewer() {
         // create a window and bind its context to the main thread
-        pangolin::CreateWindowAndBind(_configor.WinName, 640 * 3, 480 * 3);
+        pangolin::CreateWindowAndBind(_configor.Window.Name, 640 * 3, 480 * 3);
 
         // enable depth
         glEnable(GL_DEPTH_TEST);
@@ -66,21 +91,25 @@ namespace ns_viewer {
 
     void Viewer::Run() {
         // fetch the context and bind it to this thread
-        pangolin::BindToContext(_configor.WinName);
+        pangolin::BindToContext(_configor.Window.Name);
 
         // we manually need to restore the properties of the context
         glEnable(GL_DEPTH_TEST);
 
         // Define Projection and initial ModelView matrix
+        const auto &c = _configor.Camera;
         pangolin::OpenGlRenderState s_cam(
-                pangolin::ProjectionMatrix(640, 480, 420, 420, 320, 240, 0.01, 100),
-                pangolin::ModelViewLookAt(2, 2, 2, 0, 0, 0, pangolin::AxisZ)
+                pangolin::ProjectionMatrix(c.Width, c.Height, c.Fx, c.Fy, c.Cx, c.Cy, c.Near, c.Far),
+                pangolin::ModelViewLookAt(
+                        ExpandStdVec3(_configor.Camera.InitPos),
+                        ExpandStdVec3(_configor.Camera.InitViewPoint), pangolin::AxisZ
+                )
         );
 
         // Create Interactive View in window
         pangolin::Handler3D handler(s_cam);
         pangolin::View &d_cam = pangolin::CreateDisplay()
-                .SetBounds(0.0, 1.0, 0.0, 1.0, -640.0f / 480.0f)
+                .SetBounds(0.0, 1.0, 0.0, 1.0, -static_cast<double>(_configor.Camera.Width) / _configor.Camera.Height)
                 .SetHandler(&handler);
 
         pangolin::RegisterKeyPressCallback('s', [this] { KeyBoardCallBack(); });
@@ -93,8 +122,8 @@ namespace ns_viewer {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             d_cam.Activate(s_cam);
             glClearColor(
-                    _configor.BackGroundColor.r, _configor.BackGroundColor.g,
-                    _configor.BackGroundColor.b, _configor.BackGroundColor.a
+                    _configor.Window.BackGroundColor.r, _configor.Window.BackGroundColor.g,
+                    _configor.Window.BackGroundColor.b, _configor.Window.BackGroundColor.a
             );
 
             // -------
@@ -118,15 +147,15 @@ namespace ns_viewer {
 
     void Viewer::KeyBoardCallBack() const {
         std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
-        const std::string filename = _configor.ScreenShotSaveDir + "/" + std::to_string(curTimeStamp) + ".png";
+        const std::string filename = _configor.Window.ScreenShotSaveDir + "/" + std::to_string(curTimeStamp) + ".png";
         pangolin::SaveWindowOnRender(filename);
         std::cout << "\033[92m\033[3m[Viewer] the scene shot is saved to path: '"
                   << filename << "\033[0m" << std::endl;
     }
 
-    // ------------
-    // Add Entities
-    // ------------
+    // ----------------
+    // process Entities
+    // ----------------
     std::size_t Viewer::AddEntity(const Entity::Ptr &entity) {
         LOCKER_VIEWER
         _entities.insert({entity->GetId(), entity});

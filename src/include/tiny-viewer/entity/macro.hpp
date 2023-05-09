@@ -15,6 +15,7 @@
 
 #define InsertEntityPair(m, entity) m.insert({entity.GetId(), entity})
 #define ExpandVec3(v) v(0), v(1), v(2)
+#define ExpandStdVec3(v) v.at(0), v.at(1), v.at(2)
 #define ExpandPCLPointXYZ(p) p.x, p.y, p.z
 #define ExpandColor(c) c.r, c.g, c.b, c.a
 #define ExpandPCLColor(p) p.r * 0.00392, p.g * 0.00392, p.b * 0.00392, p.a * 0.00392
