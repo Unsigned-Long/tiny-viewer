@@ -100,6 +100,7 @@ namespace ns_viewer {
             // -------
             for (const auto &item: _lines) { item.second.Draw(); }
             for (const auto &item: _coords) { item.second.Draw(); }
+            for (const auto &item: _cubes) { item.second.Draw(); }
             // -----------
             // end drawing
             // -----------
@@ -129,5 +130,10 @@ namespace ns_viewer {
 
     void Viewer::AddCoordinate(const Coordinate &coordinate) {
         InsertEntityPair(_coords, coordinate);
+    }
+
+    void Viewer::AddCube(const Cube &cube) {
+        InsertEntityPair(_cubes, cube);
+
     }
 }

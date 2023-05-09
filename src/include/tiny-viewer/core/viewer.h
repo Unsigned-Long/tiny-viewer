@@ -11,6 +11,7 @@
 #include "tiny-viewer/entity/line.h"
 #include "tiny-viewer/entity/coordinate.h"
 #include "iostream"
+#include "tiny-viewer/entity/cube.h"
 
 namespace ns_viewer {
 
@@ -34,6 +35,7 @@ namespace ns_viewer {
     protected:
         std::unordered_map<std::size_t, Line> _lines;
         std::unordered_map<std::size_t, Coordinate> _coords;
+        std::unordered_map<std::size_t, Cube> _cubes;
 
     public:
 
@@ -50,6 +52,8 @@ namespace ns_viewer {
         void AddLine(const Line &l);
 
         void AddCoordinate(const Coordinate &coordinate);
+
+        void AddCube(const Cube &cube);
 
     protected:
 

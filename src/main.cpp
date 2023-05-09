@@ -14,8 +14,10 @@ int main(int argc, char **argv) {
         Viewer viewer(configor);
 
         // add entities
-        viewer.AddLine(Line({1.0, 1.0, 1.0}, {3.0, 4.0, 5.0}));
+        viewer.AddLine(Line({1.0, 1.0, 1.0}, {3.0, 4.0, 5.0}, Colour::Red().WithAlpha(0.3f)));
         viewer.AddCoordinate(Coordinate(Posef::Random(5.0), 0.5f));
+        viewer.AddCube(Cube(Posef::Random(3.0f), false, Colour::Blue().WithAlpha(0.3f)));
+        viewer.AddCube(Cube(Posef::Random(3.0f), true));
 
         // show (multi thread)
         viewer.RunInMultiThread();

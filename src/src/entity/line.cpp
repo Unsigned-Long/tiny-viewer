@@ -10,6 +10,9 @@ namespace ns_viewer {
     Line::Line(Eigen::Vector3f sp, Eigen::Vector3f ep, float size, const Colour &color)
             : Entity(), _sp(std::move(sp)), _ep(std::move(ep)), _size(size), _color(color) {}
 
+    Line::Line(Eigen::Vector3f sp, Eigen::Vector3f ep, const Colour &color, float size)
+            : Line(std::move(sp), std::move(ep), size, color) {}
+
     Line::~Line() = default;
 
     void Line::Draw() const {

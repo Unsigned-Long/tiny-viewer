@@ -7,6 +7,7 @@
 
 #define DefaultLineSize (2.0f)
 #define DefaultCoordSize (1.0f)
+#define DefaultCubeSize (0.5f)
 #define DefaultPointSize (5.0f)
 #define InsertEntityPair(m, entity) m.insert({entity.GetId(), entity})
 #define ExpandVec3(v) v(0), v(1), v(2)

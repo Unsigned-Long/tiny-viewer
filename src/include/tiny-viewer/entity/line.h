@@ -22,6 +22,8 @@ namespace ns_viewer {
         Line(Eigen::Vector3f sp, Eigen::Vector3f ep, float size = DefaultLineSize,
              const Colour &color = GetUniqueColour());
 
+        Line(Eigen::Vector3f sp, Eigen::Vector3f ep, const Colour &color, float size = DefaultLineSize);
+
         ~Line() override;
 
         void Draw() const override;
