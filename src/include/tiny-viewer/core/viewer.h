@@ -62,7 +62,7 @@ namespace ns_viewer {
             double Cx = 320, Cy = 240;
             double Near = 0.01, Far = 100;
 
-            std::vector<float> InitPos = {2.0f, 2.0f, 2.0f};
+            std::vector<float> InitPos = {6.0f, 6.0f, 6.0f};
             std::vector<float> InitViewPoint = {0.0f, 0.0f, 0.0f};
 
         public:
