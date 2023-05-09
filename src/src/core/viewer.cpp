@@ -12,6 +12,8 @@
 
 namespace ns_viewer {
 
+    std::mutex Viewer::MUTEX = {};
+
     // --------------
     // public methods
     // --------------
@@ -98,7 +100,10 @@ namespace ns_viewer {
             // -------
             // drawing
             // -------
-            for (const auto &item: _entities) { item.second->Draw(); }
+            {
+                LOCKER_VIEWER
+                for (const auto &item: _entities) { item.second->Draw(); }
+            }
             // -----------
             // end drawing
             // -----------
@@ -122,7 +127,40 @@ namespace ns_viewer {
     // ------------
     // Add Entities
     // ------------
-    void Viewer::AddEntity(const Entity::Ptr &entity) {
+    std::size_t Viewer::AddEntity(const Entity::Ptr &entity) {
+        LOCKER_VIEWER
         _entities.insert({entity->GetId(), entity});
+        return entity->GetId();
+    }
+
+    bool Viewer::RemoveEntity(std::size_t id) {
+        LOCKER_VIEWER
+        return _entities.erase(id) == 1;
+    }
+
+    std::vector<std::size_t> Viewer::AddEntity(const std::vector<Entity::Ptr> &entities) {
+        LOCKER_VIEWER
+        std::vector<std::size_t> ids(entities.size());
+        for (int i = 0; i < entities.size(); ++i) {
+            const Entity::Ptr &entity = entities.at(i);
+            _entities.insert({entity->GetId(), entity});
+            ids.at(i) = entity->GetId();
+        }
+        return ids;
+    }
+
+    bool Viewer::RemoveEntity(const std::vector<std::size_t> &ids) {
+        LOCKER_VIEWER
+        bool b = false;
+        for (const auto &id: ids) {
+            b = (_entities.erase(id) == 1) && b;
+        }
+        return b;
+    }
+
+    bool Viewer::RemoveEntity() {
+        LOCKER_VIEWER
+        _entities.clear();
+        return true;
     }
 }

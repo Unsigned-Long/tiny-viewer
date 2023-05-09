@@ -16,6 +16,7 @@
 #include "tiny-viewer/entity/imu.h"
 #include "tiny-viewer/entity/camera.h"
 #include "tiny-viewer/entity/lidar.h"
+#include "mutex"
 
 namespace ns_viewer {
 
@@ -28,6 +29,8 @@ namespace ns_viewer {
         // draw setting
     };
 
+#define LOCKER_VIEWER std::unique_lock<std::mutex> viewerLock(Viewer::MUTEX);
+
     class Viewer {
     public:
         using Ptr = std::shared_ptr<Viewer>;
@@ -35,6 +38,9 @@ namespace ns_viewer {
     protected:
         ViewerConfigor _configor;
         std::shared_ptr<std::thread> _thread;
+
+    public:
+        static std::mutex MUTEX;
 
     protected:
         std::unordered_map<std::size_t, Entity::Ptr> _entities;
@@ -51,7 +57,15 @@ namespace ns_viewer {
 
         void RunInMultiThread();
 
-        void AddEntity(const Entity::Ptr &entity);
+        std::size_t AddEntity(const Entity::Ptr &entity);
+
+        std::vector<std::size_t> AddEntity(const std::vector<Entity::Ptr> &entities);
+
+        bool RemoveEntity(std::size_t id);
+
+        bool RemoveEntity(const std::vector<std::size_t> &ids);
+
+        bool RemoveEntity();
 
     protected:
 

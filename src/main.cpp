@@ -24,11 +24,21 @@ int main(int argc, char **argv) {
         viewer.AddEntity(IMU::Create(Posef::Random(3.0f)));
         viewer.AddEntity(Camera::Create(Posef::Random(3.0f)));
         viewer.AddEntity(LiDAR::Create(Posef::Random(1.0f)));
+        std::vector<Entity::Ptr> entities;
+        for (int i = 0; i < 5; ++i) {
+            entities.push_back(LiDAR::Create(Posef::Random(1.0f)));
+        }
+        auto ids = viewer.AddEntity(entities);
         // show (multi thread)
         viewer.RunInMultiThread();
-
         // access
         std::cout << "hello, world!" << std::endl;
+        std::cin.get();
+        std::cout << "hello, world!" << std::endl;
+        viewer.RemoveEntity(ids);
+        std::cin.get();
+        std::cout << "hello, world!" << std::endl;
+        viewer.RemoveEntity();
 
     } catch (const std::exception &e) {
         std::cout << e.what() << std::endl;
