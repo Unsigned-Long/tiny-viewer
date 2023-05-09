@@ -20,9 +20,13 @@ namespace ns_viewer {
         Cube _cube;
 
     public:
-        explicit IMU(const Posef &pose, float size = DefaultIMUSize);
+        explicit IMU(const Posef &pose, float size = DefaultIMUSize, const Colour &colour = Colour::Red());
 
-        static Ptr Create(const Posef &pose, float size = DefaultIMUSize);
+        explicit IMU(const Posef &pose, const Colour &colour, float size = DefaultIMUSize);
+
+        static Ptr Create(const Posef &pose, float size = DefaultIMUSize, const Colour &colour = Colour::Red());
+
+        static Ptr Create(const Posef &pose, const Colour &colour, float size = DefaultIMUSize);
 
         ~IMU() override;
 

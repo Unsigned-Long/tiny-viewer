@@ -14,6 +14,7 @@
 #include "tiny-viewer/entity/cube.h"
 #include "tiny-viewer/entity/point_cloud.h"
 #include "tiny-viewer/entity/imu.h"
+#include "tiny-viewer/entity/camera.h"
 
 namespace ns_viewer {
 

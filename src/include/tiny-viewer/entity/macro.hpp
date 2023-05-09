@@ -10,6 +10,7 @@
 #define DefaultCubeSize (0.5f)
 #define DefaultPointSize (5.0f)
 #define DefaultIMUSize (0.2f)
+#define DefaultCameraSize (0.2f)
 
 #define InsertEntityPair(m, entity) m.insert({entity.GetId(), entity})
 #define ExpandVec3(v) v(0), v(1), v(2)

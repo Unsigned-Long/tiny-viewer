@@ -22,6 +22,7 @@ int main(int argc, char **argv) {
         viewer.AddEntity(PosCloud::Random(0.5f, 200, {3.0f, 2.0f, 1.0f}));
         viewer.AddEntity(IMU::Create(Posef::Random(3.0f)));
         viewer.AddEntity(IMU::Create(Posef::Random(3.0f)));
+        viewer.AddEntity(Camera::Create(Posef::Random(3.0f)));
         // show (multi thread)
         viewer.RunInMultiThread();
 
