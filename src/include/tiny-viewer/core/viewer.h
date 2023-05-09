@@ -56,7 +56,6 @@ namespace ns_viewer {
             }
         } Window;
 
-        // draw setting
         struct {
             int Width = 640, Height = 480;
             double Fx = 420, Fy = 420;
@@ -84,12 +83,33 @@ namespace ns_viewer {
             }
         } Camera;
 
+        struct {
+            int CellCount = 10;
+            float CellSize = 1.0f;
+            // 0: xy, 1: yz, 2: zx
+            int PlaneId = 0;
+
+            Colour Color = Colour::Black().WithAlpha(0.3f);
+
+        public:
+            template<class Archive>
+            void serialize(Archive &ar) {
+                ar(
+                        cereal::make_nvp("CellCount", CellCount),
+                        cereal::make_nvp("CellSize", CellSize),
+                        cereal::make_nvp("PlaneId", PlaneId),
+                        cereal::make_nvp("Color", Color)
+                );
+            }
+        } Grid;
+
     public:
         template<class Archive>
         void serialize(Archive &ar) {
             ar(
                     cereal::make_nvp("Window", Window),
-                    cereal::make_nvp("Camera", Camera)
+                    cereal::make_nvp("Camera", Camera),
+                    cereal::make_nvp("Grid", Grid)
             );
         }
 

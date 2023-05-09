@@ -87,6 +87,41 @@ namespace ns_viewer {
         pangolin::GetBoundWindow()->RemoveCurrent();
 
         AddEntity(Coordinate::Create(Posef()));
+        Eigen::Vector3f v1, v2;
+        switch (_configor.Grid.PlaneId % 3) {
+            case 0:
+                v1 = {1.0f, 0.0f, 0.0f};
+                v2 = {0.0f, 1.0f, 0.0f};
+                break;
+            case 1:
+                v1 = {0.0f, 1.0f, 0.0f};
+                v2 = {0.0f, 0.0f, 1.0f};
+                break;
+            case 2:
+                v1 = {0.0f, 0.0f, 1.0f};
+                v2 = {1.0f, 0.0f, 0.0f};
+                break;
+            default:
+                v1 = {1.0f, 0.0f, 0.0f};
+                v2 = {0.0f, 1.0f, 0.0f};
+        }
+        v1 *= _configor.Grid.CellSize;
+        v2 *= _configor.Grid.CellSize;
+        Eigen::Vector3f s1 = -v1 * _configor.Grid.CellCount * 0.5;
+        Eigen::Vector3f s2 = -v2 * _configor.Grid.CellCount * 0.5;
+        Eigen::Vector3f s3 = s1 + s2;
+
+        for (int i = 0; i < _configor.Grid.CellCount + 1; ++i) {
+            Eigen::Vector3f p1 = s3 + i * v1;
+            Eigen::Vector3f p2 = p1 + _configor.Grid.CellCount * v2;
+            AddEntity(Line::Create(p1, p2, DefaultLineSize, _configor.Grid.Color));
+        }
+
+        for (int i = 0; i < _configor.Grid.CellCount + 1; ++i) {
+            Eigen::Vector3f p1 = s3 + i * v2;
+            Eigen::Vector3f p2 = p1 + _configor.Grid.CellCount * v1;
+            AddEntity(Line::Create(p1, p2, DefaultLineSize, _configor.Grid.Color));
+        }
     }
 
     void Viewer::Run() {

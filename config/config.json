@@ -20,15 +20,26 @@
             "Near": 0.01,
             "Far": 100.0,
             "InitPos": [
-                2.0,
-                2.0,
-                2.0
+                6.0,
+                6.0,
+                6.0
             ],
             "InitViewPoint": [
                 0.0,
                 0.0,
                 0.0
             ]
+        },
+        "Grid": {
+            "CellCount": 10,
+            "CellSize": 1.0,
+            "PlaneId": 0,
+            "Color": {
+                "red": 0.3,
+                "green": 0.3,
+                "blue": 0.3,
+                "alpha": 1.0
+            }
         }
     }
 }
