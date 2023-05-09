@@ -7,6 +7,7 @@
 
 #include "tiny-viewer/core/pose.hpp"
 #include "string"
+#include <memory>
 #include "set"
 #include "macro.hpp"
 #include "pangolin/gl/colour.h"
@@ -16,6 +17,9 @@ namespace ns_viewer {
     using Colour = pangolin::Colour;
 
     struct Entity {
+    public:
+        using Ptr = std::shared_ptr<Entity>;
+
     private:
         std::size_t _id;
         static std::size_t COUNT;

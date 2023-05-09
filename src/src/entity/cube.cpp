@@ -76,4 +76,14 @@ namespace ns_viewer {
             glDisableClientState(GL_VERTEX_ARRAY);
         }
     }
+
+    Cube::Ptr
+    Cube::Create(const Posef &pose, bool lineMode, float xWidth, float yWidth, float zWidth, const Colour &color) {
+        return std::make_shared<Cube>(pose, lineMode, xWidth, yWidth, zWidth);
+    }
+
+    Cube::Ptr
+    Cube::Create(const Posef &pose, bool lineMode, const Colour &color, float xWidth, float yWidth, float zWidth) {
+        return std::make_shared<Cube>(pose, lineMode, xWidth, yWidth, zWidth);
+    }
 }

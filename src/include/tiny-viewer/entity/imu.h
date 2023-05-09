@@ -12,12 +12,17 @@
 namespace ns_viewer {
 
     struct IMU : public Entity {
+    public:
+        using Ptr = std::shared_ptr<IMU>;
+
     protected:
         Coordinate _coord;
         Cube _cube;
 
     public:
         explicit IMU(const Posef &pose, float size = DefaultIMUSize);
+
+        static Ptr Create(const Posef &pose, float size = DefaultIMUSize);
 
         ~IMU() override;
 

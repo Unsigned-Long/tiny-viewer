@@ -14,14 +14,14 @@ int main(int argc, char **argv) {
         Viewer viewer(configor);
 
         // add entities
-        viewer.AddLine(Line({1.0, 1.0, 1.0}, {3.0, 4.0, 5.0}, Colour::Red().WithAlpha(0.3f)));
-        viewer.AddCoordinate(Coordinate(Posef::Random(5.0), 0.5f));
-        viewer.AddCube(Cube(Posef::Random(3.0f), false, Colour::Blue().WithAlpha(0.3f)));
-        viewer.AddCube(Cube(Posef::Random(3.0f), true));
-        viewer.AddPointCloud(PosColorCloud::Random(1.0f, 200, {1.0f, 2.0f, 3.0f}));
-        viewer.AddPointCloud(PosCloud::Random(0.5f, 200, {3.0f, 2.0f, 1.0f}));
-        viewer.AddIMU(IMU(Posef::Random(3.0f)));
-        viewer.AddIMU(IMU(Posef::Random(3.0f)));
+        viewer.AddEntity(Line::Create({1.0, 1.0, 1.0}, {3.0, 4.0, 5.0}, Colour::Red().WithAlpha(0.3f)));
+        viewer.AddEntity(Coordinate::Create(Posef::Random(5.0), 0.5f));
+        viewer.AddEntity(Cube::Create(Posef::Random(3.0f), false, Colour::Blue().WithAlpha(0.3f)));
+        viewer.AddEntity(Cube::Create(Posef::Random(3.0f), true));
+        viewer.AddEntity(PosColorCloud::Random(1.0f, 200, {1.0f, 2.0f, 3.0f}));
+        viewer.AddEntity(PosCloud::Random(0.5f, 200, {3.0f, 2.0f, 1.0f}));
+        viewer.AddEntity(IMU::Create(Posef::Random(3.0f)));
+        viewer.AddEntity(IMU::Create(Posef::Random(3.0f)));
         // show (multi thread)
         viewer.RunInMultiThread();
 

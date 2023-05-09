@@ -20,4 +20,12 @@ namespace ns_viewer {
         glLineWidth(_size);
         pangolin::glDrawLine(ExpandVec3(_sp), ExpandVec3(_ep));
     }
+
+    std::shared_ptr<Line> Line::Create(const Vector3f &sp, const Vector3f &ep, const Colour &color, float size) {
+        return std::make_shared<Line>(sp, ep, size, color);
+    }
+
+    std::shared_ptr<Line> Line::Create(const Vector3f &sp, const Vector3f &ep, float size, const Colour &color) {
+        return std::make_shared<Line>(sp, ep, size, color);
+    }
 }

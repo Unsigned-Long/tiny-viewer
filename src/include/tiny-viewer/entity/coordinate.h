@@ -10,6 +10,9 @@
 namespace ns_viewer {
 
     struct Coordinate : public Entity {
+    public:
+        using Ptr = std::shared_ptr<Coordinate>;
+
     protected:
         float _size;
         Eigen::Matrix4f _pose;
@@ -17,6 +20,8 @@ namespace ns_viewer {
     public:
 
         explicit Coordinate(const ns_viewer::Posef &pose, float size = DefaultCoordSize);
+
+        static Ptr Create(const ns_viewer::Posef &pose, float size = DefaultCoordSize);
 
         ~Coordinate() override;
 

@@ -11,6 +11,9 @@
 
 namespace ns_viewer {
     struct PosColorCloud : public Entity {
+    public:
+        using Ptr = std::shared_ptr<PosColorCloud>;
+
     protected:
         using PointCloud = pcl::PointCloud<pcl::PointXYZRGBA>;
         using PointCloudPtr = PointCloud::Ptr;
@@ -21,7 +24,9 @@ namespace ns_viewer {
     public:
         explicit PosColorCloud(PointCloudPtr cloud, float size = DefaultPointSize);
 
-        static PosColorCloud Random(float bound, std::size_t count, const Eigen::Vector3f &center);
+        static Ptr Create(const PointCloudPtr &cloud, float size = DefaultPointSize);
+
+        static PosColorCloud::Ptr Random(float bound, std::size_t count, const Eigen::Vector3f &center);
 
         ~PosColorCloud() override;
 
@@ -29,6 +34,9 @@ namespace ns_viewer {
     };
 
     struct PosCloud : public Entity {
+    public:
+        using Ptr = std::shared_ptr<PosCloud>;
+
     protected:
         using PointCloud = pcl::PointCloud<pcl::PointXYZ>;
         using PointCloudPtr = PointCloud::Ptr;
@@ -41,7 +49,11 @@ namespace ns_viewer {
         explicit PosCloud(PointCloudPtr cloud, float size = DefaultPointSize,
                           const Colour &colour = GetUniqueColour());
 
-        static PosCloud Random(float bound, std::size_t count, const Eigen::Vector3f &center);
+        static Ptr Create(const PointCloudPtr &cloud, float size = DefaultPointSize,
+                          const Colour &colour = GetUniqueColour());
+
+
+        static PosCloud::Ptr Random(float bound, std::size_t count, const Eigen::Vector3f &center);
 
         ~PosCloud() override;
 

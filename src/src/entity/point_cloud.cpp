@@ -26,7 +26,7 @@ namespace ns_viewer {
         glEnd();
     }
 
-    PosColorCloud PosColorCloud::Random(float bound, std::size_t count, const Eigen::Vector3f &center) {
+    PosColorCloud::Ptr PosColorCloud::Random(float bound, std::size_t count, const Eigen::Vector3f &center) {
         std::default_random_engine engine(std::chrono::steady_clock::now().time_since_epoch().count());
         std::uniform_real_distribution<float> u(-bound, bound);
         PointCloudPtr cloud(new PointCloud);
@@ -45,7 +45,11 @@ namespace ns_viewer {
             p.a = static_cast<std::uint8_t>(color.a * 255.0f);
 
         }
-        return PosColorCloud(cloud);
+        return PosColorCloud::Create(cloud);
+    }
+
+    PosColorCloud::Ptr PosColorCloud::Create(const PosColorCloud::PointCloudPtr &cloud, float size) {
+        return std::make_shared<PosColorCloud>(cloud, size);
     }
 
     // --------
@@ -66,7 +70,7 @@ namespace ns_viewer {
         glEnd();
     }
 
-    PosCloud PosCloud::Random(float bound, std::size_t count, const Vector3f &center) {
+    PosCloud::Ptr PosCloud::Random(float bound, std::size_t count, const Vector3f &center) {
         std::default_random_engine engine(std::chrono::steady_clock::now().time_since_epoch().count());
         std::uniform_real_distribution<float> u(-bound, bound);
         PointCloudPtr cloud(new PointCloud);
@@ -78,7 +82,11 @@ namespace ns_viewer {
             p.y = u(engine) + center(1);
             p.z = u(engine) + center(2);
         }
-        return PosCloud(cloud);
+        return PosCloud::Create(cloud);
+    }
+
+    PosCloud::Ptr PosCloud::Create(const PosCloud::PointCloudPtr &cloud, float size, const Colour &colour) {
+        return std::make_shared<PosCloud>(cloud, size, colour);
     }
 }
 

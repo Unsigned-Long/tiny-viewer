@@ -10,6 +10,9 @@
 namespace ns_viewer {
 
     struct Line : public Entity {
+    public:
+        using Ptr = std::shared_ptr<Line>;
+
     protected:
         Eigen::Vector3f _sp;
         Eigen::Vector3f _ep;
@@ -23,6 +26,12 @@ namespace ns_viewer {
              const Colour &color = GetUniqueColour());
 
         Line(Eigen::Vector3f sp, Eigen::Vector3f ep, const Colour &color, float size = DefaultLineSize);
+
+        static Ptr Create(const Eigen::Vector3f &sp, const Eigen::Vector3f &ep, float size = DefaultLineSize,
+                          const Colour &color = GetUniqueColour());
+
+        static Ptr Create(const Eigen::Vector3f &sp, const Eigen::Vector3f &ep,
+                          const Colour &color, float size = DefaultLineSize);
 
         ~Line() override;
 

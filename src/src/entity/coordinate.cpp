@@ -14,6 +14,10 @@ namespace ns_viewer {
         pangolin::glDrawAxis(_pose, _size);
     }
 
+    Coordinate::Ptr Coordinate::Create(const Posef &pose, float size) {
+        return std::make_shared<Coordinate>(pose, size);
+    }
+
     Coordinate::~Coordinate() = default;
 }
 

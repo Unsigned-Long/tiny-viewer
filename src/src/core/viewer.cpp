@@ -59,7 +59,7 @@ namespace ns_viewer {
         // unset the current context from the main thread
         pangolin::GetBoundWindow()->RemoveCurrent();
 
-        AddCoordinate(Coordinate(Posef()));
+        AddEntity(Coordinate::Create(Posef()));
     }
 
     void Viewer::Run() {
@@ -98,12 +98,7 @@ namespace ns_viewer {
             // -------
             // drawing
             // -------
-            for (const auto &item: _lines) { item.second.Draw(); }
-            for (const auto &item: _coords) { item.second.Draw(); }
-            for (const auto &item: _cubes) { item.second.Draw(); }
-            for (const auto &item: _posColorClouds) { item.second.Draw(); }
-            for (const auto &item: _posClouds) { item.second.Draw(); }
-            for (const auto &item: _imus) { item.second.Draw(); }
+            for (const auto &item: _entities) { item.second->Draw(); }
             // -----------
             // end drawing
             // -----------
@@ -127,28 +122,7 @@ namespace ns_viewer {
     // ------------
     // Add Entities
     // ------------
-    void Viewer::AddLine(const Line &l) {
-        InsertEntityPair(_lines, l);
-    }
-
-    void Viewer::AddCoordinate(const Coordinate &coordinate) {
-        InsertEntityPair(_coords, coordinate);
-    }
-
-    void Viewer::AddCube(const Cube &cube) {
-        InsertEntityPair(_cubes, cube);
-
-    }
-
-    void Viewer::AddPointCloud(const PosColorCloud &cloud) {
-        InsertEntityPair(_posColorClouds, cloud);
-    }
-
-    void Viewer::AddPointCloud(const PosCloud &cloud) {
-        InsertEntityPair(_posClouds, cloud);
-    }
-
-    void Viewer::AddIMU(const IMU &imu) {
-        InsertEntityPair(_imus, imu);
+    void Viewer::AddEntity(const Entity::Ptr &entity) {
+        _entities.insert({entity->GetId(), entity});
     }
 }

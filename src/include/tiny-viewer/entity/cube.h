@@ -9,6 +9,9 @@
 
 namespace ns_viewer {
     struct Cube : public Entity {
+    public:
+        using Ptr = std::shared_ptr<Cube>;
+
     protected:
         Eigen::Vector3f v1;
         Eigen::Vector3f v2;
@@ -30,6 +33,13 @@ namespace ns_viewer {
 
         Cube(const Posef &pose, bool lineMode, const Colour &color, float xWidth = DefaultCubeSize,
              float yWidth = DefaultCubeSize, float zWidth = DefaultCubeSize);
+
+        static Ptr Create(const Posef &pose, bool lineMode, float xWidth = DefaultCubeSize,
+                          float yWidth = DefaultCubeSize, float zWidth = DefaultCubeSize,
+                          const Colour &color = GetUniqueColour());
+
+        static Ptr Create(const Posef &pose, bool lineMode, const Colour &color, float xWidth = DefaultCubeSize,
+                          float yWidth = DefaultCubeSize, float zWidth = DefaultCubeSize);
 
         ~Cube() override;
 

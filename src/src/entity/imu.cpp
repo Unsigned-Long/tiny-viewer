@@ -15,4 +15,8 @@ namespace ns_viewer {
         _cube.Draw();
         _coord.Draw();
     }
+
+    IMU::Ptr IMU::Create(const Posef &pose, float size) {
+        return std::make_shared<IMU>(pose, size);
+    }
 }

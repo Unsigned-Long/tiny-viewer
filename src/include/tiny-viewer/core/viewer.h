@@ -35,12 +35,7 @@ namespace ns_viewer {
         std::shared_ptr<std::thread> _thread;
 
     protected:
-        std::unordered_map<std::size_t, Line> _lines;
-        std::unordered_map<std::size_t, Coordinate> _coords;
-        std::unordered_map<std::size_t, Cube> _cubes;
-        std::unordered_map<std::size_t, PosColorCloud> _posColorClouds;
-        std::unordered_map<std::size_t, PosCloud> _posClouds;
-        std::unordered_map<std::size_t, IMU> _imus;
+        std::unordered_map<std::size_t, Entity::Ptr> _entities;
 
     public:
 
@@ -54,17 +49,7 @@ namespace ns_viewer {
 
         void RunInMultiThread();
 
-        void AddLine(const Line &l);
-
-        void AddCoordinate(const Coordinate &coordinate);
-
-        void AddCube(const Cube &cube);
-
-        void AddPointCloud(const PosColorCloud &cloud);
-
-        void AddPointCloud(const PosCloud &cloud);
-
-        void AddIMU(const IMU &imu);
+        void AddEntity(const Entity::Ptr &entity);
 
     protected:
 
