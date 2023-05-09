@@ -13,6 +13,7 @@
 #include "iostream"
 #include "tiny-viewer/entity/cube.h"
 #include "tiny-viewer/entity/point_cloud.h"
+#include "tiny-viewer/entity/imu.h"
 
 namespace ns_viewer {
 
@@ -39,6 +40,7 @@ namespace ns_viewer {
         std::unordered_map<std::size_t, Cube> _cubes;
         std::unordered_map<std::size_t, PosColorCloud> _posColorClouds;
         std::unordered_map<std::size_t, PosCloud> _posClouds;
+        std::unordered_map<std::size_t, IMU> _imus;
 
     public:
 
@@ -61,6 +63,8 @@ namespace ns_viewer {
         void AddPointCloud(const PosColorCloud &cloud);
 
         void AddPointCloud(const PosCloud &cloud);
+
+        void AddIMU(const IMU &imu);
 
     protected:
 

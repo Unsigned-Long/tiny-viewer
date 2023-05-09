@@ -20,6 +20,8 @@ int main(int argc, char **argv) {
         viewer.AddCube(Cube(Posef::Random(3.0f), true));
         viewer.AddPointCloud(PosColorCloud::Random(1.0f, 200, {1.0f, 2.0f, 3.0f}));
         viewer.AddPointCloud(PosCloud::Random(0.5f, 200, {3.0f, 2.0f, 1.0f}));
+        viewer.AddIMU(IMU(Posef::Random(3.0f)));
+        viewer.AddIMU(IMU(Posef::Random(3.0f)));
         // show (multi thread)
         viewer.RunInMultiThread();
 
