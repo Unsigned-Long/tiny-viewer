@@ -8,7 +8,6 @@
 #include "thread"
 #include "memory"
 #include "utility"
-#include "tiny-viewer/colour.hpp"
 #include "tiny-viewer/entity/line.h"
 #include "tiny-viewer/entity/coordinate.h"
 #include "iostream"

@@ -1,7 +1,7 @@
 //
 // Created by csl on 10/16/22.
 //
-#include "tiny-viewer/viewer.h"
+#include "tiny-viewer/core/viewer.h"
 
 int main(int argc, char **argv) {
     try {

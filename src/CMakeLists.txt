@@ -4,12 +4,12 @@ find_package(Eigen3 REQUIRED)
 find_package(PCL REQUIRED)
 find_package(Pangolin REQUIRED)
 
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src SRC_FILES)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src/core CORE_FILES)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src/entity ENTITY_FILES)
 
 add_library(
         ${LIBRARY_NAME} SHARED
-        ${SRC_FILES}
+        ${CORE_FILES}
         ${ENTITY_FILES}
 )
 

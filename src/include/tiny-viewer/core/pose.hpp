@@ -5,7 +5,7 @@
 #ifndef SLAM_SCENE_VIEWER_POSE_H
 #define SLAM_SCENE_VIEWER_POSE_H
 
-#include "tiny-viewer/utils.hpp"
+#include "utils.hpp"
 #include "Eigen/Geometry"
 #include "random"
 #include "chrono"

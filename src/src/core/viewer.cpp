@@ -2,7 +2,7 @@
 // Created by csl on 10/22/22.
 //
 
-#include "tiny-viewer/viewer.h"
+#include "tiny-viewer/core/viewer.h"
 #include "filesystem"
 #include "pangolin/display/display.h"
 #include "pangolin/display/view.h"
@@ -87,6 +87,8 @@ namespace ns_viewer {
 
             // Clear screen and activate view to render into
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             d_cam.Activate(s_cam);
             glClearColor(
                     _configor.BackGroundColor.r, _configor.BackGroundColor.g,

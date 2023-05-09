@@ -5,13 +5,15 @@
 #ifndef TINY_VIEWER_ENTITY_H
 #define TINY_VIEWER_ENTITY_H
 
-#include "tiny-viewer/pose.hpp"
+#include "tiny-viewer/core/pose.hpp"
 #include "string"
 #include "set"
-#include "tiny-viewer/colour.hpp"
 #include "macro.hpp"
+#include "pangolin/gl/colour.h"
 
 namespace ns_viewer {
+    using ColourWheel = pangolin::ColourWheel;
+    using Colour = pangolin::Colour;
 
     struct Entity {
     private:
