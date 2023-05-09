@@ -8,11 +8,11 @@
 namespace ns_viewer {
 
     Camera::Camera(const Posef &pose, float size, const Colour &color)
-            : Entity(), _coord(pose, size * 0.5f), _color(color) {
+            : Entity(), _coord(pose, size), _color(color) {
         _v0 = pose.translation;
-        Eigen::Vector3f x = pose.rotation.col(0) * size * 0.5f;
-        Eigen::Vector3f y = pose.rotation.col(1) * size * 0.5f;
-        Eigen::Vector3f z = pose.rotation.col(2) * size * 0.5f;
+        Eigen::Vector3f x = pose.rotation.col(0) * size;
+        Eigen::Vector3f y = pose.rotation.col(1) * size;
+        Eigen::Vector3f z = pose.rotation.col(2) * size;
 
         _v1 = _v0 - x - y * 0.75f + z;
         _v2 = _v0 + x - y * 0.75f + z;

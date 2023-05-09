@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
         viewer.AddEntity(IMU::Create(Posef::Random(3.0f)));
         viewer.AddEntity(IMU::Create(Posef::Random(3.0f)));
         viewer.AddEntity(Camera::Create(Posef::Random(3.0f)));
+        viewer.AddEntity(LiDAR::Create(Posef::Random(1.0f)));
         // show (multi thread)
         viewer.RunInMultiThread();
 
