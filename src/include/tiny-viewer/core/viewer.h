@@ -12,6 +12,7 @@
 #include "tiny-viewer/entity/coordinate.h"
 #include "iostream"
 #include "tiny-viewer/entity/cube.h"
+#include "tiny-viewer/entity/point_cloud.h"
 
 namespace ns_viewer {
 
@@ -36,6 +37,8 @@ namespace ns_viewer {
         std::unordered_map<std::size_t, Line> _lines;
         std::unordered_map<std::size_t, Coordinate> _coords;
         std::unordered_map<std::size_t, Cube> _cubes;
+        std::unordered_map<std::size_t, PosColorCloud> _posColorClouds;
+        std::unordered_map<std::size_t, PosCloud> _posClouds;
 
     public:
 
@@ -54,6 +57,10 @@ namespace ns_viewer {
         void AddCoordinate(const Coordinate &coordinate);
 
         void AddCube(const Cube &cube);
+
+        void AddPointCloud(const PosColorCloud &cloud);
+
+        void AddPointCloud(const PosCloud &cloud);
 
     protected:
 

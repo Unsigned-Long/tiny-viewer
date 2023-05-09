@@ -18,7 +18,8 @@ int main(int argc, char **argv) {
         viewer.AddCoordinate(Coordinate(Posef::Random(5.0), 0.5f));
         viewer.AddCube(Cube(Posef::Random(3.0f), false, Colour::Blue().WithAlpha(0.3f)));
         viewer.AddCube(Cube(Posef::Random(3.0f), true));
-
+        viewer.AddPointCloud(PosColorCloud::Random(1.0f, 200, {1.0f, 2.0f, 3.0f}));
+        viewer.AddPointCloud(PosCloud::Random(0.5f, 200, {3.0f, 2.0f, 1.0f}));
         // show (multi thread)
         viewer.RunInMultiThread();
 

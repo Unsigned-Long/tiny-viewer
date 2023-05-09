@@ -101,6 +101,8 @@ namespace ns_viewer {
             for (const auto &item: _lines) { item.second.Draw(); }
             for (const auto &item: _coords) { item.second.Draw(); }
             for (const auto &item: _cubes) { item.second.Draw(); }
+            for (const auto &item: _posColorClouds) { item.second.Draw(); }
+            for (const auto &item: _posClouds) { item.second.Draw(); }
             // -----------
             // end drawing
             // -----------
@@ -135,5 +137,13 @@ namespace ns_viewer {
     void Viewer::AddCube(const Cube &cube) {
         InsertEntityPair(_cubes, cube);
 
+    }
+
+    void Viewer::AddPointCloud(const PosColorCloud &cloud) {
+        InsertEntityPair(_posColorClouds, cloud);
+    }
+
+    void Viewer::AddPointCloud(const PosCloud &cloud) {
+        InsertEntityPair(_posClouds, cloud);
     }
 }
