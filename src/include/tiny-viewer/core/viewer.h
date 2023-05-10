@@ -16,6 +16,7 @@
 #include "tiny-viewer/entity/imu.h"
 #include "tiny-viewer/entity/camera.h"
 #include "tiny-viewer/entity/lidar.h"
+#include "tiny-viewer/entity/surfel.h"
 #include "mutex"
 #include "pangolin/gl/opengl_render_state.h"
 #include "cereal/cereal.hpp"

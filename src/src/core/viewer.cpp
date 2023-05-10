@@ -80,9 +80,6 @@ namespace ns_viewer {
         // create a window and bind its context to the main thread
         pangolin::CreateWindowAndBind(_configor.Window.Name, _configor.Window.Width, _configor.Window.height);
 
-        // enable depth
-        glEnable(GL_DEPTH_TEST);
-
         // unset the current context from the main thread
         pangolin::GetBoundWindow()->RemoveCurrent();
 
@@ -130,6 +127,8 @@ namespace ns_viewer {
 
         // we manually need to restore the properties of the context
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         // Define Projection and initial ModelView matrix
         const auto &c = _configor.Camera;
@@ -153,8 +152,6 @@ namespace ns_viewer {
 
             // Clear screen and activate view to render into
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             d_cam.Activate(s_cam);
             glClearColor(
                     _configor.Window.BackGroundColor.r, _configor.Window.BackGroundColor.g,
