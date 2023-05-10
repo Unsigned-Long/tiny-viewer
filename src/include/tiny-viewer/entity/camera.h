@@ -7,6 +7,7 @@
 
 #include "entity.h"
 #include "coordinate.h"
+#include "cube.h"
 
 namespace ns_viewer {
 
@@ -35,6 +36,37 @@ namespace ns_viewer {
         static Ptr Create(const Posef &pose, const Colour &color, float size = DefaultCameraSize);
 
         ~Camera() override;
+
+        void Draw() const override;
+    };
+
+    struct CubeCamera : public Entity {
+    public:
+        using Ptr = std::shared_ptr<CubeCamera>;
+
+    protected:
+        Coordinate coord;
+
+        Eigen::Vector3f v0;
+        Eigen::Vector3f v1;
+        Eigen::Vector3f v2;
+        Eigen::Vector3f v3;
+        Eigen::Vector3f v4;
+
+        Cube cube;
+
+        Colour color;
+
+    public:
+        explicit CubeCamera(const Posef &pose, float size = DefaultCameraSize, const Colour &color = Colour::Green());
+
+        explicit CubeCamera(const Posef &pose, const Colour &color, float size = DefaultCameraSize);
+
+        static Ptr Create(const Posef &pose, float size = DefaultCameraSize, const Colour &color = Colour::Green());
+
+        static Ptr Create(const Posef &pose, const Colour &color, float size = DefaultCameraSize);
+
+        ~CubeCamera() override;
 
         void Draw() const override;
     };

@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
         viewer.AddEntity(IMU::Create(Posef::Random(3.0f)));
         viewer.AddEntity(IMU::Create(Posef::Random(3.0f)));
         viewer.AddEntity(Camera::Create(Posef::Random(3.0f)));
+        viewer.AddEntity(CubeCamera::Create(Posef::Random(3.0f)));
         viewer.AddEntity(LiDAR::Create(Posef::Random(1.0f)));
         std::vector<Entity::Ptr> entities;
         for (int i = 0; i < 5; ++i) {
