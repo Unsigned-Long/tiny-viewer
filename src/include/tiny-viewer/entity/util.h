@@ -2,8 +2,12 @@
 // Created by csl on 5/8/23.
 //
 
-#ifndef TINY_VIEWER_MACRO_HPP
-#define TINY_VIEWER_MACRO_HPP
+#ifndef TINY_VIEWER_UTIL_H
+#define TINY_VIEWER_UTIL_H
+
+#include "pcl/visualization/pcl_visualizer.h"
+
+namespace ns_viewer {
 
 #define DefaultLineSize (2.0f)
 #define DefaultCoordSize (1.0f)
@@ -20,4 +24,10 @@
 #define ExpandColor(c) c.r, c.g, c.b, c.a
 #define ExpandPCLColor(p) p.r * 0.00392, p.g * 0.00392, p.b * 0.00392, p.a * 0.00392
 
-#endif //TINY_VIEWER_MACRO_HPP
+    using IntensityMode = pcl::visualization::LookUpTableRepresentationProperties;
+
+    vtkSmartPointer <vtkLookupTable>
+    GetColormapLUT(pcl::visualization::LookUpTableRepresentationProperties colormapType, double minmax[2]);
+}
+
+#endif //TINY_VIEWER_UTIL_H

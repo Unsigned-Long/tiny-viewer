@@ -3,6 +3,7 @@
 //
 #include "tiny-viewer/core/viewer.h"
 #include "pcl/io/pcd_io.h"
+#include <vtkLookupTable.h>
 
 int main(int argc, char **argv) {
     try {

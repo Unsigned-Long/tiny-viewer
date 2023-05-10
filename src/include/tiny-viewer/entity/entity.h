@@ -9,7 +9,7 @@
 #include "string"
 #include <memory>
 #include "set"
-#include "macro.hpp"
+#include "util.h"
 #include "pangolin/gl/colour.h"
 #include "cereal/cereal.hpp"
 
