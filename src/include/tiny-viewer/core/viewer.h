@@ -138,6 +138,9 @@ namespace ns_viewer {
 
         static Ptr Create(const ViewerConfigor &configor = ViewerConfigor());
 
+        // used for load viewer from file
+        explicit Viewer(char) {}
+
         virtual ~Viewer();
 
         void RunInSingleThread();
@@ -154,6 +157,10 @@ namespace ns_viewer {
 
         bool RemoveEntity();
 
+        void Save(const std::string &filename, bool binaryMode = true) const;
+
+        static Ptr Load(const std::string &filename, bool binaryMode = true);
+
     protected:
 
         void InitViewer();
@@ -161,6 +168,16 @@ namespace ns_viewer {
         void Run();
 
         void KeyBoardCallBack() const;
+
+    public:
+
+        template<class Archive>
+        void serialize(Archive &archive) {
+            archive(
+                    cereal::make_nvp("configor", _configor),
+                    cereal::make_nvp("entities", _entities)
+            );
+        }
     };
 }
 

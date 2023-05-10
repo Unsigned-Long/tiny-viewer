@@ -12,10 +12,11 @@ int main(int argc, char **argv) {
         //     ViewerConfigor().SaveConfigure("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
         //     std::cin.get();
         // }
-        std::ofstream file("/home/csl/learncpp/data/o.json");
-        cereal::JSONOutputArchive ar(file);
-        Entity::Ptr e = Cloud<pcl::PointXYZ>::Random(0.5f, 200, {3.0f, 2.0f, 1.0f});
-        ar(e);
+        {
+            auto viewer = Viewer::Load("/home/csl/CppWorks/artwork/tiny-viewer/data/viewer.bin");
+            viewer->RunInMultiThread();
+            return 0;
+        }
         // viewer
         Viewer viewer("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
 
@@ -35,7 +36,7 @@ int main(int argc, char **argv) {
         viewer.AddEntity(Cloud<pcl::PointXYZRGBA>::Random(1.0f, 200, {1.0f, 2.0f, 3.0f}));
         viewer.AddEntity(Cloud<pcl::PointXYZ>::Random(0.5f, 200, {3.0f, 2.0f, 1.0f}));
         pcl::PointCloud<pcl::PointXYZI>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZI>);
-        pcl::io::loadPCDFile("/home/csl/CppWorks/artwork/tiny-viewer/cloud/scan.pcd", *cloud);
+        pcl::io::loadPCDFile("/home/csl/CppWorks/artwork/tiny-viewer/data/scan.pcd", *cloud);
         viewer.AddEntity(Cloud<pcl::PointXYZI>::Create(cloud, 2.0f));
 
         viewer.AddEntity(IMU::Create(Posef::Random(3.0f)));
@@ -55,9 +56,11 @@ int main(int argc, char **argv) {
         viewer.AddEntity(Cone::Create(Posef::Random(5.0f), 0.3f, M_PI_4));
 
         // show (multi thread)
-        viewer.RunInMultiThread();
+        viewer.RunInSingleThread();
         // access
         std::cout << "hello, world!" << std::endl;
+
+        viewer.Save("/home/csl/CppWorks/artwork/tiny-viewer/data/viewer.bin", true);
         // std::cin.get();
         // std::cout << "hello, world!" << std::endl;
         // viewer.RemoveEntity(ids);

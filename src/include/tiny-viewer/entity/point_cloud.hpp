@@ -68,7 +68,7 @@ namespace ns_viewer {
         template<class Archive>
         void serialize(Archive &archive) {
             Entity::serialize(archive);
-            archive(cereal::make_nvp("cloud", *cloud), CEREAL_NVP(size), CEREAL_NVP(color));
+            archive(cereal::make_nvp("data", *cloud), CEREAL_NVP(size), CEREAL_NVP(color));
         }
     };
 
@@ -133,7 +133,7 @@ namespace ns_viewer {
         template<class Archive>
         void serialize(Archive &archive) {
             Entity::serialize(archive);
-            archive(cereal::make_nvp("cloud", *cloud), CEREAL_NVP(size));
+            archive(cereal::make_nvp("data", *cloud), CEREAL_NVP(size));
         }
     };
 
@@ -220,7 +220,7 @@ namespace ns_viewer {
         template<class Archive>
         void serialize(Archive &archive) {
             Entity::serialize(archive);
-            archive(cereal::make_nvp("cloud", *cloud), CEREAL_NVP(size));
+            archive(cereal::make_nvp("data", *cloud), CEREAL_NVP(size));
         }
     };
 }

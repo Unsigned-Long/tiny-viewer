@@ -224,4 +224,31 @@ namespace ns_viewer {
         _entities.clear();
         return true;
     }
+
+    void Viewer::Save(const std::string &filename, bool binaryMode) const {
+        std::ofstream file(filename);
+        if (binaryMode) {
+            cereal::BinaryOutputArchive ar(file);
+            LOCKER_VIEWER
+            ar(*this);
+        } else {
+            cereal::JSONOutputArchive ar(file);
+            LOCKER_VIEWER
+            ar(*this);
+        }
+    }
+
+    Viewer::Ptr Viewer::Load(const std::string &filename, bool binaryMode) {
+        auto viewer = std::make_shared<Viewer>('2');
+        std::ifstream file(filename);
+        if (binaryMode) {
+            cereal::BinaryInputArchive ar(file);
+            ar(*viewer);
+        } else {
+            cereal::JSONInputArchive ar(file);
+            ar(*viewer);
+        }
+        viewer->InitViewer();
+        return viewer;
+    }
 }
