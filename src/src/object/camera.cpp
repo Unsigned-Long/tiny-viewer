@@ -2,7 +2,7 @@
 // Created by csl on 5/9/23.
 //
 
-#include "tiny-viewer/entity/camera.h"
+#include "tiny-viewer/object/camera.h"
 #include "pangolin/gl/gldraw.h"
 
 namespace ns_viewer {

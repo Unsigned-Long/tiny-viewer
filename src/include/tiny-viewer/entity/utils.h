@@ -2,8 +2,8 @@
 // Created by csl on 5/8/23.
 //
 
-#ifndef TINY_VIEWER_UTIL_H
-#define TINY_VIEWER_UTIL_H
+#ifndef TINY_VIEWER_UTILS_H
+#define TINY_VIEWER_UTILS_H
 
 #include "pcl/visualization/pcl_visualizer.h"
 
@@ -28,6 +28,8 @@ namespace ns_viewer {
 
     vtkSmartPointer <vtkLookupTable>
     GetColormapLUT(pcl::visualization::LookUpTableRepresentationProperties colormapType, double minmax[2]);
+
+    std::pair<Eigen::Vector3f, Eigen::Vector3f> TangentBasis(const Eigen::Vector3f &v);
 }
 
-#endif //TINY_VIEWER_UTIL_H
+#endif //TINY_VIEWER_UTILS_H

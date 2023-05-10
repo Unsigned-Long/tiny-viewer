@@ -1,7 +1,7 @@
 //
 // Created by csl on 5/10/23.
 //
-#include "tiny-viewer/entity/util.h"
+#include "tiny-viewer/entity/utils.h"
 
 namespace ns_viewer {
 
@@ -90,5 +90,16 @@ namespace ns_viewer {
         }
         table->Build();
         return table;
+    }
+
+    std::pair<Eigen::Vector3f, Eigen::Vector3f> TangentBasis(const Eigen::Vector3f &v) {
+        Eigen::Vector3f b, c;
+        Eigen::Vector3f a = v.normalized();
+        Eigen::Vector3f tmp(0, 0, 1);
+        if (a == tmp)
+            tmp << 1, 0, 0;
+        b = (tmp - a * (a.transpose() * tmp)).normalized();
+        c = a.cross(b);
+        return {b, c};
     }
 }

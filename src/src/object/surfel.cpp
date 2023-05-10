@@ -3,7 +3,7 @@
 //
 
 #include "pangolin/gl/gldraw.h"
-#include "tiny-viewer/entity/surfel.h"
+#include "tiny-viewer/object/surfel.h"
 
 namespace ns_viewer {
 

@@ -5,8 +5,8 @@
 #ifndef TINY_VIEWER_LIDAR_H
 #define TINY_VIEWER_LIDAR_H
 
-#include "entity.h"
-#include "coordinate.h"
+#include "tiny-viewer/entity/entity.h"
+#include "tiny-viewer/entity/coordinate.h"
 
 namespace ns_viewer {
     struct LiDAR : public Entity {

@@ -5,9 +5,9 @@
 #ifndef TINY_VIEWER_SURFEL_H
 #define TINY_VIEWER_SURFEL_H
 
-#include "entity.h"
+#include "tiny-viewer/entity/entity.h"
 #include "pangolin/gl/opengl_render_state.h"
-#include "coordinate.h"
+#include "tiny-viewer/entity/coordinate.h"
 
 namespace ns_viewer {
     struct Surfel : public Entity {

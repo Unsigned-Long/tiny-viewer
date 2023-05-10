@@ -2,7 +2,7 @@
 // Created by csl on 5/9/23.
 //
 
-#include "tiny-viewer/entity/lidar.h"
+#include "tiny-viewer/object/lidar.h"
 #include "pangolin/gl/gldraw.h"
 #include "pangolin/gl/gl.h"
 

@@ -5,9 +5,9 @@
 #ifndef TINY_VIEWER_IMU_H
 #define TINY_VIEWER_IMU_H
 
-#include "entity.h"
-#include "coordinate.h"
-#include "cube.h"
+#include "tiny-viewer/entity/entity.h"
+#include "tiny-viewer/entity/coordinate.h"
+#include "tiny-viewer/entity/cube.h"
 
 namespace ns_viewer {
 

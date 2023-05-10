@@ -6,11 +6,13 @@ find_package(Pangolin REQUIRED)
 
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src/core CORE_FILES)
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src/entity ENTITY_FILES)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src/object OBJECT_FILES)
 
 add_library(
         ${LIBRARY_NAME} SHARED
         ${CORE_FILES}
         ${ENTITY_FILES}
+        ${OBJECT_FILES}
 )
 
 target_include_directories(

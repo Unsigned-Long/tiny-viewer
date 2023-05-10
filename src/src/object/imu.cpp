@@ -2,7 +2,7 @@
 // Created by csl on 5/9/23.
 //
 
-#include "tiny-viewer/entity/imu.h"
+#include "tiny-viewer/object/imu.h"
 
 namespace ns_viewer {
 

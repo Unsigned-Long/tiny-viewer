@@ -45,6 +45,11 @@ int main(int argc, char **argv) {
             entities.push_back(LiDAR::Create(Posef::Random(5.0f)));
         }
         auto ids = viewer.AddEntity(entities);
+
+        viewer.AddEntity(Arrow::Create({4.0f, 2.0f, 2.0f}, {4.0f, 2.0f, 5.0f}));
+
+        viewer.AddEntity(Cone::Create(Posef::Random(5.0f), 0.3f, M_PI_4));
+
         // show (multi thread)
         viewer.RunInMultiThread();
         // access
