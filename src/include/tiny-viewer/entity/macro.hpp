@@ -13,7 +13,6 @@
 #define DefaultCameraSize (0.2f)
 #define DefaultLiDARSize (0.2f)
 
-#define InsertEntityPair(m, entity) m.insert({entity.GetId(), entity})
 #define ExpandVec3(v) v(0), v(1), v(2)
 #define ExpandStdVec3(v) v.at(0), v.at(1), v.at(2)
 #define ExpandAryVec3(v) v[0], v[1], v[2]
