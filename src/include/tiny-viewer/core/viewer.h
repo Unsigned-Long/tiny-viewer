@@ -44,6 +44,8 @@ namespace ns_viewer {
             std::string Name = "Tiny Viewer";
             std::string ScreenShotSaveDir;
             Colour BackGroundColor = Colour::White();
+            int Width = 640 * 2;
+            int height = 480 * 2;
 
         public:
             template<class Archive>
@@ -51,7 +53,9 @@ namespace ns_viewer {
                 ar(
                         cereal::make_nvp("Name", Name),
                         cereal::make_nvp("ScreenShotSaveDir", ScreenShotSaveDir),
-                        cereal::make_nvp("BackGroundColor", BackGroundColor)
+                        cereal::make_nvp("BackGroundColor", BackGroundColor),
+                        cereal::make_nvp("Width", Width),
+                        cereal::make_nvp("height", height)
                 );
             }
         } Window;

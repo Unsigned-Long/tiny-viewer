@@ -8,7 +8,7 @@
 #define DefaultLineSize (2.0f)
 #define DefaultCoordSize (1.0f)
 #define DefaultCubeSize (0.5f)
-#define DefaultPointSize (5.0f)
+#define DefaultPointSize (4.0f)
 #define DefaultIMUSize (0.2f)
 #define DefaultCameraSize (0.2f)
 #define DefaultLiDARSize (0.2f)

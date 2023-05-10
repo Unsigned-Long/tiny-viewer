@@ -8,16 +8,16 @@
 namespace ns_viewer {
 
     Camera::Camera(const Posef &pose, float size, const Colour &color)
-            : Entity(), _coord(pose, size), _color(color) {
-        _v0 = pose.translation;
+            : Entity(), coord(pose, size), color(color) {
+        v0 = pose.translation;
         Eigen::Vector3f x = pose.rotation.col(0) * size;
         Eigen::Vector3f y = pose.rotation.col(1) * size;
         Eigen::Vector3f z = pose.rotation.col(2) * size;
 
-        _v1 = _v0 - x - y * 0.75f + z;
-        _v2 = _v0 + x - y * 0.75f + z;
-        _v3 = _v0 - x + y * 0.75f + z;
-        _v4 = _v0 + x + y * 0.75f + z;
+        v1 = v0 - x - y * 0.75f + z;
+        v2 = v0 + x - y * 0.75f + z;
+        v3 = v0 - x + y * 0.75f + z;
+        v4 = v0 + x + y * 0.75f + z;
     }
 
     Camera::Camera(const Posef &pose, const Colour &color, float size)
@@ -34,16 +34,24 @@ namespace ns_viewer {
     }
 
     void Camera::Draw() const {
-        _coord.Draw();
-        glColor4f(ExpandColor(_color));
+        coord.Draw();
+        glColor4f(ExpandColor(color));
         glLineWidth(DefaultLineSize);
-        pangolin::glDrawLine(ExpandVec3(_v0), ExpandVec3(_v1));
-        pangolin::glDrawLine(ExpandVec3(_v0), ExpandVec3(_v2));
-        pangolin::glDrawLine(ExpandVec3(_v0), ExpandVec3(_v3));
-        pangolin::glDrawLine(ExpandVec3(_v0), ExpandVec3(_v4));
-        pangolin::glDrawLine(ExpandVec3(_v1), ExpandVec3(_v2));
-        pangolin::glDrawLine(ExpandVec3(_v3), ExpandVec3(_v4));
-        pangolin::glDrawLine(ExpandVec3(_v1), ExpandVec3(_v3));
-        pangolin::glDrawLine(ExpandVec3(_v2), ExpandVec3(_v4));
+        pangolin::glDrawLine(ExpandVec3(v0), ExpandVec3(v1));
+        pangolin::glDrawLine(ExpandVec3(v0), ExpandVec3(v2));
+        pangolin::glDrawLine(ExpandVec3(v0), ExpandVec3(v3));
+        pangolin::glDrawLine(ExpandVec3(v0), ExpandVec3(v4));
+        pangolin::glDrawLine(ExpandVec3(v1), ExpandVec3(v2));
+        pangolin::glDrawLine(ExpandVec3(v3), ExpandVec3(v4));
+        pangolin::glDrawLine(ExpandVec3(v1), ExpandVec3(v3));
+        pangolin::glDrawLine(ExpandVec3(v2), ExpandVec3(v4));
+        glPointSize(DefaultPointSize);
+        glBegin(GL_POINTS);
+        glVertex3f(ExpandVec3(v0));
+        glVertex3f(ExpandVec3(v1));
+        glVertex3f(ExpandVec3(v2));
+        glVertex3f(ExpandVec3(v3));
+        glVertex3f(ExpandVec3(v4));
+        glEnd();
     }
 }

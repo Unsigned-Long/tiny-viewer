@@ -9,7 +9,7 @@
 namespace ns_viewer {
 
     LiDAR::LiDAR(const Posef &pose, float size, const Colour &color)
-            : Entity(), _coord(pose, size), _color(color) {
+            : Entity(), coord(pose, size), color(color) {
         Eigen::Vector3f p = pose.translation;
         Eigen::Vector3f x = pose.rotation.col(0) * size;
         Eigen::Vector3f y = pose.rotation.col(1) * size;
@@ -20,8 +20,8 @@ namespace ns_viewer {
             float ang = deltaAng * static_cast<float>(i);
             float c = std::cos(ang);
             float s = std::sin(ang);
-            _tops.at(i) = p + c * x + s * y + z;
-            _bottoms.at(i) = p + c * x + s * y - z;
+            tops.at(i) = p + c * x + s * y + z;
+            bottoms.at(i) = p + c * x + s * y - z;
         }
     }
 
@@ -38,21 +38,30 @@ namespace ns_viewer {
     LiDAR::~LiDAR() = default;
 
     void LiDAR::Draw() const {
-        _coord.Draw();
-        glColor4f(ExpandColor(_color));
+        coord.Draw();
+        glColor4f(ExpandColor(color));
         glLineWidth(DefaultLineSize);
 
         for (int i = 0; i < 8; ++i) {
             int j = (i + 1) % 8;
-            Eigen::Vector3f tvi = _tops.at(i);
-            Eigen::Vector3f tvj = _tops.at(j);
+            const Eigen::Vector3f &tvi = tops.at(i);
+            const Eigen::Vector3f &tvj = tops.at(j);
             pangolin::glDrawLine(ExpandVec3(tvi), ExpandVec3(tvj));
 
-            Eigen::Vector3f bvi = _bottoms.at(i);
-            Eigen::Vector3f bvj = _bottoms.at(j);
+            const Eigen::Vector3f &bvi = bottoms.at(i);
+            const Eigen::Vector3f &bvj = bottoms.at(j);
             pangolin::glDrawLine(ExpandVec3(bvi), ExpandVec3(bvj));
 
             pangolin::glDrawLine(ExpandVec3(tvi), ExpandVec3(bvi));
         }
+        glPointSize(DefaultPointSize);
+        glBegin(GL_POINTS);
+        for (int i = 0; i < 8; ++i) {
+            const Eigen::Vector3f &tvi = tops.at(i);
+            const Eigen::Vector3f &bvi = bottoms.at(i);
+            glVertex3f(ExpandVec3(tvi));
+            glVertex3f(ExpandVec3(bvi));
+        }
+        glEnd();
     }
 }

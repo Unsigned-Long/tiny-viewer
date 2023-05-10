@@ -6,6 +6,10 @@
 int main(int argc, char **argv) {
     try {
         using namespace ns_viewer;
+        // {
+        //     ViewerConfigor().SaveConfigure("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
+        //     std::cin.get();
+        // }
         // viewer
         Viewer viewer("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
 

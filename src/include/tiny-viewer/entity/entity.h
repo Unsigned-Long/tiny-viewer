@@ -22,7 +22,7 @@ namespace ns_viewer {
         using Ptr = std::shared_ptr<Entity>;
 
     private:
-        std::size_t _id;
+        std::size_t id;
         static std::size_t COUNT;
         static ColourWheel COLOR_WHEEL;
 

@@ -23,9 +23,8 @@ namespace ns_viewer {
         Eigen::Vector3f v7;
         Eigen::Vector3f v8;
 
-
-        Colour _color;
-        bool _lineMode;
+        Colour color;
+        bool lineMode;
 
     public:
         Cube(const Posef &pose, bool lineMode, float xWidth = DefaultCubeSize,

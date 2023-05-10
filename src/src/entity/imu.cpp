@@ -7,7 +7,7 @@
 namespace ns_viewer {
 
     IMU::IMU(const Posef &pose, float size, const Colour &colour)
-            : Entity(), _coord(pose, size), _cube(pose, true, size * 2.0f, size * 2.0f, size * 2.0f, colour) {}
+            : Entity(), coord(pose, size), cube(pose, true, size * 2.0f, size * 2.0f, size * 2.0f, colour) {}
 
     IMU::~IMU() = default;
 
@@ -23,7 +23,7 @@ namespace ns_viewer {
     }
 
     void IMU::Draw() const {
-        _cube.Draw();
-        _coord.Draw();
+        cube.Draw();
+        coord.Draw();
     }
 }

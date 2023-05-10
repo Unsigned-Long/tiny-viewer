@@ -13,12 +13,12 @@ namespace ns_viewer {
     public:
         using Ptr = std::shared_ptr<LiDAR>;
     protected:
-        Coordinate _coord;
+        Coordinate coord;
 
-        std::array<Eigen::Vector3f, 8> _tops;
-        std::array<Eigen::Vector3f, 8> _bottoms;
+        std::array<Eigen::Vector3f, 8> tops;
+        std::array<Eigen::Vector3f, 8> bottoms;
 
-        Colour _color;
+        Colour color;
 
     public:
         explicit LiDAR(const Posef &pose, float size = DefaultLiDARSize, const Colour &color = Colour::Blue());

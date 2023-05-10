@@ -8,7 +8,7 @@
 namespace ns_viewer {
 
     Cube::Cube(const Posef &pose, bool lineMode, float xWidth, float yWidth, float zWidth, const Colour &color)
-            : Entity(), _lineMode(lineMode), _color(color) {
+            : Entity(), lineMode(lineMode), color(color) {
         Eigen::Vector3f p = pose.translation;
         Eigen::Vector3f x = pose.rotation.col(0) * xWidth * 0.5f;
         Eigen::Vector3f y = pose.rotation.col(1) * yWidth * 0.5f;
@@ -31,9 +31,9 @@ namespace ns_viewer {
     Cube::~Cube() = default;
 
     void Cube::Draw() const {
-        glColor4f(ExpandColor(_color));
+        glColor4f(ExpandColor(color));
 
-        if (_lineMode) {
+        if (lineMode) {
             glLineWidth(DefaultLineSize);
             pangolin::glDrawLine(ExpandVec3(v1), ExpandVec3(v2));
             pangolin::glDrawLine(ExpandVec3(v3), ExpandVec3(v4));
@@ -75,6 +75,18 @@ namespace ns_viewer {
 
             glDisableClientState(GL_VERTEX_ARRAY);
         }
+
+        glPointSize(DefaultPointSize);
+        glBegin(GL_POINTS);
+        glVertex3f(ExpandVec3(v1));
+        glVertex3f(ExpandVec3(v2));
+        glVertex3f(ExpandVec3(v3));
+        glVertex3f(ExpandVec3(v4));
+        glVertex3f(ExpandVec3(v5));
+        glVertex3f(ExpandVec3(v6));
+        glVertex3f(ExpandVec3(v7));
+        glVertex3f(ExpandVec3(v8));
+        glEnd();
     }
 
     Cube::Ptr

@@ -78,7 +78,7 @@ namespace ns_viewer {
     // -----------------
     void Viewer::InitViewer() {
         // create a window and bind its context to the main thread
-        pangolin::CreateWindowAndBind(_configor.Window.Name, 640 * 3, 480 * 3);
+        pangolin::CreateWindowAndBind(_configor.Window.Name, _configor.Window.Width, _configor.Window.height);
 
         // enable depth
         glEnable(GL_DEPTH_TEST);

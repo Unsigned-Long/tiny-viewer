@@ -18,9 +18,9 @@ namespace ns_viewer {
         using PointCloud = pcl::PointCloud<pcl::PointXYZRGBA>;
         using PointCloudPtr = PointCloud::Ptr;
 
-        PointCloudPtr _cloud;
+        PointCloudPtr cloud;
 
-        float _size;
+        float size;
     public:
         explicit PosColorCloud(PointCloudPtr cloud, float size = DefaultPointSize);
 
@@ -41,10 +41,10 @@ namespace ns_viewer {
         using PointCloud = pcl::PointCloud<pcl::PointXYZ>;
         using PointCloudPtr = PointCloud::Ptr;
 
-        PointCloudPtr _cloud;
+        PointCloudPtr cloud;
 
-        float _size;
-        Colour _color;
+        float size;
+        Colour color;
     public:
         explicit PosCloud(PointCloudPtr cloud, float size = DefaultPointSize,
                           const Colour &colour = GetUniqueColour());

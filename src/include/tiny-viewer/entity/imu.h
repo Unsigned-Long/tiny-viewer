@@ -16,8 +16,8 @@ namespace ns_viewer {
         using Ptr = std::shared_ptr<IMU>;
 
     protected:
-        Coordinate _coord;
-        Cube _cube;
+        Coordinate coord;
+        Cube cube;
 
     public:
         explicit IMU(const Posef &pose, float size = DefaultIMUSize, const Colour &colour = Colour::Red());

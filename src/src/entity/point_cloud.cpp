@@ -12,14 +12,14 @@ namespace ns_viewer {
     // PosColorCloud
     // -------------
     PosColorCloud::PosColorCloud(PointCloudPtr cloud, float size)
-            : Entity(), _cloud(std::move(cloud)), _size(size) {}
+            : Entity(), cloud(std::move(cloud)), size(size) {}
 
     PosColorCloud::~PosColorCloud() = default;
 
     void PosColorCloud::Draw() const {
-        glPointSize(_size);
+        glPointSize(size);
         glBegin(GL_POINTS);
-        for (const auto &p: _cloud->points) {
+        for (const auto &p: cloud->points) {
             glColor4f(ExpandPCLColor(p));
             glVertex3f(ExpandPCLPointXYZ(p));
         }
@@ -56,15 +56,15 @@ namespace ns_viewer {
     // PosCloud
     // --------
     PosCloud::PosCloud(PosCloud::PointCloudPtr cloud, float size, const Colour &colour)
-            : Entity(), _cloud(std::move(cloud)), _color(colour), _size(size) {}
+            : Entity(), cloud(std::move(cloud)), color(colour), size(size) {}
 
     PosCloud::~PosCloud() = default;
 
     void PosCloud::Draw() const {
-        glPointSize(_size);
-        glColor4f(ExpandColor(_color));
+        glPointSize(size);
+        glColor4f(ExpandColor(color));
         glBegin(GL_POINTS);
-        for (const auto &p: _cloud->points) {
+        for (const auto &p: cloud->points) {
             glVertex3f(ExpandPCLPointXYZ(p));
         }
         glEnd();

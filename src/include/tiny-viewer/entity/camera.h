@@ -15,15 +15,15 @@ namespace ns_viewer {
         using Ptr = std::shared_ptr<Camera>;
 
     protected:
-        Coordinate _coord;
+        Coordinate coord;
 
-        Eigen::Vector3f _v0;
-        Eigen::Vector3f _v1;
-        Eigen::Vector3f _v2;
-        Eigen::Vector3f _v3;
-        Eigen::Vector3f _v4;
+        Eigen::Vector3f v0;
+        Eigen::Vector3f v1;
+        Eigen::Vector3f v2;
+        Eigen::Vector3f v3;
+        Eigen::Vector3f v4;
 
-        Colour _color;
+        Colour color;
 
     public:
         explicit Camera(const Posef &pose, float size = DefaultCameraSize, const Colour &color = Colour::Green());

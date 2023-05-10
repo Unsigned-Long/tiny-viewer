@@ -14,11 +14,11 @@ namespace ns_viewer {
         using Ptr = std::shared_ptr<Line>;
 
     protected:
-        Eigen::Vector3f _sp;
-        Eigen::Vector3f _ep;
+        Eigen::Vector3f sp;
+        Eigen::Vector3f ep;
 
-        Colour _color;
-        float _size;
+        Colour color;
+        float size;
 
     public:
 
