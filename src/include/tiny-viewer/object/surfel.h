@@ -21,7 +21,7 @@ namespace ns_viewer {
         Eigen::Vector3f v4;
 
         Colour color;
-        bool lineMode;
+        bool lineMode{};
 
         Coordinate coord;
 
@@ -37,7 +37,22 @@ namespace ns_viewer {
         ~Surfel() override;
 
         void Draw() const override;
+
+        Surfel() = default;
+
+    public:
+
+        template<class Archive>
+        void serialize(Archive &archive) {
+            Entity::serialize(archive);
+            archive(
+                    CEREAL_NVP(v1), CEREAL_NVP(v2), CEREAL_NVP(v3), CEREAL_NVP(v4),
+                    CEREAL_NVP(color), CEREAL_NVP(lineMode), CEREAL_NVP(coord)
+            );
+        }
     };
 }
 
+CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Surfel, "Surfel")
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Surfel)
 #endif //TINY_VIEWER_SURFEL_H

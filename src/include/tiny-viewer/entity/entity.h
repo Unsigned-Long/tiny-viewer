@@ -10,12 +10,9 @@
 #include <memory>
 #include "set"
 #include "utils.h"
-#include "pangolin/gl/colour.h"
 #include "cereal/cereal.hpp"
 
 namespace ns_viewer {
-    using ColourWheel = pangolin::ColourWheel;
-    using Colour = pangolin::Colour;
 
     struct Entity {
     public:
@@ -23,7 +20,7 @@ namespace ns_viewer {
 
     private:
         std::size_t id;
-        static std::size_t COUNT;
+        static std::size_t counter;
         static ColourWheel COLOR_WHEEL;
 
     public:
@@ -39,6 +36,14 @@ namespace ns_viewer {
 
     private:
         static std::size_t GenUniqueName();
+
+    public:
+        template<class Archive>
+        void serialize(Archive &archive) {
+            std::size_t counterBackup = counter;
+            archive(CEREAL_NVP(id), CEREAL_NVP(counter));
+            if (counter < counterBackup) { counter = counterBackup; }
+        }
     };
 }
 

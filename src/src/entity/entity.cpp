@@ -7,14 +7,14 @@
 namespace ns_viewer {
 
     ColourWheel Entity::COLOR_WHEEL = ColourWheel(1.0f);
-    std::size_t Entity::COUNT = 0;
+    std::size_t Entity::counter = 0;
 
     Entity::Entity() : id(GenUniqueName()) {}
 
     Entity::~Entity() = default;
 
     std::size_t Entity::GenUniqueName() {
-        return COUNT++;
+        return counter++;
     }
 
     Colour Entity::GetUniqueColour() {

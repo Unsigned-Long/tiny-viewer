@@ -21,23 +21,7 @@
 #include "tiny-viewer/entity/cone.h"
 #include "mutex"
 #include "pangolin/gl/opengl_render_state.h"
-#include "cereal/cereal.hpp"
-#include "cereal/types/vector.hpp"
-#include "fstream"
-#include "cereal/archives/json.hpp"
 
-namespace pangolin {
-    template<class Archive>
-    void serialize(Archive &ar, ns_viewer::Colour &color) {
-        ar(
-                cereal::make_nvp("red", color.red),
-                cereal::make_nvp("green", color.green),
-                cereal::make_nvp("blue", color.blue),
-                cereal::make_nvp("alpha", color.alpha)
-        );
-    }
-
-}
 namespace ns_viewer {
 
 

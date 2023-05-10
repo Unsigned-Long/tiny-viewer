@@ -50,4 +50,5 @@ namespace ns_viewer {
     Cone::Ptr Cone::Create(const Posef &pose, float height, float angle, const Colour &color) {
         return std::make_shared<Cone>(pose, height, angle, color);
     }
+
 }

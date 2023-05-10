@@ -14,7 +14,7 @@ namespace ns_viewer {
         using Ptr = std::shared_ptr<Coordinate>;
 
     protected:
-        float size;
+        float size{};
         Eigen::Matrix4f pose;
 
     public:
@@ -27,9 +27,18 @@ namespace ns_viewer {
 
         void Draw() const override;
 
+        Coordinate() = default;
+
+    public:
+
+        template<class Archive>
+        void serialize(Archive &archive) {
+            Entity::serialize(archive);
+            archive(CEREAL_NVP(size), CEREAL_NVP(pose));
+        }
     };
-
 }
-
+CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Coordinate, "Coordinate")
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Coordinate)
 
 #endif //TINY_VIEWER_COORDINATE_H

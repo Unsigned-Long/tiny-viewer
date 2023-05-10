@@ -28,7 +28,19 @@ namespace ns_viewer {
         ~Cone() override;
 
         void Draw() const override;
+
+        Cone() = default;
+
+    public:
+
+        template<class Archive>
+        void serialize(Archive &archive) {
+            Entity::serialize(archive);
+            archive(CEREAL_NVP(tp), CEREAL_NVP(bp), CEREAL_NVP(verts), CEREAL_NVP(color));
+        }
     };
 }
+CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Cone, "Cone")
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Cone)
 
 #endif //TINY_VIEWER_CONE_H

@@ -12,6 +12,10 @@ int main(int argc, char **argv) {
         //     ViewerConfigor().SaveConfigure("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
         //     std::cin.get();
         // }
+        std::ofstream file("/home/csl/learncpp/data/o.json");
+        cereal::JSONOutputArchive ar(file);
+        Entity::Ptr e = Cloud<pcl::PointXYZ>::Random(0.5f, 200, {3.0f, 2.0f, 1.0f});
+        ar(e);
         // viewer
         Viewer viewer("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
 

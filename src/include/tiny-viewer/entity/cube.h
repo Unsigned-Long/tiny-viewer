@@ -24,7 +24,7 @@ namespace ns_viewer {
         Eigen::Vector3f v8;
 
         Colour color;
-        bool lineMode;
+        bool lineMode{};
 
     public:
         Cube(const Posef &pose, bool lineMode, float xWidth = DefaultCubeSize,
@@ -43,8 +43,25 @@ namespace ns_viewer {
         ~Cube() override;
 
         void Draw() const override;
+
+        Cube() = default;
+
+    public:
+
+        template<class Archive>
+        void serialize(Archive &archive) {
+            Entity::serialize(archive);
+            archive(
+                    CEREAL_NVP(v1), CEREAL_NVP(v2), CEREAL_NVP(v3), CEREAL_NVP(v4),
+                    CEREAL_NVP(v5), CEREAL_NVP(v6), CEREAL_NVP(v7), CEREAL_NVP(v8),
+                    CEREAL_NVP(color),
+                    CEREAL_NVP(lineMode)
+            );
+        }
     };
 }
 
+CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Cube, "Cube")
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Cube)
 
 #endif //TINY_VIEWER_CUBE_H

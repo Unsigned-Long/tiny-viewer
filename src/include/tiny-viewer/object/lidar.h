@@ -32,7 +32,20 @@ namespace ns_viewer {
         ~LiDAR() override;
 
         void Draw() const override;
+
+        LiDAR() = default;
+
+    public:
+
+        template<class Archive>
+        void serialize(Archive &archive) {
+            Entity::serialize(archive);
+            archive(CEREAL_NVP(coord), CEREAL_NVP(tops), CEREAL_NVP(bottoms), CEREAL_NVP(color));
+        }
     };
 }
+
+CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::LiDAR, "LiDAR")
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::LiDAR)
 
 #endif //TINY_VIEWER_LIDAR_H

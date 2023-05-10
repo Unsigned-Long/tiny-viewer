@@ -18,7 +18,7 @@ namespace ns_viewer {
         Eigen::Vector3f ep;
 
         Colour color;
-        float size;
+        float size{};
 
     public:
 
@@ -37,8 +37,19 @@ namespace ns_viewer {
 
         void Draw() const override;
 
-    };
+        Line() = default;
 
+    public:
+
+        template<class Archive>
+        void serialize(Archive &archive) {
+            Entity::serialize(archive);
+            archive(CEREAL_NVP(sp), CEREAL_NVP(ep), CEREAL_NVP(color), CEREAL_NVP(size));
+        }
+    };
 }
+
+CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Line, "Line")
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Line)
 
 #endif //TINY_VIEWER_LINE_H

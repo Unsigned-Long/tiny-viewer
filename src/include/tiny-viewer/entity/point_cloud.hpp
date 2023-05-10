@@ -60,6 +60,16 @@ namespace ns_viewer {
             }
             glEnd();
         }
+
+        Cloud() : cloud(new PointCloud) {}
+
+    public:
+
+        template<class Archive>
+        void serialize(Archive &archive) {
+            Entity::serialize(archive);
+            archive(cereal::make_nvp("cloud", *cloud), CEREAL_NVP(size), CEREAL_NVP(color));
+        }
     };
 
     template<>
@@ -73,7 +83,7 @@ namespace ns_viewer {
 
         PointCloudPtr cloud;
 
-        float size;
+        float size{};
     public:
         explicit Cloud(PointCloudPtr cloud, float size = DefaultPointSize)
                 : Entity(), cloud(std::move(cloud)), size(size) {}
@@ -115,6 +125,16 @@ namespace ns_viewer {
             }
             glEnd();
         }
+
+        Cloud() : cloud(new PointCloud) {}
+
+    public:
+
+        template<class Archive>
+        void serialize(Archive &archive) {
+            Entity::serialize(archive);
+            archive(cereal::make_nvp("cloud", *cloud), CEREAL_NVP(size));
+        }
     };
 
     template<>
@@ -130,7 +150,7 @@ namespace ns_viewer {
 
         ColorPointCloudPtr cloud;
 
-        float size;
+        float size{};
 
     public:
         explicit Cloud(const PointCloudPtr &inputCloud, float size = DefaultPointSize,
@@ -192,7 +212,25 @@ namespace ns_viewer {
             }
             glEnd();
         }
+
+        Cloud() : cloud(new ColorPointCloud) {}
+
+    public:
+
+        template<class Archive>
+        void serialize(Archive &archive) {
+            Entity::serialize(archive);
+            archive(cereal::make_nvp("cloud", *cloud), CEREAL_NVP(size));
+        }
     };
 }
+CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Cloud<pcl::PointXYZ>, "Cloud::PointXYZ")
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Cloud<pcl::PointXYZ>)
+
+CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Cloud<pcl::PointXYZI>, "Cloud::PointXYZI")
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Cloud<pcl::PointXYZI>)
+
+CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Cloud<pcl::PointXYZRGBA>, "Cloud::PointXYZRGBA")
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Cloud<pcl::PointXYZRGBA>)
 
 #endif //TINY_VIEWER_POINT_CLOUD_H
