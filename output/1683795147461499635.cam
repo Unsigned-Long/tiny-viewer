@@ -1,6 +1,6 @@
 {
-    "value0": {
-        "value0": {
+    "cam_view": {
+        "projection_mat": {
             "value0": 1.3125,
             "value1": 0.0,
             "value2": 0.0,
@@ -18,7 +18,7 @@
             "value14": -0.020002000200020004,
             "value15": 0.0
         },
-        "value1": {
+        "model_view_mat": {
             "value0": -0.760960158594116,
             "value1": -0.37733237263677107,
             "value2": -0.5277877580928914,

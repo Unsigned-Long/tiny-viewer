@@ -79,7 +79,10 @@ namespace pangolin {
 
     template<class Archive>
     void serialize(Archive &ar, OpenGlRenderState &m) {
-        ar(m.GetProjectionMatrix(), m.GetModelViewMatrix());
+        ar(
+                cereal::make_nvp("projection_mat", m.GetProjectionMatrix()),
+                cereal::make_nvp("model_view_mat", m.GetModelViewMatrix())
+        );
     }
 }
 

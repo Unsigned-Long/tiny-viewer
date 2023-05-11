@@ -136,9 +136,9 @@ namespace ns_viewer {
     void Viewer::Run() {
         if (std::filesystem::exists(_configor.Window.DataOutputPath)) {
             std::cout << "\033[92m\033[3m[Viewer] "
-                         "press 's' key to save the current scene, "
-                         "'c' key for camera view, "
-                         "and 'v' key for total viewer.\033[0m" << std::endl;
+                         "press [ctrl+'s'] to save the current scene, "
+                         "[ctrl+'c'] for camera view, "
+                         "and [ctrl+'v'] for total viewer.\033[0m" << std::endl;
         }
 
         // fetch the context and bind it to this thread
@@ -155,9 +155,9 @@ namespace ns_viewer {
                 .SetBounds(0.0, 1.0, 0.0, 1.0, -static_cast<double>(_configor.Camera.Width) / _configor.Camera.Height)
                 .SetHandler(&handler);
 
-        pangolin::RegisterKeyPressCallback('s', [this] { SaveScreenShotCallBack(); });
-        pangolin::RegisterKeyPressCallback('c', [this] { SaveCameraCallBack(); });
-        pangolin::RegisterKeyPressCallback('v', [this] { SaveViewerCallBack(); });
+        pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 's', [this] { SaveScreenShotCallBack(); });
+        pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 'c', [this] { SaveCameraCallBack(); });
+        pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 'v', [this] { SaveViewerCallBack(); });
 
         while (!pangolin::ShouldQuit()) {
 
@@ -202,7 +202,7 @@ namespace ns_viewer {
 
         std::ofstream file(filename);
         cereal::JSONOutputArchive ar(file);
-        ar(this->_camView);
+        ar(cereal::make_nvp("cam_view", this->_camView));
         std::cout << "\033[92m\033[3m[Viewer] the camera view is saved to path: '"
                   << filename << "\033[0m" << std::endl;
     }
