@@ -7,6 +7,7 @@
 
 #include "tiny-viewer/entity/entity.h"
 #include "tiny-viewer/entity/coordinate.h"
+#include "tiny-viewer/entity/cylinder.h"
 
 namespace ns_viewer {
     struct LiDAR : public Entity {
@@ -15,10 +16,7 @@ namespace ns_viewer {
     protected:
         Coordinate coord;
 
-        std::array<Eigen::Vector3f, 8> tops;
-        std::array<Eigen::Vector3f, 8> bottoms;
-
-        Colour color;
+        Cylinder cylinder;
 
     public:
         explicit LiDAR(const Posef &pose, float size = DefaultLiDARSize, const Colour &color = Colour::Blue());
@@ -40,7 +38,7 @@ namespace ns_viewer {
         template<class Archive>
         void serialize(Archive &archive) {
             Entity::serialize(archive);
-            archive(CEREAL_NVP(coord), CEREAL_NVP(tops), CEREAL_NVP(bottoms), CEREAL_NVP(color));
+            archive(CEREAL_NVP(coord), CEREAL_NVP(cylinder));
         }
     };
 }

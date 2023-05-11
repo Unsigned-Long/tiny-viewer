@@ -19,6 +19,7 @@
 #include "tiny-viewer/object/surfel.h"
 #include "tiny-viewer/entity/arrow.h"
 #include "tiny-viewer/entity/cone.h"
+#include "tiny-viewer/entity/cylinder.h"
 #include "mutex"
 #include "pangolin/gl/opengl_render_state.h"
 

@@ -33,6 +33,8 @@ int main(int argc, char **argv) {
 
         viewer.AddEntity(Coordinate::Create(Posef::Random(5.0), 0.5f));
 
+        viewer.AddEntity(Cylinder::Create(Posef::Random(3.0f), 1.0, 0.5f));
+
         viewer.AddEntity(Cloud<pcl::PointXYZRGBA>::Random(1.0f, 200, {1.0f, 2.0f, 3.0f}));
         viewer.AddEntity(Cloud<pcl::PointXYZRGB>::Random(1.0f, 200, {3.0f, 3.0f, 3.0f}));
         viewer.AddEntity(Cloud<pcl::PointXYZ>::Random(0.5f, 200, {3.0f, 2.0f, 1.0f}));
