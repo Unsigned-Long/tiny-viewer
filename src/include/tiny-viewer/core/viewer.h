@@ -105,13 +105,15 @@ namespace ns_viewer {
         }
 
     public:
-        ViewerConfigor();
+        ViewerConfigor(const std::string &winName = "Tiny Viewer");
 
         // load configure information from the json file
         static ViewerConfigor LoadConfigure(const std::string &filename);
 
         // load configure information from the json file
         bool SaveConfigure(const std::string &filename);
+
+        ViewerConfigor &WithWinName(const std::string &winName);
     };
 
 #define LOCKER_VIEWER std::unique_lock<std::mutex> viewerLock(Viewer::MUTEX);

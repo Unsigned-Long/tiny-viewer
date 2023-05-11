@@ -14,7 +14,7 @@ namespace ns_viewer {
     // --------------
     // ViewerConfigor
     // --------------
-    ViewerConfigor::ViewerConfigor() = default;
+    ViewerConfigor::ViewerConfigor(const std::string &winName) { Window.Name = winName; }
 
     ViewerConfigor ViewerConfigor::LoadConfigure(const std::string &filename) {
         std::ifstream file(filename);
@@ -29,6 +29,11 @@ namespace ns_viewer {
         cereal::JSONOutputArchive archive(file);
         archive(cereal::make_nvp("Configor", *this));
         return true;
+    }
+
+    ViewerConfigor &ViewerConfigor::WithWinName(const std::string &winName) {
+        Window.Name = winName;
+        return *this;
     }
 
     // ------

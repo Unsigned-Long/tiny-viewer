@@ -12,11 +12,11 @@ int main(int argc, char **argv) {
         //     ViewerConfigor().SaveConfigure("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
         //     std::cin.get();
         // }
-        {
-            auto viewer = Viewer::Load("/home/csl/CppWorks/artwork/tiny-viewer/data/viewer.bin");
-            viewer->RunInMultiThread();
-            return 0;
-        }
+        // {
+        //     auto viewer = Viewer::Load("/home/csl/CppWorks/artwork/tiny-viewer/data/viewer.bin");
+        //     viewer->RunInMultiThread();
+        //     return 0;
+        // }
         // viewer
         Viewer viewer("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
 
@@ -56,17 +56,11 @@ int main(int argc, char **argv) {
         viewer.AddEntity(Cone::Create(Posef::Random(5.0f), 0.3f, M_PI_4));
 
         // show (multi thread)
-        viewer.RunInSingleThread();
-        // access
+        viewer.RunInMultiThread();
+
         std::cout << "hello, world!" << std::endl;
 
-        viewer.Save("/home/csl/CppWorks/artwork/tiny-viewer/data/viewer.bin", true);
-        // std::cin.get();
-        // std::cout << "hello, world!" << std::endl;
-        // viewer.RemoveEntity(ids);
-        // std::cin.get();
-        // std::cout << "hello, world!" << std::endl;
-        // viewer.RemoveEntity();
+        // viewer.Save("/home/csl/CppWorks/artwork/tiny-viewer/data/viewer.bin", true);
 
     } catch (const std::exception &e) {
         std::cout << e.what() << std::endl;
