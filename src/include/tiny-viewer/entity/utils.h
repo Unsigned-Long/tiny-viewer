@@ -107,6 +107,18 @@ namespace pcl {
     }
 
     template<class Archive>
+    void serialize(Archive &ar, pcl::PointXYZRGB &p) {
+        ar(
+                cereal::make_nvp("x", p.x),
+                cereal::make_nvp("y", p.y),
+                cereal::make_nvp("z", p.z),
+                cereal::make_nvp("r", p.r),
+                cereal::make_nvp("g", p.g),
+                cereal::make_nvp("b", p.b)
+        );
+    }
+
+    template<class Archive>
     void serialize(Archive &ar, pcl::PointXYZRGBA &p) {
         ar(
                 cereal::make_nvp("x", p.x),

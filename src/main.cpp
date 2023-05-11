@@ -34,6 +34,7 @@ int main(int argc, char **argv) {
         viewer.AddEntity(Coordinate::Create(Posef::Random(5.0), 0.5f));
 
         viewer.AddEntity(Cloud<pcl::PointXYZRGBA>::Random(1.0f, 200, {1.0f, 2.0f, 3.0f}));
+        viewer.AddEntity(Cloud<pcl::PointXYZRGB>::Random(1.0f, 200, {3.0f, 3.0f, 3.0f}));
         viewer.AddEntity(Cloud<pcl::PointXYZ>::Random(0.5f, 200, {3.0f, 2.0f, 1.0f}));
         pcl::PointCloud<pcl::PointXYZI>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZI>);
         pcl::io::loadPCDFile("/home/csl/CppWorks/artwork/tiny-viewer/data/scan.pcd", *cloud);
@@ -58,9 +59,9 @@ int main(int argc, char **argv) {
         // show (multi thread)
         viewer.RunInMultiThread();
 
-        std::cout << "press any key to set cam view from file." << std::endl;
-        std::cin.get();
-        viewer.SetCamView("/home/csl/CppWorks/artwork/tiny-viewer/output/1683795147461499635.cam");
+        // std::cout << "press any key to set cam view from file." << std::endl;
+        // std::cin.get();
+        // viewer.SetCamView("/home/csl/CppWorks/artwork/tiny-viewer/output/1683795147461499635.cam");
 
     } catch (const std::exception &e) {
         std::cout << e.what() << std::endl;

@@ -73,6 +73,69 @@ namespace ns_viewer {
     };
 
     template<>
+    struct Cloud<pcl::PointXYZRGB> : public Entity {
+    public:
+        using Ptr = std::shared_ptr<Cloud>;
+
+    protected:
+        using PointCloud = pcl::PointCloud<pcl::PointXYZRGB>;
+        using PointCloudPtr = PointCloud::Ptr;
+
+        PointCloudPtr cloud;
+
+        float size{};
+    public:
+        explicit Cloud(PointCloudPtr cloud, float size = DefaultPointSize)
+                : Entity(), cloud(std::move(cloud)), size(size) {}
+
+        static Ptr Create(const PointCloudPtr &cloud, float size = DefaultPointSize) {
+            return std::make_shared<Cloud>(cloud, size);
+        }
+
+        static Cloud::Ptr Random(float bound, std::size_t count, const Eigen::Vector3f &center) {
+            std::default_random_engine engine(std::chrono::steady_clock::now().time_since_epoch().count());
+            std::uniform_real_distribution<float> u(-bound, bound);
+            PointCloudPtr cloud(new PointCloud);
+            cloud->resize(count);
+            for (int i = 0; i < count; ++i) {
+                pcl::PointXYZRGB &p = cloud->at(i);
+                // x, y, z
+                p.x = u(engine) + center(0);
+                p.y = u(engine) + center(1);
+                p.z = u(engine) + center(2);
+                // r, g, b, a
+                auto color = GetUniqueColour();
+                p.r = static_cast<std::uint8_t>(color.r * 255.0f);
+                p.g = static_cast<std::uint8_t>(color.g * 255.0f);
+                p.b = static_cast<std::uint8_t>(color.b * 255.0f);
+            }
+            return Cloud::Create(cloud);
+        }
+
+        ~Cloud() override = default;
+
+        void Draw() const override {
+            glPointSize(size);
+            glBegin(GL_POINTS);
+            for (const auto &p: cloud->points) {
+                glColor4f(ExpandPCLColor(p));
+                glVertex3f(ExpandPCLPointXYZ(p));
+            }
+            glEnd();
+        }
+
+        Cloud() : cloud(new PointCloud) {}
+
+    public:
+
+        template<class Archive>
+        void serialize(Archive &archive) {
+            Entity::serialize(archive);
+            archive(cereal::make_nvp("data", *cloud), CEREAL_NVP(size));
+        }
+    };
+
+    template<>
     struct Cloud<pcl::PointXYZRGBA> : public Entity {
     public:
         using Ptr = std::shared_ptr<Cloud>;
@@ -95,6 +158,7 @@ namespace ns_viewer {
         static Cloud::Ptr Random(float bound, std::size_t count, const Eigen::Vector3f &center) {
             std::default_random_engine engine(std::chrono::steady_clock::now().time_since_epoch().count());
             std::uniform_real_distribution<float> u(-bound, bound);
+            std::uniform_real_distribution<float> ua(0.0f, 255.0f);
             PointCloudPtr cloud(new PointCloud);
             cloud->resize(count);
             for (int i = 0; i < count; ++i) {
@@ -108,7 +172,7 @@ namespace ns_viewer {
                 p.r = static_cast<std::uint8_t>(color.r * 255.0f);
                 p.g = static_cast<std::uint8_t>(color.g * 255.0f);
                 p.b = static_cast<std::uint8_t>(color.b * 255.0f);
-                p.a = static_cast<std::uint8_t>(color.a * 255.0f);
+                p.a = static_cast<std::uint8_t>(ua(engine));
 
             }
             return Cloud::Create(cloud);
@@ -233,4 +297,6 @@ CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Cloud<pcl::Po
 CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Cloud<pcl::PointXYZRGBA>, "Cloud::PointXYZRGBA")
 CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Cloud<pcl::PointXYZRGBA>)
 
+CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Cloud<pcl::PointXYZRGB>, "Cloud::PointXYZRGB")
+CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Cloud<pcl::PointXYZRGB>)
 #endif //TINY_VIEWER_POINT_CLOUD_H
