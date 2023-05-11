@@ -36,6 +36,11 @@ namespace ns_viewer {
         return *this;
     }
 
+    ViewerConfigor &ViewerConfigor::WithScreenShotSaveDir(const std::string &dir) {
+        Window.ScreenShotSaveDir = dir;
+        return *this;
+    }
+
     // ------
     // Viewer
     // ------
