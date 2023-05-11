@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
         //     std::cin.get();
         // }
         // {
-        //     auto viewer = Viewer::Load("/home/csl/CppWorks/artwork/tiny-viewer/data/viewer.bin");
+        //     auto viewer = Viewer::Load("/home/csl/CppWorks/artwork/tiny-viewer/output/1683794904023740133.view");
         //     viewer->RunInMultiThread();
         //     return 0;
         // }
@@ -58,9 +58,9 @@ int main(int argc, char **argv) {
         // show (multi thread)
         viewer.RunInMultiThread();
 
-        std::cout << "hello, world!" << std::endl;
-
-        // viewer.Save("/home/csl/CppWorks/artwork/tiny-viewer/data/viewer.bin", true);
+        std::cout << "press any key to set cam view from file." << std::endl;
+        std::cin.get();
+        viewer.SetCamView("/home/csl/CppWorks/artwork/tiny-viewer/output/1683795147461499635.cam");
 
     } catch (const std::exception &e) {
         std::cout << e.what() << std::endl;

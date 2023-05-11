@@ -16,6 +16,7 @@
 #include "cereal/types/polymorphic.hpp"
 #include "fstream"
 #include "pangolin/gl/colour.h"
+#include "pangolin/gl/opengl_render_state.h"
 
 namespace ns_viewer {
 
@@ -69,6 +70,16 @@ namespace pangolin {
                 cereal::make_nvp("blue", color.blue),
                 cereal::make_nvp("alpha", color.alpha)
         );
+    }
+
+    template<class Archive>
+    void serialize(Archive &ar, OpenGlMatrix &m) {
+        for (double &i: m.m) { ar(i); }
+    }
+
+    template<class Archive>
+    void serialize(Archive &ar, OpenGlRenderState &m) {
+        ar(m.GetProjectionMatrix(), m.GetModelViewMatrix());
     }
 }
 

@@ -2,7 +2,7 @@
     "Configor": {
         "Window": {
             "Name": "Tiny Viewer",
-            "ScreenShotSaveDir": "../img/scene-shot",
+            "DataOutputPath": "../output",
             "BackGroundColor": {
                 "red": 1.0,
                 "green": 1.0,

@@ -29,7 +29,7 @@ namespace ns_viewer {
     public:
         struct {
             std::string Name = "Tiny Viewer";
-            std::string ScreenShotSaveDir;
+            std::string DataOutputPath;
             Colour BackGroundColor = Colour::White();
             int Width = 640 * 2;
             int height = 480 * 2;
@@ -39,7 +39,7 @@ namespace ns_viewer {
             void serialize(Archive &ar) {
                 ar(
                         cereal::make_nvp("Name", Name),
-                        cereal::make_nvp("ScreenShotSaveDir", ScreenShotSaveDir),
+                        cereal::make_nvp("DataOutputPath", DataOutputPath),
                         cereal::make_nvp("BackGroundColor", BackGroundColor),
                         cereal::make_nvp("Width", Width),
                         cereal::make_nvp("height", height)
@@ -133,6 +133,7 @@ namespace ns_viewer {
 
     protected:
         std::unordered_map<std::size_t, Entity::Ptr> _entities;
+        pangolin::OpenGlRenderState _camView;
 
     public:
 
@@ -161,17 +162,25 @@ namespace ns_viewer {
 
         bool RemoveEntity();
 
+        void SetCamView(const pangolin::OpenGlRenderState &camView);
+
+        void SetCamView(const std::string &filename);
+
         void Save(const std::string &filename, bool binaryMode = true) const;
 
         static Ptr Load(const std::string &filename, bool binaryMode = true);
 
     protected:
 
-        void InitViewer();
+        void InitViewer(bool initCamViewFromConfigor);
 
         void Run();
 
-        void KeyBoardCallBack() const;
+        void SaveScreenShotCallBack() const;
+
+        void SaveCameraCallBack() const;
+
+        void SaveViewerCallBack() const;
 
     public:
 
@@ -179,7 +188,8 @@ namespace ns_viewer {
         void serialize(Archive &archive) {
             archive(
                     cereal::make_nvp("configor", _configor),
-                    cereal::make_nvp("entities", _entities)
+                    cereal::make_nvp("entities", _entities),
+                    cereal::make_nvp("camera_view", _camView)
             );
         }
     };

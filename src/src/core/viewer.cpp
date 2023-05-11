@@ -37,7 +37,7 @@ namespace ns_viewer {
     }
 
     ViewerConfigor &ViewerConfigor::WithScreenShotSaveDir(const std::string &dir) {
-        Window.ScreenShotSaveDir = dir;
+        Window.DataOutputPath = dir;
         return *this;
     }
 
@@ -51,7 +51,7 @@ namespace ns_viewer {
     // public methods
     // --------------
     Viewer::Viewer(ViewerConfigor configor)
-            : _thread(nullptr), _configor(std::move(configor)) { InitViewer(); }
+            : _thread(nullptr), _configor(std::move(configor)) { InitViewer(true); }
 
     Viewer::Ptr Viewer::Create(const ViewerConfigor &configor) {
         return std::make_shared<Viewer>(configor);
@@ -66,32 +66,34 @@ namespace ns_viewer {
     }
 
     void Viewer::RunInSingleThread() {
-        if (std::filesystem::exists(_configor.Window.ScreenShotSaveDir)) {
-            std::cout
-                    << "\033[92m\033[3m[Viewer] adjust the camera and press 's' key to save the current scene.\033[0m"
-                    << std::endl;
-        }
         Run();
     }
 
     void Viewer::RunInMultiThread() {
-        if (std::filesystem::exists(_configor.Window.ScreenShotSaveDir)) {
-            std::cout
-                    << "\033[92m\033[3m[Viewer] adjust the camera and press 's' key to save the current scene.\033[0m"
-                    << std::endl;
-        }
         this->_thread = std::make_shared<std::thread>([this]() { Run(); });
     }
 
     // -----------------
     // protected methods
     // -----------------
-    void Viewer::InitViewer() {
+    void Viewer::InitViewer(bool initCamViewFromConfigor) {
         // create a window and bind its context to the main thread
         pangolin::CreateWindowAndBind(_configor.Window.Name, _configor.Window.Width, _configor.Window.height);
 
         // unset the current context from the main thread
         pangolin::GetBoundWindow()->RemoveCurrent();
+
+        if (initCamViewFromConfigor) {
+            // Define Projection and initial ModelView matrix
+            const auto &c = _configor.Camera;
+            _camView = pangolin::OpenGlRenderState(
+                    pangolin::ProjectionMatrix(c.Width, c.Height, c.Fx, c.Fy, c.Cx, c.Cy, c.Near, c.Far),
+                    pangolin::ModelViewLookAt(
+                            ExpandStdVec3(_configor.Camera.InitPos),
+                            ExpandStdVec3(_configor.Camera.InitViewPoint), pangolin::AxisZ
+                    )
+            );
+        }
 
         AddEntity(Coordinate::Create(Posef()));
         Eigen::Vector3f v1, v2;
@@ -132,6 +134,13 @@ namespace ns_viewer {
     }
 
     void Viewer::Run() {
+        if (std::filesystem::exists(_configor.Window.DataOutputPath)) {
+            std::cout << "\033[92m\033[3m[Viewer] "
+                         "press 's' key to save the current scene, "
+                         "'c' key for camera view, "
+                         "and 'v' key for total viewer.\033[0m" << std::endl;
+        }
+
         // fetch the context and bind it to this thread
         pangolin::BindToContext(_configor.Window.Name);
 
@@ -140,29 +149,21 @@ namespace ns_viewer {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        // Define Projection and initial ModelView matrix
-        const auto &c = _configor.Camera;
-        pangolin::OpenGlRenderState s_cam(
-                pangolin::ProjectionMatrix(c.Width, c.Height, c.Fx, c.Fy, c.Cx, c.Cy, c.Near, c.Far),
-                pangolin::ModelViewLookAt(
-                        ExpandStdVec3(_configor.Camera.InitPos),
-                        ExpandStdVec3(_configor.Camera.InitViewPoint), pangolin::AxisZ
-                )
-        );
-
         // Create Interactive View in window
-        pangolin::Handler3D handler(s_cam);
+        pangolin::Handler3D handler(_camView);
         pangolin::View &d_cam = pangolin::CreateDisplay()
                 .SetBounds(0.0, 1.0, 0.0, 1.0, -static_cast<double>(_configor.Camera.Width) / _configor.Camera.Height)
                 .SetHandler(&handler);
 
-        pangolin::RegisterKeyPressCallback('s', [this] { KeyBoardCallBack(); });
+        pangolin::RegisterKeyPressCallback('s', [this] { SaveScreenShotCallBack(); });
+        pangolin::RegisterKeyPressCallback('c', [this] { SaveCameraCallBack(); });
+        pangolin::RegisterKeyPressCallback('v', [this] { SaveViewerCallBack(); });
 
         while (!pangolin::ShouldQuit()) {
 
             // Clear screen and activate view to render into
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            d_cam.Activate(s_cam);
+            d_cam.Activate(_camView);
             glClearColor(
                     _configor.Window.BackGroundColor.r, _configor.Window.BackGroundColor.g,
                     _configor.Window.BackGroundColor.b, _configor.Window.BackGroundColor.a
@@ -187,11 +188,30 @@ namespace ns_viewer {
         pangolin::GetBoundWindow()->RemoveCurrent();
     }
 
-    void Viewer::KeyBoardCallBack() const {
+    void Viewer::SaveScreenShotCallBack() const {
         std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
-        const std::string filename = _configor.Window.ScreenShotSaveDir + "/" + std::to_string(curTimeStamp) + ".png";
+        const std::string filename = _configor.Window.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".png";
         pangolin::SaveWindowOnRender(filename);
         std::cout << "\033[92m\033[3m[Viewer] the scene shot is saved to path: '"
+                  << filename << "\033[0m" << std::endl;
+    }
+
+    void Viewer::SaveCameraCallBack() const {
+        std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
+        const std::string filename = _configor.Window.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".cam";
+
+        std::ofstream file(filename);
+        cereal::JSONOutputArchive ar(file);
+        ar(this->_camView);
+        std::cout << "\033[92m\033[3m[Viewer] the camera view is saved to path: '"
+                  << filename << "\033[0m" << std::endl;
+    }
+
+    void Viewer::SaveViewerCallBack() const {
+        std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
+        const std::string filename = _configor.Window.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".view";
+        this->Save(filename, true);
+        std::cout << "\033[92m\033[3m[Viewer] the viewer is saved to path: '"
                   << filename << "\033[0m" << std::endl;
     }
 
@@ -258,7 +278,20 @@ namespace ns_viewer {
             cereal::JSONInputArchive ar(file);
             ar(*viewer);
         }
-        viewer->InitViewer();
+        viewer->InitViewer(false);
         return viewer;
+    }
+
+    void Viewer::SetCamView(const pangolin::OpenGlRenderState &camView) {
+        this->_camView.SetModelViewMatrix(camView.GetModelViewMatrix());
+        this->_camView.SetProjectionMatrix(camView.GetProjectionMatrix());
+    }
+
+    void Viewer::SetCamView(const std::string &filename) {
+        std::ifstream file(filename);
+        cereal::JSONInputArchive ar(file);
+        pangolin::OpenGlRenderState camView;
+        ar(camView);
+        SetCamView(camView);
     }
 }
