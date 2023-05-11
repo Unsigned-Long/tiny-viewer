@@ -25,7 +25,6 @@
 
 namespace ns_viewer {
 
-
     struct ViewerConfigor {
     public:
         struct {
@@ -145,7 +144,7 @@ namespace ns_viewer {
         static Ptr Create(const ViewerConfigor &configor = ViewerConfigor());
 
         // used for load viewer from file
-        explicit Viewer(char) {}
+        explicit Viewer(char) : _thread(nullptr) {}
 
         virtual ~Viewer();
 
@@ -182,6 +181,8 @@ namespace ns_viewer {
         void SaveCameraCallBack() const;
 
         void SaveViewerCallBack() const;
+
+        void VideoRecordCallBack() const;
 
     public:
 

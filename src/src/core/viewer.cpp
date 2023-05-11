@@ -134,12 +134,6 @@ namespace ns_viewer {
     }
 
     void Viewer::Run() {
-        if (std::filesystem::exists(_configor.Window.DataOutputPath)) {
-            std::cout << "\033[92m\033[3m[Viewer] "
-                         "press [ctrl+'s'] to save the current scene, "
-                         "[ctrl+'c'] for camera view, "
-                         "and [ctrl+'v'] for total viewer.\033[0m" << std::endl;
-        }
 
         // fetch the context and bind it to this thread
         pangolin::BindToContext(_configor.Window.Name);
@@ -155,9 +149,18 @@ namespace ns_viewer {
                 .SetBounds(0.0, 1.0, 0.0, 1.0, -static_cast<double>(_configor.Camera.Width) / _configor.Camera.Height)
                 .SetHandler(&handler);
 
-        pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 's', [this] { SaveScreenShotCallBack(); });
-        pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 'c', [this] { SaveCameraCallBack(); });
-        pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 'v', [this] { SaveViewerCallBack(); });
+        if (std::filesystem::exists(_configor.Window.DataOutputPath)) {
+
+            pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 's', [this] { SaveScreenShotCallBack(); });
+            pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 'c', [this] { SaveCameraCallBack(); });
+            pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 'v', [this] { SaveViewerCallBack(); });
+            pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 'r', [this] { VideoRecordCallBack(); });
+
+            std::cout << "\033[92m\033[3m[Viewer] "
+                         "press [ctrl+'s'] to save the current scene, "
+                         "[ctrl+'c'] for camera view, "
+                         "and [ctrl+'v'] for total viewer.\033[0m" << std::endl;
+        }
 
         while (!pangolin::ShouldQuit()) {
 
@@ -293,5 +296,9 @@ namespace ns_viewer {
         pangolin::OpenGlRenderState camView;
         ar(camView);
         SetCamView(camView);
+    }
+
+    void Viewer::VideoRecordCallBack() const {
+        // todo: record video
     }
 }
