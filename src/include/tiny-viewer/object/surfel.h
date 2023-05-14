@@ -30,7 +30,15 @@ namespace ns_viewer {
                const Colour &color = GetUniqueColour(), pangolin::AxisDirection mainAxis = pangolin::AxisX,
                pangolin::AxisDirection subAxis = pangolin::AxisY);
 
+        Surfel(const Eigen::Vector4f &plane, float mainWidth, float subWidth, bool lineMode,
+               const Colour &color = GetUniqueColour(), pangolin::AxisDirection mainAxis = pangolin::AxisX,
+               pangolin::AxisDirection subAxis = pangolin::AxisY);
+
         static Ptr Create(const Posef &pose, float mainWidth, float subWidth, bool lineMode,
+                          const Colour &color = GetUniqueColour(), pangolin::AxisDirection mainAxis = pangolin::AxisX,
+                          pangolin::AxisDirection subAxis = pangolin::AxisY);
+
+        static Ptr Create(const Eigen::Vector4f &plane, float mainWidth, float subWidth, bool lineMode,
                           const Colour &color = GetUniqueColour(), pangolin::AxisDirection mainAxis = pangolin::AxisX,
                           pangolin::AxisDirection subAxis = pangolin::AxisY);
 

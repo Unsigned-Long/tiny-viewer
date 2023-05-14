@@ -23,9 +23,27 @@ namespace ns_viewer {
         v4 = p - ma + sa;
     }
 
+    Surfel::Surfel(const Vector4f &plane, float mainWidth, float subWidth, bool lineMode, const Colour &color,
+                   pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis)
+            : Surfel([&plane]() {
+        Eigen::Vector3f zAxis = plane.block<3, 1>(0, 0);
+        std::pair<Eigen::Vector3f, Eigen::Vector3f> axis = TangentBasis(zAxis);
+        Eigen::Matrix3f rotMat;
+        rotMat.col(0) = axis.first;
+        rotMat.col(1) = axis.second;
+        rotMat.col(2) = zAxis;
+        return Posef(rotMat, -plane(3, 0) * zAxis);
+    }(), mainWidth, subWidth, lineMode, color, mainAxis, subAxis) {}
+
     Surfel::Ptr Surfel::Create(const Posef &pose, float mainWidth, float subWidth, bool lineMode, const Colour &color,
                                pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis) {
         return std::make_shared<Surfel>(pose, mainWidth, subWidth, lineMode, color, mainAxis, subAxis);
+    }
+
+    Surfel::Ptr
+    Surfel::Create(const Vector4f &plane, float mainWidth, float subWidth, bool lineMode, const Colour &color,
+                   pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis) {
+        return std::make_shared<Surfel>(plane, mainWidth, subWidth, lineMode, color, mainAxis, subAxis);
     }
 
     Surfel::~Surfel() = default;
