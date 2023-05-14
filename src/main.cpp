@@ -27,9 +27,9 @@ int main(int argc, char **argv) {
         viewer.AddEntity(Cube::Create(Posef::Random(3.0f), true));
 
         viewer.AddEntity(
-                Surfel::Create(Posef::Random(2.0f), 0.5f, 0.3f, false, Entity::GetUniqueColour().WithAlpha(0.3f))
+                Plane::Create(Posef::Random(2.0f), 0.5f, 0.3f, false, Entity::GetUniqueColour().WithAlpha(0.3f))
         );
-        viewer.AddEntity(Surfel::Create(Posef::Random(1.0f), 0.5f, 0.3f, true));
+        viewer.AddEntity(Plane::Create(Posef::Random(1.0f), 0.5f, 0.3f, true));
 
         viewer.AddEntity(Coordinate::Create(Posef::Random(5.0), 0.5f));
 
@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
                                           {3.0f, 1.0f, 2.0f}}, false, Colour::Black().WithAlpha(0.2f)));
 
         for (int i = 0; i < 10; ++i) {
-            viewer.AddEntity(PlaneInCube::Random(5.0f));
+            viewer.AddEntity(Surfel::Random(5.0f));
         }
 
         // show (multi thread)

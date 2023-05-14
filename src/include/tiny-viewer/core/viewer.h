@@ -21,8 +21,8 @@
 #include "tiny-viewer/object/camera.h"
 #include "tiny-viewer/object/imu.h"
 #include "tiny-viewer/object/lidar.h"
+#include "tiny-viewer/object/plane.h"
 #include "tiny-viewer/object/surfel.h"
-#include "tiny-viewer/object/plane_in_cube.h"
 #include "utility"
 
 namespace ns_viewer {

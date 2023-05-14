@@ -3,12 +3,12 @@
 //
 
 #include "pangolin/gl/gldraw.h"
-#include "tiny-viewer/object/surfel.h"
+#include "tiny-viewer/object/plane.h"
 
 namespace ns_viewer {
 
-    Surfel::Surfel(const Posef &pose, float mainWidth, float subWidth, bool lineMode, const Colour &color,
-                   pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis)
+    Plane::Plane(const Posef &pose, float mainWidth, float subWidth, bool lineMode, const Colour &color,
+                 pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis)
             : Entity(), lineMode(lineMode), color(color), coord(pose, 0.5f * std::min(mainWidth, subWidth)) {
         Eigen::Vector3f p = pose.translation;
 
@@ -23,9 +23,9 @@ namespace ns_viewer {
         v4 = p - ma + sa;
     }
 
-    Surfel::Surfel(const Vector4f &plane, float mainWidth, float subWidth, bool lineMode, const Colour &color,
-                   pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis)
-            : Surfel([&plane]() {
+    Plane::Plane(const Vector4f &plane, float mainWidth, float subWidth, bool lineMode, const Colour &color,
+                 pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis)
+            : Plane([&plane]() {
         Eigen::Vector3f zAxis = plane.block<3, 1>(0, 0);
         std::pair<Eigen::Vector3f, Eigen::Vector3f> axis = TangentBasis(zAxis);
         Eigen::Matrix3f rotMat;
@@ -35,20 +35,20 @@ namespace ns_viewer {
         return Posef(rotMat, -plane(3, 0) * zAxis);
     }(), mainWidth, subWidth, lineMode, color, mainAxis, subAxis) {}
 
-    Surfel::Ptr Surfel::Create(const Posef &pose, float mainWidth, float subWidth, bool lineMode, const Colour &color,
-                               pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis) {
-        return std::make_shared<Surfel>(pose, mainWidth, subWidth, lineMode, color, mainAxis, subAxis);
+    Plane::Ptr Plane::Create(const Posef &pose, float mainWidth, float subWidth, bool lineMode, const Colour &color,
+                             pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis) {
+        return std::make_shared<Plane>(pose, mainWidth, subWidth, lineMode, color, mainAxis, subAxis);
     }
 
-    Surfel::Ptr
-    Surfel::Create(const Vector4f &plane, float mainWidth, float subWidth, bool lineMode, const Colour &color,
-                   pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis) {
-        return std::make_shared<Surfel>(plane, mainWidth, subWidth, lineMode, color, mainAxis, subAxis);
+    Plane::Ptr
+    Plane::Create(const Vector4f &plane, float mainWidth, float subWidth, bool lineMode, const Colour &color,
+                  pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis) {
+        return std::make_shared<Plane>(plane, mainWidth, subWidth, lineMode, color, mainAxis, subAxis);
     }
 
-    Surfel::~Surfel() = default;
+    Plane::~Plane() = default;
 
-    void Surfel::Draw() const {
+    void Plane::Draw() const {
         coord.Draw();
         glColor4f(ExpandColor(color));
         if (lineMode) {

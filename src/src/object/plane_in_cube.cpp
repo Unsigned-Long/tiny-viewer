@@ -2,14 +2,14 @@
 // Created by csl on 5/14/23.
 //
 
-#include "tiny-viewer/object/plane_in_cube.h"
+#include "tiny-viewer/object/surfel.h"
 #include "pangolin/gl/gldraw.h"
 #include "artwork/logger/logger.h"
 
 namespace ns_viewer {
 
-    PlaneInCube::PlaneInCube(const Vector4f &plane, const Cube &cube, const bool lineMode, bool drawCube,
-                             const Colour &color)
+    Surfel::Surfel(const Vector4f &plane, const Cube &cube, const bool lineMode, bool drawCube,
+                   const Colour &color)
             : Entity(), drawCube(drawCube), cube(cube) {
         auto v = cube.GetVertices();
         Eigen::Vector3f norm = plane.block<3, 1>(0, 0);
@@ -52,25 +52,25 @@ namespace ns_viewer {
         polygon = Polygon(verts, lineMode, color);
     }
 
-    PlaneInCube::~PlaneInCube() = default;
+    Surfel::~Surfel() = default;
 
-    void PlaneInCube::Draw() const {
+    void Surfel::Draw() const {
         if (drawCube) { cube.Draw(); }
         polygon.Draw();
     }
 
-    PlaneInCube::Ptr
-    PlaneInCube::Create(const Vector4f &plane, const Cube &cube, bool lineMode, bool drawCube, const Colour &color) {
-        return std::make_shared<PlaneInCube>(plane, cube, lineMode, drawCube, color);
+    Surfel::Ptr
+    Surfel::Create(const Vector4f &plane, const Cube &cube, bool lineMode, bool drawCube, const Colour &color) {
+        return std::make_shared<Surfel>(plane, cube, lineMode, drawCube, color);
     }
 
-    PlaneInCube::Ptr PlaneInCube::Random(float bound) {
+    Surfel::Ptr Surfel::Random(float bound) {
         std::default_random_engine engine(std::chrono::steady_clock::now().time_since_epoch().count());
         std::uniform_real_distribution<float> u1(0.5f, 1.0f);
         std::uniform_real_distribution<float> u2(-bound, bound);
         Eigen::Vector3f norm = Eigen::Vector3f(u2(engine), u2(engine), u2(engine)).normalized();
         auto pose = Posef::Random(bound);
-        return PlaneInCube::Create(
+        return Surfel::Create(
                 {ExpandVec3(norm), -pose.translation.dot(norm)},
                 Cube(pose, true, u1(engine), u1(engine), u1(engine)), false
         );
