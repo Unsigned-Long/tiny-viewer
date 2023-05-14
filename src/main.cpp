@@ -58,6 +58,12 @@ int main(int argc, char **argv) {
 
         viewer.AddEntity(Cone::Create(Posef::Random(5.0f), 0.3f, M_PI_4));
 
+        viewer.AddEntity(Polygon::Create({{0.0f, 0.0f, 2.0f},
+                                          {0.0f, 1.0f, 3.0f},
+                                          {1.0f, 2.0f, 2.0f},
+                                          {2.0f, 3.0f, 1.0f},
+                                          {3.0f, 1.0f, 2.0f}}, false, Colour::Black().WithAlpha(0.2f)));
+
         // show (multi thread)
         viewer.RunInMultiThread();
 
