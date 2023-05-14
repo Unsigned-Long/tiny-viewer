@@ -43,6 +43,9 @@ namespace ns_viewer {
     GetColormapLUT(pcl::visualization::LookUpTableRepresentationProperties colormapType, double minmax[2]);
 
     std::pair<Eigen::Vector3f, Eigen::Vector3f> TangentBasis(const Eigen::Vector3f &v);
+
+    std::optional<Eigen::Vector3f>
+    LinePlaneIntersection(const Eigen::Vector3f &ls, const Eigen::Vector3f &le, const Eigen::Vector3f &norm, float d);
 }
 
 namespace Eigen {

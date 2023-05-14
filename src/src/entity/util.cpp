@@ -102,4 +102,24 @@ namespace ns_viewer {
         c = a.cross(b);
         return {b, c};
     }
+
+    std::optional<Eigen::Vector3f>
+    LinePlaneIntersection(const Eigen::Vector3f &ls, const Eigen::Vector3f &le, const Eigen::Vector3f &norm, float d) {
+        float ds = norm.dot(ls) + d;
+        float de = norm.dot(le) + d;
+        if (ds * de > 0.0) {
+            // small side
+            return {};
+        } else if (ds == 0.0) {
+            // ls in plane
+            return ls;
+        } else if (de == 0.0) {
+            // le in plane
+            return le;
+        } else {
+            // intersection
+            float nds = std::abs(ds), nde = std::abs(de);
+            return (nds * le + nde * ls) / (nds + nde);
+        }
+    }
 }
