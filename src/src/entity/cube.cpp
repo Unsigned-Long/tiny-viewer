@@ -98,4 +98,12 @@ namespace ns_viewer {
     Cube::Create(const Posef &pose, bool lineMode, const Colour &color, float xWidth, float yWidth, float zWidth) {
         return std::make_shared<Cube>(pose, lineMode, xWidth, yWidth, zWidth, color);
     }
+
+    std::array<Eigen::Vector3f, 8> Cube::GetVertices() const {
+        return {v1, v2, v3, v4, v5, v6, v7, v8};
+    }
+
+    Eigen::Vector3f Cube::GetCenter() const {
+        return (v1 + v2 + v7 + v8) * 0.25f;
+    }
 }

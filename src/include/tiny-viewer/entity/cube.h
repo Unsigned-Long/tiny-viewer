@@ -40,6 +40,10 @@ namespace ns_viewer {
         static Ptr Create(const Posef &pose, bool lineMode, const Colour &color, float xWidth = DefaultCubeSize,
                           float yWidth = DefaultCubeSize, float zWidth = DefaultCubeSize);
 
+        [[nodiscard]] Eigen::Vector3f GetCenter() const;
+
+        [[nodiscard]] std::array<Eigen::Vector3f, 8> GetVertices() const;
+
         ~Cube() override;
 
         void Draw() const override;
