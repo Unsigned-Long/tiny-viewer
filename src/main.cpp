@@ -64,6 +64,10 @@ int main(int argc, char **argv) {
                                           {2.0f, 3.0f, 1.0f},
                                           {3.0f, 1.0f, 2.0f}}, false, Colour::Black().WithAlpha(0.2f)));
 
+        for (int i = 0; i < 10; ++i) {
+            viewer.AddEntity(PlaneInCube::Random(5.0f));
+        }
+
         // show (multi thread)
         viewer.RunInMultiThread();
 
