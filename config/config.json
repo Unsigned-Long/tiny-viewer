@@ -2,7 +2,6 @@
     "Configor": {
         "Window": {
             "Name": "Tiny Viewer",
-            "DataOutputPath": "../output",
             "BackGroundColor": {
                 "red": 1.0,
                 "green": 1.0,
@@ -10,7 +9,10 @@
                 "alpha": 1.0
             },
             "Width": 1280,
-            "height": 960
+            "Height": 960
+        },
+        "Output": {
+            "DataOutputPath": "../output"
         },
         "Camera": {
             "Width": 640,
@@ -35,7 +37,7 @@
         "Grid": {
             "CellCount": 10,
             "CellSize": 1.0,
-            "PlaneId": 0,
+            "PlanePos": 0,
             "Color": {
                 "red": 0.0,
                 "green": 0.0,

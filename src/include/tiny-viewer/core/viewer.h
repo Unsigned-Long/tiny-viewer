@@ -31,23 +31,29 @@ namespace ns_viewer {
     public:
         struct {
             std::string Name = "Tiny Viewer";
-            std::string DataOutputPath;
             Colour BackGroundColor = Colour::White();
             int Width = 640 * 2;
-            int height = 480 * 2;
+            int Height = 480 * 2;
 
         public:
             template<class Archive>
             void serialize(Archive &ar) {
                 ar(
-                        cereal::make_nvp("Name", Name),
-                        cereal::make_nvp("DataOutputPath", DataOutputPath),
-                        cereal::make_nvp("BackGroundColor", BackGroundColor),
-                        cereal::make_nvp("Width", Width),
-                        cereal::make_nvp("height", height)
+                        CEREAL_NVP(Name), CEREAL_NVP(BackGroundColor),
+                        CEREAL_NVP(Width), CEREAL_NVP(Height)
                 );
             }
         } Window;
+
+        struct {
+            std::string DataOutputPath;
+
+        public:
+            template<class Archive>
+            void serialize(Archive &ar) {
+                ar(CEREAL_NVP(DataOutputPath));
+            }
+        } Output;
 
         struct {
             int Width = 640, Height = 480;
@@ -62,16 +68,11 @@ namespace ns_viewer {
             template<class Archive>
             void serialize(Archive &ar) {
                 ar(
-                        cereal::make_nvp("Width", Width),
-                        cereal::make_nvp("Height", Height),
-                        cereal::make_nvp("Fx", Fx),
-                        cereal::make_nvp("Fy", Fy),
-                        cereal::make_nvp("Cx", Cx),
-                        cereal::make_nvp("Cy", Cy),
-                        cereal::make_nvp("Near", Near),
-                        cereal::make_nvp("Far", Far),
-                        cereal::make_nvp("InitPos", InitPos),
-                        cereal::make_nvp("InitViewPoint", InitViewPoint)
+                        CEREAL_NVP(Width), CEREAL_NVP(Height),
+                        CEREAL_NVP(Fx), CEREAL_NVP(Fy),
+                        CEREAL_NVP(Cx), CEREAL_NVP(Cy),
+                        CEREAL_NVP(Near), CEREAL_NVP(Far),
+                        CEREAL_NVP(InitPos), CEREAL_NVP(InitViewPoint)
                 );
             }
         } Camera;
@@ -80,7 +81,7 @@ namespace ns_viewer {
             int CellCount = 10;
             float CellSize = 1.0f;
             // 0: xy, 1: yz, 2: zx
-            int PlaneId = 0;
+            int PlanePos = 0;
 
             Colour Color = Colour::Black().WithAlpha(0.3f);
 
@@ -88,10 +89,8 @@ namespace ns_viewer {
             template<class Archive>
             void serialize(Archive &ar) {
                 ar(
-                        cereal::make_nvp("CellCount", CellCount),
-                        cereal::make_nvp("CellSize", CellSize),
-                        cereal::make_nvp("PlaneId", PlaneId),
-                        cereal::make_nvp("Color", Color)
+                        CEREAL_NVP(CellCount), CEREAL_NVP(CellSize),
+                        CEREAL_NVP(PlanePos), CEREAL_NVP(Color)
                 );
             }
         } Grid;
@@ -99,11 +98,7 @@ namespace ns_viewer {
     public:
         template<class Archive>
         void serialize(Archive &ar) {
-            ar(
-                    cereal::make_nvp("Window", Window),
-                    cereal::make_nvp("Camera", Camera),
-                    cereal::make_nvp("Grid", Grid)
-            );
+            ar(CEREAL_NVP(Window), CEREAL_NVP(Output), CEREAL_NVP(Camera), CEREAL_NVP(Grid));
         }
 
     public:

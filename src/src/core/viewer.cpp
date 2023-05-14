@@ -18,8 +18,8 @@ namespace ns_viewer {
 
     ViewerConfigor ViewerConfigor::LoadConfigure(const std::string &filename) {
         std::ifstream file(filename);
-        cereal::JSONInputArchive archive(file);
         ViewerConfigor configor;
+        cereal::JSONInputArchive archive(file);
         archive(cereal::make_nvp("Configor", configor));
         return configor;
     }
@@ -37,7 +37,7 @@ namespace ns_viewer {
     }
 
     ViewerConfigor &ViewerConfigor::WithScreenShotSaveDir(const std::string &dir) {
-        Window.DataOutputPath = dir;
+        Output.DataOutputPath = dir;
         return *this;
     }
 
@@ -78,7 +78,7 @@ namespace ns_viewer {
     // -----------------
     void Viewer::InitViewer(bool initCamViewFromConfigor) {
         // create a window and bind its context to the main thread
-        pangolin::CreateWindowAndBind(_configor.Window.Name, _configor.Window.Width, _configor.Window.height);
+        pangolin::CreateWindowAndBind(_configor.Window.Name, _configor.Window.Width, _configor.Window.Height);
 
         // unset the current context from the main thread
         pangolin::GetBoundWindow()->RemoveCurrent();
@@ -97,7 +97,7 @@ namespace ns_viewer {
 
         AddEntity(Coordinate::Create(Posef()));
         Eigen::Vector3f v1, v2;
-        switch (_configor.Grid.PlaneId % 3) {
+        switch (_configor.Grid.PlanePos % 3) {
             case 0:
                 v1 = {1.0f, 0.0f, 0.0f};
                 v2 = {0.0f, 1.0f, 0.0f};
@@ -149,7 +149,7 @@ namespace ns_viewer {
                 .SetBounds(0.0, 1.0, 0.0, 1.0, -static_cast<double>(_configor.Camera.Width) / _configor.Camera.Height)
                 .SetHandler(&handler);
 
-        if (std::filesystem::exists(_configor.Window.DataOutputPath)) {
+        if (std::filesystem::exists(_configor.Output.DataOutputPath)) {
 
             pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 's', [this] { SaveScreenShotCallBack(); });
             pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 'c', [this] { SaveCameraCallBack(); });
@@ -193,7 +193,7 @@ namespace ns_viewer {
 
     void Viewer::SaveScreenShotCallBack() const {
         std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
-        const std::string filename = _configor.Window.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".png";
+        const std::string filename = _configor.Output.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".png";
         pangolin::SaveWindowOnRender(filename);
         std::cout << "\033[92m\033[3m[Viewer] the scene shot is saved to path: '"
                   << filename << "\033[0m" << std::endl;
@@ -201,7 +201,7 @@ namespace ns_viewer {
 
     void Viewer::SaveCameraCallBack() const {
         std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
-        const std::string filename = _configor.Window.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".cam";
+        const std::string filename = _configor.Output.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".cam";
 
         std::ofstream file(filename);
         cereal::JSONOutputArchive ar(file);
@@ -212,7 +212,7 @@ namespace ns_viewer {
 
     void Viewer::SaveViewerCallBack() const {
         std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
-        const std::string filename = _configor.Window.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".view";
+        const std::string filename = _configor.Output.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".view";
         this->Save(filename, true);
         std::cout << "\033[92m\033[3m[Viewer] the viewer is saved to path: '"
                   << filename << "\033[0m" << std::endl;

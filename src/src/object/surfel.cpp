@@ -1,80 +1,78 @@
 //
-// Created by csl on 5/10/23.
+// Created by csl on 5/14/23.
 //
 
+#include "tiny-viewer/object/surfel.h"
 #include "pangolin/gl/gldraw.h"
-#include "tiny-viewer/object/plane.h"
+#include "artwork/logger/logger.h"
 
 namespace ns_viewer {
 
-    Plane::Plane(const Posef &pose, float mainWidth, float subWidth, bool lineMode, const Colour &color,
-                 pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis)
-            : Entity(), lineMode(lineMode), color(color), coord(pose, 0.5f * std::min(mainWidth, subWidth)) {
-        Eigen::Vector3f p = pose.translation;
+    Surfel::Surfel(const Vector4f &plane, const Cube &cube, const bool lineMode, bool drawCube,
+                   const Colour &color)
+            : Entity(), drawCube(drawCube), cube(cube) {
+        auto v = cube.GetVertices();
+        Eigen::Vector3f norm = plane.block<3, 1>(0, 0);
+        float dist = plane(3, 0);
 
-        Eigen::Vector3f ma = 0.5f * mainWidth * pose.rotation *
-                             Eigen::Vector3f(ExpandAryVec3(pangolin::AxisDirectionVector[mainAxis]));
-        Eigen::Vector3f sa = 0.5f * subWidth * pose.rotation *
-                             Eigen::Vector3f(ExpandAryVec3(pangolin::AxisDirectionVector[subAxis]));
+        std::vector<Eigen::Vector3f> verts;
+        verts.reserve(10);
 
-        v1 = p + ma + sa;
-        v2 = p + ma - sa;
-        v3 = p - ma - sa;
-        v4 = p - ma + sa;
+#define INTERSECT_HELP(i, j)                                         \
+    if (auto p = LinePlaneIntersection(v[i], v[j], norm, dist); p) { \
+        verts.push_back(*p);                                         \
     }
 
-    Plane::Plane(const Vector4f &plane, float mainWidth, float subWidth, bool lineMode, const Colour &color,
-                 pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis)
-            : Plane([&plane]() {
-        Eigen::Vector3f zAxis = plane.block<3, 1>(0, 0);
-        std::pair<Eigen::Vector3f, Eigen::Vector3f> axis = TangentBasis(zAxis);
-        Eigen::Matrix3f rotMat;
-        rotMat.col(0) = axis.first;
-        rotMat.col(1) = axis.second;
-        rotMat.col(2) = zAxis;
-        return Posef(rotMat, -plane(3, 0) * zAxis);
-    }(), mainWidth, subWidth, lineMode, color, mainAxis, subAxis) {}
+        INTERSECT_HELP(0, 1)
+        INTERSECT_HELP(2, 3)
+        INTERSECT_HELP(4, 5)
+        INTERSECT_HELP(6, 7)
 
-    Plane::Ptr Plane::Create(const Posef &pose, float mainWidth, float subWidth, bool lineMode, const Colour &color,
-                             pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis) {
-        return std::make_shared<Plane>(pose, mainWidth, subWidth, lineMode, color, mainAxis, subAxis);
+        INTERSECT_HELP(0, 2)
+        INTERSECT_HELP(1, 3)
+        INTERSECT_HELP(4, 6)
+        INTERSECT_HELP(5, 7)
+
+        INTERSECT_HELP(0, 4)
+        INTERSECT_HELP(1, 5)
+        INTERSECT_HELP(2, 6)
+        INTERSECT_HELP(3, 7)
+
+        Eigen::Vector3f cen = cube.GetCenter();
+        std::pair<Eigen::Vector3f, Eigen::Vector3f> axis = TangentBasis(norm);
+
+        std::sort(verts.begin(), verts.end(), [&cen, &axis](const Eigen::Vector3f &v1, const Eigen::Vector3f &v2) {
+            Eigen::Vector3f d1 = v1 - cen, d2 = v2 - cen;
+            float theta1 = std::atan2(d1.dot(axis.second), d1.dot(axis.first));
+            float theta2 = std::atan2(d2.dot(axis.second), d2.dot(axis.first));
+            return theta1 < theta2;
+        });
+
+#undef INTERSECT_HELP
+        polygon = Polygon(verts, lineMode, color);
     }
 
-    Plane::Ptr
-    Plane::Create(const Vector4f &plane, float mainWidth, float subWidth, bool lineMode, const Colour &color,
-                  pangolin::AxisDirection mainAxis, pangolin::AxisDirection subAxis) {
-        return std::make_shared<Plane>(plane, mainWidth, subWidth, lineMode, color, mainAxis, subAxis);
+    Surfel::~Surfel() = default;
+
+    void Surfel::Draw() const {
+        if (drawCube) { cube.Draw(); }
+        polygon.Draw();
     }
 
-    Plane::~Plane() = default;
+    Surfel::Ptr
+    Surfel::Create(const Vector4f &plane, const Cube &cube, bool lineMode, bool drawCube, const Colour &color) {
+        return std::make_shared<Surfel>(plane, cube, lineMode, drawCube, color);
+    }
 
-    void Plane::Draw() const {
-        coord.Draw();
-        glColor4f(ExpandColor(color));
-        if (lineMode) {
-            glLineWidth(DefaultLineSize);
-            pangolin::glDrawLine(ExpandVec3(v1), ExpandVec3(v2));
-            pangolin::glDrawLine(ExpandVec3(v2), ExpandVec3(v3));
-            pangolin::glDrawLine(ExpandVec3(v3), ExpandVec3(v4));
-            pangolin::glDrawLine(ExpandVec3(v4), ExpandVec3(v1));
-        } else {
-            const GLfloat verts[] = {
-                    ExpandVec3(v1), ExpandVec3(v2), ExpandVec3(v3),
-                    ExpandVec3(v1), ExpandVec3(v3), ExpandVec3(v4),
-            };
-
-            glVertexPointer(3, GL_FLOAT, 0, verts);
-            glEnableClientState(GL_VERTEX_ARRAY);
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-
-            glDisableClientState(GL_VERTEX_ARRAY);
-        }
-        glPointSize(DefaultPointSize);
-        glBegin(GL_POINTS);
-        glVertex3f(ExpandVec3(v1));
-        glVertex3f(ExpandVec3(v2));
-        glVertex3f(ExpandVec3(v3));
-        glVertex3f(ExpandVec3(v4));
-        glEnd();
+    Surfel::Ptr Surfel::Random(float bound) {
+        std::default_random_engine engine(std::chrono::steady_clock::now().time_since_epoch().count());
+        std::uniform_real_distribution<float> u1(0.5f, 1.0f);
+        std::uniform_real_distribution<float> u2(-bound, bound);
+        Eigen::Vector3f norm = Eigen::Vector3f(u2(engine), u2(engine), u2(engine)).normalized();
+        auto pose = Posef::Random(bound);
+        return Surfel::Create(
+                {ExpandVec3(norm), -pose.translation.dot(norm)},
+                Cube(pose, true, u1(engine), u1(engine), u1(engine)), false
+        );
     }
 }
