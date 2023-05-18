@@ -23,6 +23,7 @@
 #include "tiny-viewer/object/lidar.h"
 #include "tiny-viewer/object/plane.h"
 #include "tiny-viewer/object/surfel.h"
+#include "tiny-viewer/object/aligned_cloud.hpp"
 #include "utility"
 
 namespace ns_viewer {

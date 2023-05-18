@@ -41,6 +41,7 @@ int main(int argc, char **argv) {
         pcl::PointCloud<pcl::PointXYZI>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZI>);
         pcl::io::loadPCDFile("/home/csl/CppWorks/artwork/tiny-viewer/data/scan.pcd", *cloud);
         viewer.AddEntity(Cloud<pcl::PointXYZI>::Create(cloud, 2.0f));
+        viewer.AddEntity(AlignedCloud<pcl::PointXYZI>::Random(2.0f, 2000, {-3.0f, 2.0f, -3.0f}, {0.0f, 0.0f, -1.0f}));
 
         viewer.AddEntity(IMU::Create(Posef::Random(3.0f)));
         viewer.AddEntity(IMU::Create(Posef::Random(3.0f)));
