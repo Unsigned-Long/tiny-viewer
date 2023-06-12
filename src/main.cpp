@@ -69,6 +69,8 @@ int main(int argc, char **argv) {
             viewer.AddEntity(Surfel::Random(5.0f));
         }
 
+        viewer.AddEntity(Radar::Create(Posef::Random(5.0f)));
+
         // show (multi thread)
         viewer.RunInMultiThread();
 

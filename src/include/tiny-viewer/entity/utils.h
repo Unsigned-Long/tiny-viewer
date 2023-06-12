@@ -26,6 +26,7 @@ namespace ns_viewer {
 #define DefaultPointSize (4.0f)
 #define DefaultIMUSize (0.2f)
 #define DefaultCameraSize (0.2f)
+#define DefaultRadarSize (0.2f)
 #define DefaultLiDARSize (0.2f)
 
 #define ExpandVec3(v) v(0), v(1), v(2)
