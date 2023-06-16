@@ -18,6 +18,7 @@
 #include "tiny-viewer/entity/line.h"
 #include "tiny-viewer/entity/point_cloud.hpp"
 #include "tiny-viewer/entity/polygon.h"
+#include "tiny-viewer/entity/path.h"
 #include "tiny-viewer/object/camera.h"
 #include "tiny-viewer/object/imu.h"
 #include "tiny-viewer/object/lidar.h"
