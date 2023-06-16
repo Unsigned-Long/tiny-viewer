@@ -122,4 +122,21 @@ namespace ns_viewer {
             return (nds * le + nde * ls) / (nds + nde);
         }
     }
+
+    std::vector<std::string> StringSplit(const std::string &str, char splitor, bool ignoreEmpty) {
+        std::vector<std::string> vec;
+        auto iter = str.cbegin();
+        while (true) {
+            auto pos = std::find(iter, str.cend(), splitor);
+            auto elem = std::string(iter, pos);
+            if (!(elem.empty() && ignoreEmpty)) {
+                vec.push_back(elem);
+            }
+            if (pos == str.cend()) {
+                break;
+            }
+            iter = ++pos;
+        }
+        return vec;
+    }
 }

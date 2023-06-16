@@ -47,6 +47,8 @@ namespace ns_viewer {
 
     std::optional<Eigen::Vector3f>
     LinePlaneIntersection(const Eigen::Vector3f &ls, const Eigen::Vector3f &le, const Eigen::Vector3f &norm, float d);
+
+    std::vector<std::string> StringSplit(const std::string &str, char splitor, bool ignoreEmpty = true);
 }
 
 namespace Eigen {
