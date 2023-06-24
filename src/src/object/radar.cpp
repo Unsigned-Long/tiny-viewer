@@ -15,23 +15,23 @@ namespace ns_viewer {
         Eigen::Vector3f z = pose.rotation.col(2);
 
         {
-            Eigen::Vector3f ep = cenVert + z * size;
+            Eigen::Vector3f ep = cenVert + x * size;
             const float deltaAng = M_PI * 2.0f / 8.0f;
             const auto r = static_cast<float>(size * std::sin(M_PI / 3.0));
 
             for (int i = 0; i < 8; ++i) {
                 float ang = deltaAng * static_cast<float>(i);
-                Eigen::Vector3f rv = Eigen::AngleAxisf(ang, z) * x * r;
+                Eigen::Vector3f rv = Eigen::AngleAxisf(ang, x) * y * r;
                 tVerts.at(i) = ep + rv;
             }
         }
         {
-            Eigen::Vector3f ep = cenVert + y * size;
+            Eigen::Vector3f ep = cenVert - z * size;
             const float deltaAng = M_PI * 2.0f / 4.0f;
             const auto r = static_cast<float>(size * std::sin(M_PI / 9.0));
             for (int i = 0; i < 4; ++i) {
                 float ang = deltaAng * static_cast<float>(i);
-                Eigen::Vector3f rv = Eigen::AngleAxisf(ang, y) * x * r;
+                Eigen::Vector3f rv = Eigen::AngleAxisf(ang, z) * y * r;
                 bVerts.at(i) = ep + rv;
             }
         }
