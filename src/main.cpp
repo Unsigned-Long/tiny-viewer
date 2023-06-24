@@ -79,6 +79,7 @@ int main(int argc, char **argv) {
                                       "s 0 0 -0.75 0 0 -0.5 -0.25 0 0 -0.5 0 0 0 0 0.25 "
                                       "m 1 0 1.25 s 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 -0.5 0 -0.5 -0.5 0 -0.25 l 0.75 0 0"));
 
+        viewer.AddEntity(Cloud<Landmark>::Random(5.0, 20, {4, 5, 4}));
         // show (multi thread)
         viewer.RunInMultiThread();
 

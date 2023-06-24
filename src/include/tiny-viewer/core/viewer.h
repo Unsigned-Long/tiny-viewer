@@ -26,6 +26,7 @@
 #include "tiny-viewer/object/surfel.h"
 #include "tiny-viewer/object/aligned_cloud.hpp"
 #include "tiny-viewer/object/radar.h"
+#include "tiny-viewer/object/landmark.h"
 #include "utility"
 
 namespace ns_viewer {
