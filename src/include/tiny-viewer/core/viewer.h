@@ -171,6 +171,8 @@ namespace ns_viewer {
 
         static Ptr Load(const std::string &filename, bool binaryMode = true);
 
+        ViewerConfigor &GetConfigor();
+
     protected:
 
         void InitViewer(bool initCamViewFromConfigor);

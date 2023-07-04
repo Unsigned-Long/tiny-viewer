@@ -301,4 +301,8 @@ namespace ns_viewer {
     void Viewer::VideoRecordCallBack() const {
         // todo: record video
     }
+
+    ViewerConfigor &Viewer::GetConfigor() {
+        return _configor;
+    }
 }
