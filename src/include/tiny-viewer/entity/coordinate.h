@@ -14,8 +14,8 @@ namespace ns_viewer {
         using Ptr = std::shared_ptr<Coordinate>;
 
     protected:
-        float size{};
         Eigen::Matrix4f pose;
+        float size{};
 
     public:
 

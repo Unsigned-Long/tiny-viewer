@@ -16,8 +16,8 @@ namespace ns_viewer {
     protected:
         std::vector<Eigen::Vector3f> verts;
 
-        Colour color;
         bool lineMode{};
+        Colour color;
 
     public:
         Polygon(const std::vector<Eigen::Vector3f> &verts, bool lineMode, const Colour &color = GetUniqueColour());

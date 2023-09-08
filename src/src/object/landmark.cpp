@@ -19,7 +19,7 @@ namespace ns_viewer {
                 {-0.58f, 0.58f, -0.58f},
         };
 
-        for (int i = 0; i < verts.size(); i += 2) {
+        for (int i = 0; i < static_cast<int>(verts.size()); i += 2) {
             Eigen::Vector3f delta = Eigen::Vector3f{scales[i / 2][0], scales[i / 2][1], scales[i / 2][2]} * size;
             verts.at(i + 0) = p + delta, verts.at(i + 1) = p - delta;
         }
@@ -39,7 +39,7 @@ namespace ns_viewer {
     void Landmark::Draw() const {
         glColor4f(ExpandColor(color));
         glLineWidth(DefaultLineSize);
-        for (int i = 0; i < verts.size(); i += 2) {
+        for (int i = 0; i < static_cast<int>(verts.size()); i += 2) {
             pangolin::glDrawLine(ExpandVec3(verts.at(i + 0)), ExpandVec3(verts.at(i + 1)));
         }
     }

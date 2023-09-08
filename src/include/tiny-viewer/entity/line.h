@@ -17,8 +17,8 @@ namespace ns_viewer {
         Eigen::Vector3f sp;
         Eigen::Vector3f ep;
 
-        Colour color;
         float size{};
+        Colour color;
 
     public:
 

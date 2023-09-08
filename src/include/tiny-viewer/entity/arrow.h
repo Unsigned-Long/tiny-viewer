@@ -19,8 +19,8 @@ namespace ns_viewer {
 
         std::array<Eigen::Vector3f, 4> verts;
 
-        Colour color;
         float size{};
+        Colour color;
 
     public:
 

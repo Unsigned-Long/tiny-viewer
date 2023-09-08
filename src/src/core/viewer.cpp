@@ -51,7 +51,7 @@ namespace ns_viewer {
     // public methods
     // --------------
     Viewer::Viewer(ViewerConfigor configor)
-            : _thread(nullptr), _configor(std::move(configor)) { InitViewer(true); }
+            : _configor(std::move(configor)), _thread(nullptr) { InitViewer(true); }
 
     Viewer::Ptr Viewer::Create(const ViewerConfigor &configor) {
         return std::make_shared<Viewer>(configor);
@@ -235,7 +235,7 @@ namespace ns_viewer {
     std::vector<std::size_t> Viewer::AddEntity(const std::vector<Entity::Ptr> &entities) {
         LOCKER_VIEWER
         std::vector<std::size_t> ids(entities.size());
-        for (int i = 0; i < entities.size(); ++i) {
+        for (int i = 0; i < static_cast<int>(entities.size()); ++i) {
             const Entity::Ptr &entity = entities.at(i);
             _entities.insert({entity->GetId(), entity});
             ids.at(i) = entity->GetId();

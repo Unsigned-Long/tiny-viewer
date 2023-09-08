@@ -64,7 +64,7 @@ namespace ns_viewer {
         explicit Cloud(const PointCloudPtr &cloud, float size = DefaultLandmarkSize)
                 : Entity() {
             landmarks.resize(cloud->size());
-            for (int i = 0; i < cloud->size(); ++i) {
+            for (int i = 0; i < static_cast<int>(cloud->size()); ++i) {
                 const auto &p = cloud->at(i);
                 landmarks.at(i) = Landmark({ExpandPCLPointXYZ(p)}, size);
             }
@@ -73,7 +73,7 @@ namespace ns_viewer {
         explicit Cloud(const RGBPointCloudPtr &cloud, float size = DefaultLandmarkSize)
                 : Entity() {
             landmarks.resize(cloud->size());
-            for (int i = 0; i < cloud->size(); ++i) {
+            for (int i = 0; i < static_cast<int>(cloud->size()); ++i) {
                 const auto &p = cloud->at(i);
                 landmarks.at(i) = Landmark({ExpandPCLPointXYZ(p)}, size, Colour(ExpandPCLColor(p)));
             }
@@ -82,7 +82,7 @@ namespace ns_viewer {
         explicit Cloud(const RGBAPointCloudPtr &cloud, float size = DefaultLandmarkSize)
                 : Entity() {
             landmarks.resize(cloud->size());
-            for (int i = 0; i < cloud->size(); ++i) {
+            for (int i = 0; i < static_cast<int>(cloud->size()); ++i) {
                 const auto &p = cloud->at(i);
                 landmarks.at(i) = Landmark({ExpandPCLPointXYZ(p)}, size, Colour(ExpandPCLColor(p)));
             }
@@ -97,7 +97,7 @@ namespace ns_viewer {
             std::uniform_real_distribution<float> u(-bound, bound);
             PointCloudPtr cloud(new PointCloud);
             cloud->resize(count);
-            for (int i = 0; i < count; ++i) {
+            for (int i = 0; i < static_cast<int>(count); ++i) {
                 pcl::PointXYZ &p = cloud->at(i);
                 // x, y, z
                 p.x = u(engine) + center(0);

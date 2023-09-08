@@ -23,8 +23,8 @@ namespace ns_viewer {
 
         PointCloudPtr cloud;
 
-        float size;
         Colour color;
+        float size;
     public:
         explicit Cloud(PointCloudPtr cloud, float size = DefaultPointSize, const Colour &colour = GetUniqueColour())
                 : Entity(), cloud(std::move(cloud)), color(colour), size(size) {}
@@ -39,7 +39,7 @@ namespace ns_viewer {
             std::uniform_real_distribution<float> u(-bound, bound);
             PointCloudPtr cloud(new PointCloud);
             cloud->resize(count);
-            for (int i = 0; i < count; ++i) {
+            for (int i = 0; i < static_cast<int>(count); ++i) {
                 pcl::PointXYZ &p = cloud->at(i);
                 // x, y, z
                 p.x = u(engine) + center(0);
@@ -97,7 +97,7 @@ namespace ns_viewer {
             std::uniform_real_distribution<float> u(-bound, bound);
             PointCloudPtr cloud(new PointCloud);
             cloud->resize(count);
-            for (int i = 0; i < count; ++i) {
+            for (int i = 0; i < static_cast<int>(count); ++i) {
                 pcl::PointXYZRGB &p = cloud->at(i);
                 // x, y, z
                 p.x = u(engine) + center(0);
@@ -161,7 +161,7 @@ namespace ns_viewer {
             std::uniform_real_distribution<float> ua(0.0f, 255.0f);
             PointCloudPtr cloud(new PointCloud);
             cloud->resize(count);
-            for (int i = 0; i < count; ++i) {
+            for (int i = 0; i < static_cast<int>(count); ++i) {
                 pcl::PointXYZRGBA &p = cloud->at(i);
                 // x, y, z
                 p.x = u(engine) + center(0);
@@ -229,7 +229,7 @@ namespace ns_viewer {
             vtkSmartPointer<vtkLookupTable> table = GetColormapLUT(mode, minmax);
             double rgb[3];
             cloud->resize(inputCloud->size());
-            for (int i = 0; i < inputCloud->size(); ++i) {
+            for (int i = 0; i < static_cast<int>(inputCloud->size()); ++i) {
                 auto &ip = inputCloud->at(i);
                 auto &op = cloud->at(i);
                 op.x = ip.x;
@@ -253,7 +253,7 @@ namespace ns_viewer {
             std::uniform_real_distribution<float> ui(0.0, 1.0);
             PointCloudPtr cloud(new PointCloud);
             cloud->resize(count);
-            for (int i = 0; i < count; ++i) {
+            for (int i = 0; i < static_cast<int>(count); ++i) {
                 pcl::PointXYZI &p = cloud->at(i);
                 // x, y, z
                 p.x = u(engine) + center(0);

@@ -14,7 +14,7 @@ namespace ns_viewer {
         float t = 0.0f, delta = 1.0f / static_cast<float>(num - 1);
         std::vector<Eigen::Vector3f> result(num);
 
-        for (int i = 0; i < num; ++i) {
+        for (int i = 0; i < static_cast<int>(num); ++i) {
             result[i] = Solve(t, controlPoints, 0, controlPoints.size());
             t += delta;
         }
@@ -59,13 +59,13 @@ namespace ns_viewer {
     std::vector<Line> Path::ParseSVGCode(const std::string &svgCode, float size, const Colour &color) {
         auto codes = StringSplit(svgCode, ' ', true);
         std::vector<std::pair<char, std::vector<float>>> data;
-        for (int i = 0; i < codes.size();) {
+        for (int i = 0; i < static_cast<int>(codes.size());) {
             const auto &code = codes.at(i);
             if (IsSVGPathControlCode(code)) {
                 // control code
                 data.push_back({code.front(), {}});
                 int j = i + 1;
-                for (; j < codes.size(); ++j) {
+                for (; j < static_cast<int>(codes.size()); ++j) {
                     auto nextCode = codes.at(j);
                     if (IsSVGPathControlCode(nextCode)) { break; }
                     data.back().second.push_back(std::stof(nextCode));
@@ -106,9 +106,9 @@ namespace ns_viewer {
                 case 'S': {
                     std::vector<Eigen::Vector3f> cps(1 + vec.size() / 3);
                     cps.front() = lastPoint;
-                    for (int i = 0; i < vec.size(); ++i) { cps.at(1 + i / 3)(i % 3) = vec.at(i); }
+                    for (int i = 0; i < static_cast<int>(vec.size()); ++i) { cps.at(1 + i / 3)(i % 3) = vec.at(i); }
                     auto pts = Bezier::Solve(cps, 2 + static_cast<std::size_t>(CurveLength(cps) / 0.25f));
-                    for (int i = 0; i < pts.size() - 1; ++i) {
+                    for (int i = 0; i < static_cast<int>(pts.size()) - 1; ++i) {
                         lines.emplace_back(pts.at(i), pts.at(i + 1), size, color);
                     }
                     lastPoint = cps.back();
@@ -117,11 +117,11 @@ namespace ns_viewer {
                 case 's': {
                     std::vector<Eigen::Vector3f> cps(1 + vec.size() / 3);
                     cps.front() = lastPoint;
-                    for (int i = 0; i < vec.size(); ++i) { cps.at(1 + i / 3)(i % 3) = vec.at(i); }
-                    for (int i = 1; i < cps.size(); ++i) { cps.at(i) += cps.at(i - 1); }
+                    for (int i = 0; i < static_cast<int>(vec.size()); ++i) { cps.at(1 + i / 3)(i % 3) = vec.at(i); }
+                    for (int i = 1; i < static_cast<int>(cps.size()); ++i) { cps.at(i) += cps.at(i - 1); }
 
                     auto pts = Bezier::Solve(cps, 2 + static_cast<std::size_t>(CurveLength(cps) / 0.25f));
-                    for (int i = 0; i < pts.size() - 1; ++i) {
+                    for (int i = 0; i < static_cast<int>(pts.size()) - 1; ++i) {
                         lines.emplace_back(pts.at(i), pts.at(i + 1), size, color);
                     }
                     lastPoint = cps.back();
@@ -155,7 +155,7 @@ namespace ns_viewer {
 
     float Path::CurveLength(const std::vector<Eigen::Vector3f> &pts) {
         float len = 0.0f;
-        for (int i = 0; i < pts.size() - 1; ++i) {
+        for (int i = 0; i < static_cast<int>(pts.size()) - 1; ++i) {
             const Eigen::Vector3f &p1 = pts.at(i);
             const Eigen::Vector3f &p2 = pts.at(i + 1);
             len += (p1 - p2).norm();

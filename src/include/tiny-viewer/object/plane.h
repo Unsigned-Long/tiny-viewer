@@ -20,8 +20,8 @@ namespace ns_viewer {
         Eigen::Vector3f v3;
         Eigen::Vector3f v4;
 
-        Colour color;
         bool lineMode{};
+        Colour color;
 
         Coordinate coord;
 

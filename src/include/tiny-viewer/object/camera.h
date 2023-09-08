@@ -67,9 +67,8 @@ namespace ns_viewer {
         Eigen::Vector3f v3;
         Eigen::Vector3f v4;
 
-        Cube cube;
-
         Colour color;
+        Cube cube;
 
     public:
         explicit CubeCamera(const Posef &pose, float size = DefaultCameraSize, const Colour &color = Colour::Green());

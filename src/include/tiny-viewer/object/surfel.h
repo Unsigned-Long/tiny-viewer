@@ -17,9 +17,8 @@ namespace ns_viewer {
     protected:
 
         Polygon polygon;
-        Cube cube;
-
         bool drawCube{};
+        Cube cube;
 
     public:
         Surfel(const Eigen::Vector4f &plane, const Cube &cube, bool lineMode, bool drawCube = true,

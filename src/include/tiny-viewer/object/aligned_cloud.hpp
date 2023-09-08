@@ -43,7 +43,7 @@ namespace ns_viewer {
             std::uniform_real_distribution<float> u(-bound, bound);
             pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
             cloud->resize(count);
-            for (int i = 0; i < count; ++i) {
+            for (int i = 0; i < static_cast<int>(count); ++i) {
                 auto &p = cloud->at(i);
                 // x, y, z
                 p.x = u(engine) + center(0);
@@ -66,7 +66,7 @@ namespace ns_viewer {
         ColorizeCloudByDirection(const typename pcl::PointCloud<PointType>::Ptr &iCloud, const Eigen::Vector3f &dir) {
             pcl::PointCloud<pcl::PointXYZI>::Ptr oCloud(new pcl::PointCloud<pcl::PointXYZI>);
             oCloud->resize(iCloud->size());
-            for (int i = 0; i < iCloud->size(); ++i) {
+            for (int i = 0; i < static_cast<int>(iCloud->size()); ++i) {
                 const auto &ip = iCloud->at(i);
                 auto &op = oCloud->at(i);
                 op.x = ip.x, op.y = ip.y, op.z = ip.z;
