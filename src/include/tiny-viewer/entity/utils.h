@@ -57,14 +57,19 @@ namespace Eigen {
     void serialize(Archive &archive, Eigen::Matrix<ScaleType, Rows, Cols> &m) {
         for (int i = 0; i < Rows; ++i) {
             for (int j = 0; j < Cols; ++j) {
-                archive(m(i, j));
+                archive(cereal::make_nvp('r' + std::to_string(i) + 'c' + std::to_string(j), m(i, j)));
             }
         }
     }
 
     template<class Archive, typename ScaleType>
     void serialize(Archive &archive, Eigen::Quaternion<ScaleType> &q) {
-        archive(q.coeffs());
+        archive(
+                cereal::make_nvp("qx", q.coeffs()[0]),
+                cereal::make_nvp("qy", q.coeffs()[1]),
+                cereal::make_nvp("qz", q.coeffs()[2]),
+                cereal::make_nvp("qw", q.coeffs()[3])
+        );
     }
 }
 
