@@ -62,6 +62,24 @@ namespace Eigen {
         }
     }
 
+    template<class Archive, typename ScaleType, int Cols>
+    void serialize(Archive &archive, Eigen::Matrix<ScaleType, Eigen::Dynamic, Cols> &m) {
+        for (int i = 0; i < m.rows(); ++i) {
+            for (int j = 0; j < Cols; ++j) {
+                archive(cereal::make_nvp('r' + std::to_string(i) + 'c' + std::to_string(j), m(i, j)));
+            }
+        }
+    }
+
+    template<class Archive, typename ScaleType>
+    void serialize(Archive &archive, Eigen::Matrix<ScaleType, Eigen::Dynamic, Eigen::Dynamic> &m) {
+        for (int i = 0; i < m.rows(); ++i) {
+            for (int j = 0; j < m.cols(); ++j) {
+                archive(cereal::make_nvp('r' + std::to_string(i) + 'c' + std::to_string(j), m(i, j)));
+            }
+        }
+    }
+
     template<class Archive, typename ScaleType>
     void serialize(Archive &archive, Eigen::Quaternion<ScaleType> &q) {
         archive(
