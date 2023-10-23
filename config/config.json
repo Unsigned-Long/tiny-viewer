@@ -12,7 +12,7 @@
             "Height": 960
         },
         "Output": {
-            "DataOutputPath": "../output"
+            "DataOutputPath": ""
         },
         "Camera": {
             "Width": 640,
@@ -35,6 +35,8 @@
             ]
         },
         "Grid": {
+            "ShowGrid": true,
+            "ShowIdentityCoord": true,
             "CellCount": 10,
             "CellSize": 1.0,
             "PlanePos": 0,

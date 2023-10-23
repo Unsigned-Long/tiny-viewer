@@ -5,18 +5,11 @@
 #include "pcl/io/pcd_io.h"
 #include <vtkLookupTable.h>
 
-int main(int argc, char **argv) {
+void TEST_ENTITIES() {
     try {
         using namespace ns_viewer;
-        // {
-        //     ViewerConfigor().SaveConfigure("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
-        //     std::cin.get();
-        // }
-        // {
-        //     auto viewer = Viewer::Load("/home/csl/CppWorks/artwork/tiny-viewer/output/1683794904023740133.view");
-        //     viewer->RunInMultiThread();
-        //     return 0;
-        // }
+        ViewerConfigor().SaveConfigure("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
+
         // viewer
         Viewer viewer("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
 
@@ -71,13 +64,14 @@ int main(int argc, char **argv) {
 
         viewer.AddEntity(Radar::Create(Posef::Random(5.0f)));
 
-        viewer.AddEntity(Path::Create("M 3 3 3 l 0 0 -1 s 0 0 -0.5 0.5 0 0 0.5 0 0 0 0 0.5 l 0 0 1 "
-                                      "m 0.25 0 0 l 0 0 -1 s 0 0 -0.5 0.5 0 0 l 0.25 0 0 "
-                                      "m 0.5 0 0 s -0.5 0 0 0 0 0.5 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 0 0 -0.5 -0.5 0 0 "
-                                      "m 0.5 0 0.75 l 0 0 -0.75 s 0 0 0.5 0 0 0.5 0.4 0 0 0.4 0 0 0 0 -0.5 0 0 -0.5 "
-                                      "m 1 0 0.5 s 0 0 -0.5 -0.5 0 0 -0.5 0 0 0 0 0.5 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 "
-                                      "s 0 0 -0.75 0 0 -0.5 -0.25 0 0 -0.5 0 0 0 0 0.25 "
-                                      "m 1 0 1.25 s 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 -0.5 0 -0.5 -0.5 0 -0.25 l 0.75 0 0"));
+        viewer.AddEntity(Path::Create(
+                "M 3 3 3 l 0 0 -1 s 0 0 -0.5 0.5 0 0 0.5 0 0 0 0 0.5 l 0 0 1 "
+                "m 0.25 0 0 l 0 0 -1 s 0 0 -0.5 0.5 0 0 l 0.25 0 0 "
+                "m 0.5 0 0 s -0.5 0 0 0 0 0.5 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 0 0 -0.5 -0.5 0 0 "
+                "m 0.5 0 0.75 l 0 0 -0.75 s 0 0 0.5 0 0 0.5 0.4 0 0 0.4 0 0 0 0 -0.5 0 0 -0.5 "
+                "m 1 0 0.5 s 0 0 -0.5 -0.5 0 0 -0.5 0 0 0 0 0.5 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 "
+                "s 0 0 -0.75 0 0 -0.5 -0.25 0 0 -0.5 0 0 0 0 0.25 "
+                "m 1 0 1.25 s 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 -0.5 0 -0.5 -0.5 0 -0.25 l 0.75 0 0"));
 
         viewer.AddEntity(Cloud<Landmark>::Random(5.0, 20, {4, 5, 4}));
         // show (multi thread)
@@ -90,5 +84,15 @@ int main(int argc, char **argv) {
     } catch (const std::exception &e) {
         std::cout << e.what() << std::endl;
     }
+}
+
+void TEST_VIEWER() {
+    ns_viewer::Viewer::Create("win 1", false, true)->RunInSingleThread();
+    ns_viewer::Viewer::Create("win 2", false, true)->RunInSingleThread();
+}
+
+int main(int argc, char **argv) {
+    // TEST_ENTITIES();
+    TEST_VIEWER();
     return 0;
 }

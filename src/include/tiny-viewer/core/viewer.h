@@ -82,6 +82,9 @@ namespace ns_viewer {
         } Camera;
 
         struct {
+            bool ShowGrid = true;
+            bool ShowIdentityCoord = true;
+
             int CellCount = 10;
             float CellSize = 1.0f;
             // 0: xy, 1: yz, 2: zx
@@ -93,6 +96,7 @@ namespace ns_viewer {
             template<class Archive>
             void serialize(Archive &ar) {
                 ar(
+                        CEREAL_NVP(ShowGrid), CEREAL_NVP(ShowIdentityCoord),
                         CEREAL_NVP(CellCount), CEREAL_NVP(CellSize),
                         CEREAL_NVP(PlanePos), CEREAL_NVP(Color)
                 );
@@ -141,6 +145,8 @@ namespace ns_viewer {
         explicit Viewer(ViewerConfigor configor = ViewerConfigor());
 
         explicit Viewer(const std::string &configPath);
+
+        static Ptr Create(const std::string &winName, bool showGrid, bool showIdentityCoord);
 
         static Ptr Create(const ViewerConfigor &configor = ViewerConfigor());
 
