@@ -87,12 +87,32 @@ void TEST_ENTITIES() {
 }
 
 void TEST_VIEWER() {
-    ns_viewer::Viewer::Create("win 1", false, true)->RunInSingleThread();
-    ns_viewer::Viewer::Create("win 2", false, true)->RunInSingleThread();
+    try {
+        { ns_viewer::Viewer::Create("win 1", false, true)->RunInSingleThread(); }
+        { ns_viewer::Viewer::Create("win 2", false, true)->RunInSingleThread(); }
+    } catch (const std::exception &e) {
+        std::cout << e.what() << std::endl;
+    }
+}
+
+void TEST_CAM_VIEW() {
+    auto viewer = ns_viewer::Viewer();
+    Eigen::Matrix3f rotMat;
+    rotMat.col(0) = Eigen::Vector3f{1, 0, 0};
+    rotMat.col(1) = Eigen::Vector3f{0, 0, -1};
+    rotMat.col(2) = Eigen::Vector3f{0, 1, 0};
+    Eigen::Vector3f pVec(0, -2, 1);
+    auto pose = ns_viewer::Posef(rotMat, pVec);
+    viewer.AddEntity(ns_viewer::Camera::Create(pose, ns_viewer::Colour::Red()));
+    viewer.RunInMultiThread();
+    std::cin.get();
+    std::cout << "set camera pose" << std::endl;
+    viewer.SetCamView(pose);
 }
 
 int main(int argc, char **argv) {
     // TEST_ENTITIES();
-    TEST_VIEWER();
+    // TEST_VIEWER();
+    TEST_CAM_VIEW();
     return 0;
 }

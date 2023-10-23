@@ -70,6 +70,7 @@ namespace ns_viewer {
         if (_thread != nullptr) {
             _thread->join();
         }
+        pangolin::DestroyWindow(_configor.Window.Name);
     }
 
     void Viewer::RunInSingleThread() {
@@ -316,5 +317,12 @@ namespace ns_viewer {
 
     ViewerConfigor &Viewer::GetConfigor() {
         return _configor;
+    }
+
+    void Viewer::SetCamView(Posef T_CamToWorld) {
+        Eigen::Vector3f vp(T_CamToWorld.translation + T_CamToWorld.rotation.col(2));
+        this->_camView.SetModelViewMatrix(pangolin::ModelViewLookAt(
+                ExpandVec3(T_CamToWorld.translation), ExpandVec3(vp), pangolin::AxisZ
+        ));
     }
 }

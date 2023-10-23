@@ -173,6 +173,8 @@ namespace ns_viewer {
 
         void SetCamView(const std::string &filename);
 
+        void SetCamView(Posef T_CamToWorld);
+
         void Save(const std::string &filename, bool binaryMode = true) const;
 
         static Ptr Load(const std::string &filename, bool binaryMode = true);
@@ -192,7 +194,6 @@ namespace ns_viewer {
         void SaveViewerCallBack() const;
 
         void VideoRecordCallBack() const;
-
     public:
 
         template<class Archive>
