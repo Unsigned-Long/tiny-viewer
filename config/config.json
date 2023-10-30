@@ -8,8 +8,8 @@
                 "blue": 1.0,
                 "alpha": 1.0
             },
-            "Width": 1280,
-            "Height": 960
+            "Width": 2048,
+            "Height": 768
         },
         "Output": {
             "DataOutputPath": ""
