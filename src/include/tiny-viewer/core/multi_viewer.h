@@ -49,18 +49,19 @@ namespace ns_viewer {
         // sub window name, entities
         std::unordered_map<std::string, std::unordered_map<std::size_t, Entity::Ptr>> _entities;
         std::unordered_map<std::string, pangolin::OpenGlRenderState> _camView;
-        std::set<std::string> _subWinNames;
+        std::vector<std::string> _subWinNames;
 
     public:
 
-        explicit MultiViewer(const std::set<std::string> &subWinNames, ViewerConfigor configor = ViewerConfigor());
+        explicit MultiViewer(const std::vector<std::string> &subWinNames, ViewerConfigor configor = ViewerConfigor());
 
-        explicit MultiViewer(const std::set<std::string> &subWinNames, const std::string &configPath);
+        explicit MultiViewer(const std::vector<std::string> &subWinNames, const std::string &configPath);
 
-        static Ptr Create(const std::string &mainWinName, const std::set<std::string> &subWinNames,
+        static Ptr Create(const std::string &mainWinName, const std::vector<std::string> &subWinNames,
                           bool showGrid, bool showIdentityCoord);
 
-        static Ptr Create(const std::set<std::string> &subWinNames, const ViewerConfigor &configor = ViewerConfigor());
+        static Ptr
+        Create(const std::vector<std::string> &subWinNames, const ViewerConfigor &configor = ViewerConfigor());
 
         // used for load viewer from file
         explicit MultiViewer(char) : _thread(nullptr) {}
@@ -78,6 +79,8 @@ namespace ns_viewer {
         bool RemoveEntity(std::size_t id, const std::string &subWinName);
 
         bool RemoveEntity(const std::vector<std::size_t> &ids, const std::string &subWinName);
+
+        bool RemoveEntity(const std::string &subWinName);
 
         bool RemoveEntity();
 

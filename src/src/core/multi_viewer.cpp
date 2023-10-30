@@ -20,15 +20,15 @@ namespace ns_viewer {
     // --------------
     // public methods
     // --------------
-    MultiViewer::MultiViewer(const std::set<std::string> &subWinNames, ViewerConfigor configor)
+    MultiViewer::MultiViewer(const std::vector<std::string> &subWinNames, ViewerConfigor configor)
             : _configor(std::move(configor)), _thread(nullptr), _subWinNames(subWinNames) { InitMultiViewer(true); }
 
-    MultiViewer::Ptr MultiViewer::Create(const std::set<std::string> &subWinNames, const ViewerConfigor &configor) {
+    MultiViewer::Ptr MultiViewer::Create(const std::vector<std::string> &subWinNames, const ViewerConfigor &configor) {
         return std::make_shared<MultiViewer>(subWinNames, configor);
     }
 
     MultiViewer::Ptr
-    MultiViewer::Create(const std::string &mainWinName, const std::set<std::string> &subWinNames, bool showGrid,
+    MultiViewer::Create(const std::string &mainWinName, const std::vector<std::string> &subWinNames, bool showGrid,
                         bool showIdentityCoord) {
         ViewerConfigor configor(mainWinName);
         configor.Grid.ShowGrid = showGrid;
@@ -36,7 +36,7 @@ namespace ns_viewer {
         return std::make_shared<MultiViewer>(subWinNames, configor);
     }
 
-    MultiViewer::MultiViewer(const std::set<std::string> &subWinNames, const std::string &configPath)
+    MultiViewer::MultiViewer(const std::vector<std::string> &subWinNames, const std::string &configPath)
             : MultiViewer(subWinNames, ViewerConfigor::LoadConfigure(configPath)) {}
 
     MultiViewer::~MultiViewer() {
@@ -252,6 +252,12 @@ namespace ns_viewer {
             b = (_entities.at(subWinName).erase(id) == 1) && b;
         }
         return b;
+    }
+
+    bool MultiViewer::RemoveEntity(const std::string &subWinName) {
+        LOCKER_MULTI_VIEWER
+        _entities.at(subWinName).clear();
+        return true;
     }
 
     bool MultiViewer::RemoveEntity() {
