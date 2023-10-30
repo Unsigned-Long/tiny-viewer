@@ -8,7 +8,7 @@
 namespace ns_viewer {
 
     //-------
-    // Camera
+    // camera
     // ------
     Camera::Camera(const Posef &pose, float size, const Colour &color)
             : Entity(), coord(pose, size), color(color) {
@@ -59,7 +59,7 @@ namespace ns_viewer {
     }
 
     //-------
-    // Camera
+    // camera
     // ------
     CubeCamera::CubeCamera(const Posef &pose, float size, const Colour &color)
             : Entity(), coord(pose, size), color(color), cube(pose, true) {

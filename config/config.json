@@ -1,51 +1,104 @@
 {
     "Configor": {
-        "Window": {
-            "Name": "Tiny Viewer",
-            "BackGroundColor": {
+        "window": {
+            "name": "Tiny Viewer",
+            "backGroundColor": {
                 "red": 1.0,
                 "green": 1.0,
                 "blue": 1.0,
                 "alpha": 1.0
             },
-            "Width": 2048,
-            "Height": 768
+            "width": 2048,
+            "height": 768
         },
-        "Output": {
-            "DataOutputPath": ""
+        "output": {
+            "dataOutputPath": ""
         },
-        "Camera": {
-            "Width": 640,
-            "Height": 480,
-            "Fx": 420.0,
-            "Fy": 420.0,
-            "Cx": 320.0,
-            "Cy": 240.0,
-            "Near": 0.01,
-            "Far": 100.0,
-            "InitPos": [
-                6.0,
-                6.0,
-                6.0
-            ],
-            "InitViewPoint": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "Grid": {
-            "ShowGrid": true,
-            "ShowIdentityCoord": true,
-            "CellCount": 10,
-            "CellSize": 1.0,
-            "PlanePos": 0,
-            "Color": {
-                "red": 0.0,
-                "green": 0.0,
-                "blue": 0.0,
-                "alpha": 0.30000001192092898
+        "camera": [
+            {
+                "key": "win2",
+                "value": {
+                    "width": 640,
+                    "height": 480,
+                    "fx": 420.0,
+                    "fy": 420.0,
+                    "cx": 320.0,
+                    "cy": 240.0,
+                    "near": 0.01,
+                    "far": 100.0,
+                    "initPos": [
+                        6.0,
+                        6.0,
+                        6.0
+                    ],
+                    "initViewPoint": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
+            },
+            {
+                "key": "win1",
+                "value": {
+                    "width": 640,
+                    "height": 480,
+                    "fx": 420.0,
+                    "fy": 420.0,
+                    "cx": 320.0,
+                    "cy": 240.0,
+                    "near": 0.01,
+                    "far": 100.0,
+                    "initPos": [
+                        6.0,
+                        6.0,
+                        6.0
+                    ],
+                    "initViewPoint": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                }
             }
-        }
+        ],
+        "grid": [
+            {
+                "key": "win2",
+                "value": {
+                    "showGrid": true,
+                    "showIdentityCoord": true,
+                    "cellCount": 10,
+                    "cellSize": 1.0,
+                    "planePos": 0,
+                    "color": {
+                        "red": 0.0,
+                        "green": 0.0,
+                        "blue": 0.0,
+                        "alpha": 0.30000001192092898
+                    }
+                }
+            },
+            {
+                "key": "win1",
+                "value": {
+                    "showGrid": true,
+                    "showIdentityCoord": true,
+                    "cellCount": 10,
+                    "cellSize": 1.0,
+                    "planePos": 0,
+                    "color": {
+                        "red": 0.0,
+                        "green": 0.0,
+                        "blue": 0.0,
+                        "alpha": 0.30000001192092898
+                    }
+                }
+            }
+        ],
+        "subWinNames": [
+            "win1",
+            "win2"
+        ]
     }
 }

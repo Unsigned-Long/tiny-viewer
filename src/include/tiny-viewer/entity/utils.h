@@ -176,7 +176,7 @@ namespace pcl {
                 cereal::make_nvp("header", cloud.header),
                 cereal::make_nvp("points", cloud.points),
                 cereal::make_nvp("width", cloud.width),
-                cereal::make_nvp("Height", cloud.height),
+                cereal::make_nvp("height", cloud.height),
                 cereal::make_nvp("is_dense", cloud.is_dense),
                 cereal::make_nvp("sensor_orientation_", cloud.sensor_orientation_),
                 cereal::make_nvp("sensor_origin_", cloud.sensor_origin_)

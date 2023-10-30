@@ -11,36 +11,6 @@
 
 namespace ns_viewer {
 
-    // --------------
-    // ViewerConfigor
-    // --------------
-    ViewerConfigor::ViewerConfigor(const std::string &winName) { Window.Name = winName; }
-
-    ViewerConfigor ViewerConfigor::LoadConfigure(const std::string &filename) {
-        std::ifstream file(filename);
-        ViewerConfigor configor;
-        cereal::JSONInputArchive archive(file);
-        archive(cereal::make_nvp("Configor", configor));
-        return configor;
-    }
-
-    bool ViewerConfigor::SaveConfigure(const std::string &filename) {
-        std::ofstream file(filename);
-        cereal::JSONOutputArchive archive(file);
-        archive(cereal::make_nvp("Configor", *this));
-        return true;
-    }
-
-    ViewerConfigor &ViewerConfigor::WithWinName(const std::string &winName) {
-        Window.Name = winName;
-        return *this;
-    }
-
-    ViewerConfigor &ViewerConfigor::WithScreenShotSaveDir(const std::string &dir) {
-        Output.DataOutputPath = dir;
-        return *this;
-    }
-
     // ------
     // Viewer
     // ------
@@ -57,11 +27,8 @@ namespace ns_viewer {
         return std::make_shared<Viewer>(configor);
     }
 
-    Viewer::Ptr Viewer::Create(const std::string &winName, bool showGrid, bool showIdentityCoord) {
-        ViewerConfigor configor(winName);
-        configor.Grid.ShowGrid = showGrid;
-        configor.Grid.ShowIdentityCoord = showIdentityCoord;
-        return std::make_shared<Viewer>(configor);
+    Viewer::Ptr Viewer::Create(const std::string &configPath) {
+        return std::make_shared<Viewer>(configPath);
     }
 
     Viewer::Viewer(const std::string &configPath) : Viewer(ViewerConfigor::LoadConfigure(configPath)) {}
@@ -70,7 +37,7 @@ namespace ns_viewer {
         if (_thread != nullptr) {
             _thread->join();
         }
-        pangolin::DestroyWindow(_configor.Window.Name);
+        pangolin::DestroyWindow(_configor.window.name);
     }
 
     void Viewer::RunInSingleThread() {
@@ -86,29 +53,29 @@ namespace ns_viewer {
     // -----------------
     void Viewer::InitViewer(bool initCamViewFromConfigor) {
         // create a window and bind its context to the main thread
-        pangolin::CreateWindowAndBind(_configor.Window.Name, _configor.Window.Width, _configor.Window.Height);
+        pangolin::CreateWindowAndBind(_configor.window.name, _configor.window.width, _configor.window.height);
 
         // unset the current context from the main thread
         pangolin::GetBoundWindow()->RemoveCurrent();
 
         if (initCamViewFromConfigor) {
             // Define Projection and initial ModelView matrix
-            const auto &c = _configor.Camera;
+            const auto &c = _configor.camera;
             _camView = pangolin::OpenGlRenderState(
-                    pangolin::ProjectionMatrix(c.Width, c.Height, c.Fx, c.Fy, c.Cx, c.Cy, c.Near, c.Far),
+                    pangolin::ProjectionMatrix(c.width, c.height, c.fx, c.fy, c.cx, c.cy, c.near, c.far),
                     pangolin::ModelViewLookAt(
-                            ExpandStdVec3(_configor.Camera.InitPos),
-                            ExpandStdVec3(_configor.Camera.InitViewPoint), pangolin::AxisZ
+                            ExpandStdVec3(_configor.camera.initPos),
+                            ExpandStdVec3(_configor.camera.initViewPoint), pangolin::AxisZ
                     )
             );
 
-            if (_configor.Grid.ShowIdentityCoord) {
+            if (_configor.grid.showIdentityCoord) {
                 AddEntity(Coordinate::Create(Posef()));
             }
 
-            if (_configor.Grid.ShowGrid) {
+            if (_configor.grid.showGrid) {
                 Eigen::Vector3f v1, v2;
-                switch (_configor.Grid.PlanePos % 3) {
+                switch (_configor.grid.planePos % 3) {
                     case 0:
                         v1 = {1.0f, 0.0f, 0.0f};
                         v2 = {0.0f, 1.0f, 0.0f};
@@ -125,22 +92,22 @@ namespace ns_viewer {
                         v1 = {1.0f, 0.0f, 0.0f};
                         v2 = {0.0f, 1.0f, 0.0f};
                 }
-                v1 *= _configor.Grid.CellSize;
-                v2 *= _configor.Grid.CellSize;
-                Eigen::Vector3f s1 = -v1 * _configor.Grid.CellCount * 0.5;
-                Eigen::Vector3f s2 = -v2 * _configor.Grid.CellCount * 0.5;
+                v1 *= _configor.grid.cellSize;
+                v2 *= _configor.grid.cellSize;
+                Eigen::Vector3f s1 = -v1 * _configor.grid.cellCount * 0.5;
+                Eigen::Vector3f s2 = -v2 * _configor.grid.cellCount * 0.5;
                 Eigen::Vector3f s3 = s1 + s2;
 
-                for (int i = 0; i < _configor.Grid.CellCount + 1; ++i) {
+                for (int i = 0; i < _configor.grid.cellCount + 1; ++i) {
                     Eigen::Vector3f p1 = s3 + i * v1;
-                    Eigen::Vector3f p2 = p1 + _configor.Grid.CellCount * v2;
-                    AddEntity(Line::Create(p1, p2, DefaultLineSize, _configor.Grid.Color));
+                    Eigen::Vector3f p2 = p1 + _configor.grid.cellCount * v2;
+                    AddEntity(Line::Create(p1, p2, DefaultLineSize, _configor.grid.color));
                 }
 
-                for (int i = 0; i < _configor.Grid.CellCount + 1; ++i) {
+                for (int i = 0; i < _configor.grid.cellCount + 1; ++i) {
                     Eigen::Vector3f p1 = s3 + i * v2;
-                    Eigen::Vector3f p2 = p1 + _configor.Grid.CellCount * v1;
-                    AddEntity(Line::Create(p1, p2, DefaultLineSize, _configor.Grid.Color));
+                    Eigen::Vector3f p2 = p1 + _configor.grid.cellCount * v1;
+                    AddEntity(Line::Create(p1, p2, DefaultLineSize, _configor.grid.color));
                 }
             }
         }
@@ -149,7 +116,7 @@ namespace ns_viewer {
     void Viewer::Run() {
 
         // fetch the context and bind it to this thread
-        pangolin::BindToContext(_configor.Window.Name);
+        pangolin::BindToContext(_configor.window.name);
 
         // we manually need to restore the properties of the context
         glEnable(GL_DEPTH_TEST);
@@ -159,10 +126,10 @@ namespace ns_viewer {
         // Create Interactive View in window
         pangolin::Handler3D handler(_camView);
         pangolin::View &d_cam = pangolin::CreateDisplay()
-                .SetBounds(0.0, 1.0, 0.0, 1.0, -static_cast<double>(_configor.Camera.Width) / _configor.Camera.Height)
+                .SetBounds(0.0, 1.0, 0.0, 1.0, -static_cast<double>(_configor.camera.width) / _configor.camera.height)
                 .SetHandler(&handler);
 
-        if (std::filesystem::exists(_configor.Output.DataOutputPath)) {
+        if (std::filesystem::exists(_configor.output.dataOutputPath)) {
 
             pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 's', [this] { SaveScreenShotCallBack(); });
             pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 'c', [this] { SaveCameraCallBack(); });
@@ -181,8 +148,8 @@ namespace ns_viewer {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             d_cam.Activate(_camView);
             glClearColor(
-                    _configor.Window.BackGroundColor.r, _configor.Window.BackGroundColor.g,
-                    _configor.Window.BackGroundColor.b, _configor.Window.BackGroundColor.a
+                    _configor.window.backGroundColor.r, _configor.window.backGroundColor.g,
+                    _configor.window.backGroundColor.b, _configor.window.backGroundColor.a
             );
 
             // -------
@@ -206,7 +173,7 @@ namespace ns_viewer {
 
     void Viewer::SaveScreenShotCallBack() const {
         std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
-        const std::string filename = _configor.Output.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".png";
+        const std::string filename = _configor.output.dataOutputPath + "/" + std::to_string(curTimeStamp) + ".png";
         pangolin::SaveWindowOnRender(filename);
         std::cout << "\033[92m\033[3m[Viewer] the scene shot is saved to path: '"
                   << filename << "\033[0m" << std::endl;
@@ -214,7 +181,7 @@ namespace ns_viewer {
 
     void Viewer::SaveCameraCallBack() const {
         std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
-        const std::string filename = _configor.Output.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".cam";
+        const std::string filename = _configor.output.dataOutputPath + "/" + std::to_string(curTimeStamp) + ".cam";
 
         std::ofstream file(filename);
         cereal::JSONOutputArchive ar(file);
@@ -225,7 +192,7 @@ namespace ns_viewer {
 
     void Viewer::SaveViewerCallBack() const {
         std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
-        const std::string filename = _configor.Output.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".view";
+        const std::string filename = _configor.output.dataOutputPath + "/" + std::to_string(curTimeStamp) + ".view";
         this->Save(filename, true);
         std::cout << "\033[92m\033[3m[Viewer] the viewer is saved to path: '"
                   << filename << "\033[0m" << std::endl;

@@ -11,39 +11,34 @@
 
 namespace ns_viewer {
 
-    // ------
+    // -----------
     // MultiViewer
-    // ------
+    // -----------
 
     std::mutex MultiViewer::MUTEX = {};
 
     // --------------
     // public methods
     // --------------
-    MultiViewer::MultiViewer(const std::vector<std::string> &subWinNames, ViewerConfigor configor)
-            : _configor(std::move(configor)), _thread(nullptr), _subWinNames(subWinNames) { InitMultiViewer(true); }
+    MultiViewer::MultiViewer(MultiViewerConfigor configor)
+            : _configor(std::move(configor)), _thread(nullptr) { InitMultiViewer(true); }
 
-    MultiViewer::Ptr MultiViewer::Create(const std::vector<std::string> &subWinNames, const ViewerConfigor &configor) {
-        return std::make_shared<MultiViewer>(subWinNames, configor);
+    MultiViewer::Ptr MultiViewer::Create(const MultiViewerConfigor &configor) {
+        return std::make_shared<MultiViewer>(configor);
     }
 
-    MultiViewer::Ptr
-    MultiViewer::Create(const std::string &mainWinName, const std::vector<std::string> &subWinNames, bool showGrid,
-                        bool showIdentityCoord) {
-        ViewerConfigor configor(mainWinName);
-        configor.Grid.ShowGrid = showGrid;
-        configor.Grid.ShowIdentityCoord = showIdentityCoord;
-        return std::make_shared<MultiViewer>(subWinNames, configor);
+    MultiViewer::Ptr MultiViewer::Create(const std::string &configPath) {
+        return std::make_shared<MultiViewer>(configPath);
     }
 
-    MultiViewer::MultiViewer(const std::vector<std::string> &subWinNames, const std::string &configPath)
-            : MultiViewer(subWinNames, ViewerConfigor::LoadConfigure(configPath)) {}
+    MultiViewer::MultiViewer(const std::string &configPath)
+            : MultiViewer(MultiViewerConfigor::LoadConfigure(configPath)) {}
 
     MultiViewer::~MultiViewer() {
         if (_thread != nullptr) {
             _thread->join();
         }
-        pangolin::DestroyWindow(_configor.Window.Name);
+        pangolin::DestroyWindow(_configor.window.name);
     }
 
     void MultiViewer::RunInSingleThread() {
@@ -59,64 +54,63 @@ namespace ns_viewer {
     // -----------------
     void MultiViewer::InitMultiViewer(bool initCamViewFromConfigor) {
         // create a window and bind its context to the main thread
-        pangolin::CreateWindowAndBind(_configor.Window.Name, _configor.Window.Width, _configor.Window.Height);
+        pangolin::CreateWindowAndBind(_configor.window.name, _configor.window.width, _configor.window.height);
 
         // unset the current context from the main thread
         pangolin::GetBoundWindow()->RemoveCurrent();
 
         if (initCamViewFromConfigor) {
-            // Define Projection and initial ModelView matrix
-            const auto &c = _configor.Camera;
-            for (const auto &name: _subWinNames) {
+            for (const auto &name: _configor.subWinNames) {
+
+                // Define Projection and initial ModelView matrix
+                const auto &c = _configor.camera.at(name);
                 _camView.insert({name, pangolin::OpenGlRenderState(
-                        pangolin::ProjectionMatrix(c.Width, c.Height, c.Fx, c.Fy, c.Cx, c.Cy, c.Near, c.Far),
+                        pangolin::ProjectionMatrix(c.width, c.height, c.fx, c.fy, c.cx, c.cy, c.near, c.far),
                         pangolin::ModelViewLookAt(
-                                ExpandStdVec3(_configor.Camera.InitPos),
-                                ExpandStdVec3(_configor.Camera.InitViewPoint), pangolin::AxisZ
+                                ExpandStdVec3(c.initPos), ExpandStdVec3(c.initViewPoint), pangolin::AxisZ
                         ))});
                 _entities.insert({name, {}});
-            }
 
-            if (_configor.Grid.ShowIdentityCoord) {
-                for (const auto &name: _subWinNames) { AddEntity(Coordinate::Create(Posef()), name); }
-            }
-
-            if (_configor.Grid.ShowGrid) {
-                Eigen::Vector3f v1, v2;
-                switch (_configor.Grid.PlanePos % 3) {
-                    case 0:
-                        v1 = {1.0f, 0.0f, 0.0f};
-                        v2 = {0.0f, 1.0f, 0.0f};
-                        break;
-                    case 1:
-                        v1 = {0.0f, 1.0f, 0.0f};
-                        v2 = {0.0f, 0.0f, 1.0f};
-                        break;
-                    case 2:
-                        v1 = {0.0f, 0.0f, 1.0f};
-                        v2 = {1.0f, 0.0f, 0.0f};
-                        break;
-                    default:
-                        v1 = {1.0f, 0.0f, 0.0f};
-                        v2 = {0.0f, 1.0f, 0.0f};
+                const auto &grid = _configor.grid.at(name);
+                if (grid.showIdentityCoord) {
+                    AddEntity(Coordinate::Create(Posef()), name);
                 }
-                v1 *= _configor.Grid.CellSize;
-                v2 *= _configor.Grid.CellSize;
-                Eigen::Vector3f s1 = -v1 * _configor.Grid.CellCount * 0.5;
-                Eigen::Vector3f s2 = -v2 * _configor.Grid.CellCount * 0.5;
-                Eigen::Vector3f s3 = s1 + s2;
 
-                for (const auto &name: _subWinNames) {
-                    for (int i = 0; i < _configor.Grid.CellCount + 1; ++i) {
+                if (grid.showGrid) {
+                    Eigen::Vector3f v1, v2;
+                    switch (grid.planePos % 3) {
+                        case 0:
+                            v1 = {1.0f, 0.0f, 0.0f};
+                            v2 = {0.0f, 1.0f, 0.0f};
+                            break;
+                        case 1:
+                            v1 = {0.0f, 1.0f, 0.0f};
+                            v2 = {0.0f, 0.0f, 1.0f};
+                            break;
+                        case 2:
+                            v1 = {0.0f, 0.0f, 1.0f};
+                            v2 = {1.0f, 0.0f, 0.0f};
+                            break;
+                        default:
+                            v1 = {1.0f, 0.0f, 0.0f};
+                            v2 = {0.0f, 1.0f, 0.0f};
+                    }
+                    v1 *= grid.cellSize;
+                    v2 *= grid.cellSize;
+                    Eigen::Vector3f s1 = -v1 * grid.cellCount * 0.5;
+                    Eigen::Vector3f s2 = -v2 * grid.cellCount * 0.5;
+                    Eigen::Vector3f s3 = s1 + s2;
+
+                    for (int i = 0; i < grid.cellCount + 1; ++i) {
                         Eigen::Vector3f p1 = s3 + i * v1;
-                        Eigen::Vector3f p2 = p1 + _configor.Grid.CellCount * v2;
-                        AddEntity(Line::Create(p1, p2, DefaultLineSize, _configor.Grid.Color), name);
+                        Eigen::Vector3f p2 = p1 + grid.cellCount * v2;
+                        AddEntity(Line::Create(p1, p2, DefaultLineSize, grid.color), name);
                     }
 
-                    for (int i = 0; i < _configor.Grid.CellCount + 1; ++i) {
+                    for (int i = 0; i < grid.cellCount + 1; ++i) {
                         Eigen::Vector3f p1 = s3 + i * v2;
-                        Eigen::Vector3f p2 = p1 + _configor.Grid.CellCount * v1;
-                        AddEntity(Line::Create(p1, p2, DefaultLineSize, _configor.Grid.Color), name);
+                        Eigen::Vector3f p2 = p1 + grid.cellCount * v1;
+                        AddEntity(Line::Create(p1, p2, DefaultLineSize, grid.color), name);
                     }
                 }
 
@@ -127,7 +121,7 @@ namespace ns_viewer {
     void MultiViewer::Run() {
 
         // fetch the context and bind it to this thread
-        pangolin::BindToContext(_configor.Window.Name);
+        pangolin::BindToContext(_configor.window.name);
 
         // we manually need to restore the properties of the context
         glEnable(GL_DEPTH_TEST);
@@ -139,15 +133,16 @@ namespace ns_viewer {
 
         auto &display = pangolin::Display("multi").SetBounds(0.0, 1.0, 0.0, 1.0).SetLayout(pangolin::LayoutEqual);
 
-        for (const auto &name: _subWinNames) {
+        for (const auto &name: _configor.subWinNames) {
+            const auto &c = _configor.camera.at(name);
             pangolin::View &cam = pangolin::Display(name)
-                    .SetAspect(static_cast<double>(_configor.Camera.Width) / _configor.Camera.Height)
+                    .SetAspect(static_cast<double>(c.width) / c.height)
                     .SetHandler(new pangolin::Handler3D(_camView.at(name)));
             d_cam.insert({name, cam});
             display.AddDisplay(cam);
         }
 
-        if (std::filesystem::exists(_configor.Output.DataOutputPath)) {
+        if (std::filesystem::exists(_configor.output.dataOutputPath)) {
 
             pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 's', [this] { SaveScreenShotCallBack(); });
             pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 'c', [this] { SaveCameraCallBack(); });
@@ -166,8 +161,8 @@ namespace ns_viewer {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             glClearColor(
-                    _configor.Window.BackGroundColor.r, _configor.Window.BackGroundColor.g,
-                    _configor.Window.BackGroundColor.b, _configor.Window.BackGroundColor.a
+                    _configor.window.backGroundColor.r, _configor.window.backGroundColor.g,
+                    _configor.window.backGroundColor.b, _configor.window.backGroundColor.a
             );
 
             // -------
@@ -194,7 +189,7 @@ namespace ns_viewer {
 
     void MultiViewer::SaveScreenShotCallBack() const {
         std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
-        const std::string filename = _configor.Output.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".png";
+        const std::string filename = _configor.output.dataOutputPath + "/" + std::to_string(curTimeStamp) + ".png";
         pangolin::SaveWindowOnRender(filename);
         std::cout << "\033[92m\033[3m[MultiViewer] the scene shot is saved to path: '"
                   << filename << "\033[0m" << std::endl;
@@ -202,7 +197,7 @@ namespace ns_viewer {
 
     void MultiViewer::SaveCameraCallBack() const {
         std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
-        const std::string filename = _configor.Output.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".cam";
+        const std::string filename = _configor.output.dataOutputPath + "/" + std::to_string(curTimeStamp) + ".cam";
 
         std::ofstream file(filename);
         cereal::JSONOutputArchive ar(file);
@@ -213,7 +208,7 @@ namespace ns_viewer {
 
     void MultiViewer::SaveMultiViewerCallBack() const {
         std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
-        const std::string filename = _configor.Output.DataOutputPath + "/" + std::to_string(curTimeStamp) + ".view";
+        const std::string filename = _configor.output.dataOutputPath + "/" + std::to_string(curTimeStamp) + ".view";
         this->Save(filename, true);
         std::cout << "\033[92m\033[3m[MultiViewer] the viewer is saved to path: '"
                   << filename << "\033[0m" << std::endl;
@@ -310,7 +305,7 @@ namespace ns_viewer {
         // todo: record video
     }
 
-    ViewerConfigor &MultiViewer::GetConfigor() {
+    MultiViewerConfigor &MultiViewer::GetConfigor() {
         return _configor;
     }
 

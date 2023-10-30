@@ -5,7 +5,6 @@
 #ifndef TINY_VIEWER_MULTI_VIEWER_H
 #define TINY_VIEWER_MULTI_VIEWER_H
 
-#include "tiny-viewer/core/viewer.h"
 #include "iostream"
 #include "memory"
 #include "mutex"
@@ -27,8 +26,8 @@
 #include "tiny-viewer/object/surfel.h"
 #include "tiny-viewer/object/aligned_cloud.hpp"
 #include "tiny-viewer/object/radar.h"
+#include "tiny-viewer/core/viewer_configor.h"
 #include "tiny-viewer/object/landmark.h"
-#include "utility"
 
 namespace ns_viewer {
 
@@ -39,7 +38,7 @@ namespace ns_viewer {
         using Ptr = std::shared_ptr<MultiViewer>;
 
     protected:
-        ViewerConfigor _configor;
+        MultiViewerConfigor _configor;
         std::shared_ptr<std::thread> _thread;
 
     public:
@@ -49,22 +48,19 @@ namespace ns_viewer {
         // sub window name, entities
         std::unordered_map<std::string, std::unordered_map<std::size_t, Entity::Ptr>> _entities;
         std::unordered_map<std::string, pangolin::OpenGlRenderState> _camView;
-        std::vector<std::string> _subWinNames;
 
     public:
 
-        explicit MultiViewer(const std::vector<std::string> &subWinNames, ViewerConfigor configor = ViewerConfigor());
+        explicit MultiViewer(MultiViewerConfigor configor);
 
-        explicit MultiViewer(const std::vector<std::string> &subWinNames, const std::string &configPath);
+        explicit MultiViewer(const std::string &configPath);
 
-        static Ptr Create(const std::string &mainWinName, const std::vector<std::string> &subWinNames,
-                          bool showGrid, bool showIdentityCoord);
+        static Ptr Create(const MultiViewerConfigor &configor);
 
-        static Ptr
-        Create(const std::vector<std::string> &subWinNames, const ViewerConfigor &configor = ViewerConfigor());
+        static Ptr Create(const std::string &configPath);
 
         // used for load viewer from file
-        explicit MultiViewer(char) : _thread(nullptr) {}
+        explicit MultiViewer(char) : _configor({}), _thread(nullptr) {}
 
         virtual ~MultiViewer();
 
@@ -94,7 +90,7 @@ namespace ns_viewer {
 
         static Ptr Load(const std::string &filename, bool binaryMode = true);
 
-        ViewerConfigor &GetConfigor();
+        MultiViewerConfigor &GetConfigor();
 
     protected:
 
@@ -123,4 +119,4 @@ namespace ns_viewer {
     };
 }
 
-#endif //TINY_VIEWER_VIEWER_H
+#endif //TINY_VIEWER_MULTI_VIEWER_H

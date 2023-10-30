@@ -98,7 +98,7 @@ namespace ns_viewer {
         }
     };
 }
-CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Camera, "Camera")
+CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Camera, "camera")
 CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Camera)
 
 CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::CubeCamera, "CubeCamera")

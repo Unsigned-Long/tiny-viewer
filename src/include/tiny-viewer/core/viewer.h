@@ -27,101 +27,10 @@
 #include "tiny-viewer/object/aligned_cloud.hpp"
 #include "tiny-viewer/object/radar.h"
 #include "tiny-viewer/object/landmark.h"
+#include "tiny-viewer/core/viewer_configor.h"
 #include "utility"
 
 namespace ns_viewer {
-
-    struct ViewerConfigor {
-    public:
-        struct {
-            std::string Name = "Tiny Viewer";
-            Colour BackGroundColor = Colour::White();
-            int Width = 640 * 2;
-            int Height = 480 * 2;
-
-        public:
-            template<class Archive>
-            void serialize(Archive &ar) {
-                ar(
-                        CEREAL_NVP(Name), CEREAL_NVP(BackGroundColor),
-                        CEREAL_NVP(Width), CEREAL_NVP(Height)
-                );
-            }
-        } Window;
-
-        struct {
-            std::string DataOutputPath;
-
-        public:
-            template<class Archive>
-            void serialize(Archive &ar) {
-                ar(CEREAL_NVP(DataOutputPath));
-            }
-        } Output;
-
-        struct {
-            int Width = 640, Height = 480;
-            double Fx = 420, Fy = 420;
-            double Cx = 320, Cy = 240;
-            double Near = 0.01, Far = 100;
-
-            std::vector<float> InitPos = {6.0f, 6.0f, 6.0f};
-            std::vector<float> InitViewPoint = {0.0f, 0.0f, 0.0f};
-
-        public:
-            template<class Archive>
-            void serialize(Archive &ar) {
-                ar(
-                        CEREAL_NVP(Width), CEREAL_NVP(Height),
-                        CEREAL_NVP(Fx), CEREAL_NVP(Fy),
-                        CEREAL_NVP(Cx), CEREAL_NVP(Cy),
-                        CEREAL_NVP(Near), CEREAL_NVP(Far),
-                        CEREAL_NVP(InitPos), CEREAL_NVP(InitViewPoint)
-                );
-            }
-        } Camera;
-
-        struct {
-            bool ShowGrid = true;
-            bool ShowIdentityCoord = true;
-
-            int CellCount = 10;
-            float CellSize = 1.0f;
-            // 0: xy, 1: yz, 2: zx
-            int PlanePos = 0;
-
-            Colour Color = Colour::Black().WithAlpha(0.3f);
-
-        public:
-            template<class Archive>
-            void serialize(Archive &ar) {
-                ar(
-                        CEREAL_NVP(ShowGrid), CEREAL_NVP(ShowIdentityCoord),
-                        CEREAL_NVP(CellCount), CEREAL_NVP(CellSize),
-                        CEREAL_NVP(PlanePos), CEREAL_NVP(Color)
-                );
-            }
-        } Grid;
-
-    public:
-        template<class Archive>
-        void serialize(Archive &ar) {
-            ar(CEREAL_NVP(Window), CEREAL_NVP(Output), CEREAL_NVP(Camera), CEREAL_NVP(Grid));
-        }
-
-    public:
-        explicit ViewerConfigor(const std::string &winName = "Tiny Viewer");
-
-        // load configure information from the json file
-        static ViewerConfigor LoadConfigure(const std::string &filename);
-
-        // load configure information from the json file
-        bool SaveConfigure(const std::string &filename);
-
-        ViewerConfigor &WithWinName(const std::string &winName);
-
-        ViewerConfigor &WithScreenShotSaveDir(const std::string &dir);
-    };
 
 #define LOCKER_VIEWER std::unique_lock<std::mutex> viewerLock(Viewer::MUTEX);
 
@@ -146,9 +55,9 @@ namespace ns_viewer {
 
         explicit Viewer(const std::string &configPath);
 
-        static Ptr Create(const std::string &winName, bool showGrid, bool showIdentityCoord);
-
         static Ptr Create(const ViewerConfigor &configor = ViewerConfigor());
+
+        static Ptr Create(const std::string &configPath);
 
         // used for load viewer from file
         explicit Viewer(char) : _thread(nullptr) {}
@@ -194,6 +103,7 @@ namespace ns_viewer {
         void SaveViewerCallBack() const;
 
         void VideoRecordCallBack() const;
+
     public:
 
         template<class Archive>

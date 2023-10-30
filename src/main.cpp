@@ -89,8 +89,8 @@ void TEST_ENTITIES() {
 
 void TEST_VIEWER() {
     try {
-        { ns_viewer::Viewer::Create("win 1", false, true)->RunInSingleThread(); }
-        { ns_viewer::Viewer::Create("win 2", false, true)->RunInSingleThread(); }
+        { ns_viewer::Viewer::Create(ns_viewer::ViewerConfigor().WithWinName("win 1"))->RunInSingleThread(); }
+        { ns_viewer::Viewer::Create(ns_viewer::ViewerConfigor().WithWinName("win 2"))->RunInSingleThread(); }
     } catch (const std::exception &e) {
         std::cout << e.what() << std::endl;
     }
@@ -114,14 +114,14 @@ void TEST_CAM_VIEW() {
 void TEST_MULTI_VIEWER() {
     try {
         using namespace ns_viewer;
-        auto config = ViewerConfigor();
-        config.Window.Width = static_cast<int>(config.Window.Width * 2.0 * 0.8);
-        config.Window.Height = static_cast<int>(config.Window.Height * 0.8);
+        const std::string win1 = "win1", win2 = "win2";
+        MultiViewerConfigor config({win1, win2});
+        config.window.width = static_cast<int>(config.window.width * 2.0 * 0.8);
+        config.window.height = static_cast<int>(config.window.height * 0.8);
         config.SaveConfigure("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
 
-        const std::string win1 = "win1", win2 = "win2";
         // viewer
-        MultiViewer viewer({win1, win2}, "/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
+        MultiViewer viewer("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
 
         // add entities
         viewer.AddEntity(Line::Create({1.0, 1.0, 1.0}, {3.0, 4.0, 5.0}, Colour::Red().WithAlpha(0.3f)), win1);
@@ -198,9 +198,9 @@ void TEST_MULTI_VIEWER() {
 }
 
 int main(int argc, char **argv) {
-    // TEST_ENTITIES();
-    // TEST_VIEWER();
-    // TEST_CAM_VIEW();
+    TEST_ENTITIES();
+    TEST_VIEWER();
+    TEST_CAM_VIEW();
     TEST_MULTI_VIEWER();
     return 0;
 }
