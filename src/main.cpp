@@ -116,8 +116,6 @@ void TEST_MULTI_VIEWER() {
         using namespace ns_viewer;
         const std::string win1 = "win1", win2 = "win2";
         MultiViewerConfigor config({win1, win2});
-        config.window.width = static_cast<int>(config.window.width * 2.0 * 0.8);
-        config.window.height = static_cast<int>(config.window.height * 0.8);
         config.SaveConfigure("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
 
         // viewer

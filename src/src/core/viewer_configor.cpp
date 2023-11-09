@@ -43,6 +43,8 @@ namespace ns_viewer {
             camera.insert({name, {}});
             grid.insert({name, {}});
         }
+        window.width = static_cast<int>(window.width * 2.0 * 0.8);
+        window.height = static_cast<int>(window.height * 0.8);
     }
 
     MultiViewerConfigor MultiViewerConfigor::LoadConfigure(const std::string &filename) {
