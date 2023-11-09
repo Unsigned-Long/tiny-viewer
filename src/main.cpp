@@ -98,15 +98,26 @@ void TEST_VIEWER() {
 
 void TEST_CAM_VIEW() {
     auto viewer = ns_viewer::Viewer();
+
     Eigen::Matrix3f rotMat;
     rotMat.col(0) = Eigen::Vector3f{1, 0, 0};
     rotMat.col(1) = Eigen::Vector3f{0, 0, -1};
     rotMat.col(2) = Eigen::Vector3f{0, 1, 0};
+
     Eigen::Vector3f pVec(0, -2, 1);
-    auto pose = ns_viewer::Posef(rotMat, pVec);
+
+    auto a1 = Eigen::AngleAxisf(10.0 * M_PI / 180.0, Eigen::Vector3f(1, 0, 0));
+    auto a2 = Eigen::AngleAxisf(10.0 * M_PI / 180.0, Eigen::Vector3f(0, 1, 0));
+    auto a3 = Eigen::AngleAxisf(10.0 * M_PI / 180.0, Eigen::Vector3f(0, 0, 1));
+
+    auto pose = ns_viewer::Posef((a3 * a2 * a1).matrix() * rotMat, pVec);
+
     viewer.AddEntity(ns_viewer::Camera::Create(pose, ns_viewer::Colour::Red()));
     viewer.RunInMultiThread();
+    pose.translation -= pose.rotation.col(2) * 0.5f;
+
     std::cin.get();
+
     std::cout << "set camera pose" << std::endl;
     viewer.SetCamView(pose);
 }
@@ -196,9 +207,9 @@ void TEST_MULTI_VIEWER() {
 }
 
 int main(int argc, char **argv) {
-    TEST_ENTITIES();
-    TEST_VIEWER();
+//    TEST_ENTITIES();
+//    TEST_VIEWER();
     TEST_CAM_VIEW();
-    TEST_MULTI_VIEWER();
+//    TEST_MULTI_VIEWER();
     return 0;
 }

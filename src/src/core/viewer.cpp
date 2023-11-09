@@ -289,7 +289,7 @@ namespace ns_viewer {
     void Viewer::SetCamView(Posef T_CamToWorld) {
         Eigen::Vector3f vp(T_CamToWorld.translation + T_CamToWorld.rotation.col(2));
         this->_camView.SetModelViewMatrix(pangolin::ModelViewLookAt(
-                ExpandVec3(T_CamToWorld.translation), ExpandVec3(vp), pangolin::AxisZ
+                ExpandVec3(T_CamToWorld.translation), ExpandVec3(vp), ExpandVec3(-T_CamToWorld.rotation.col(1))
         ));
     }
 }
