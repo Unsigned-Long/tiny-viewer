@@ -312,7 +312,7 @@ namespace ns_viewer {
     void MultiViewer::SetCamView(Posef T_CamToWorld, const std::string &subWinName) {
         Eigen::Vector3f vp(T_CamToWorld.translation + T_CamToWorld.rotation.col(2));
         this->_camView.at(subWinName).SetModelViewMatrix(pangolin::ModelViewLookAt(
-                ExpandVec3(T_CamToWorld.translation), ExpandVec3(vp), pangolin::AxisZ
+                ExpandVec3(T_CamToWorld.translation), ExpandVec3(vp), ExpandVec3(-T_CamToWorld.rotation.col(1))
         ));
     }
 }
