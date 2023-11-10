@@ -4,10 +4,6 @@
 
 #include "tiny-viewer/entity/path.h"
 
-#define FORMAT_VECTOR
-
-#include "artwork/logger/logger.h"
-
 namespace ns_viewer {
 
     std::vector<Eigen::Vector3f> Bezier::Solve(const std::vector<Eigen::Vector3f> &controlPoints, std::size_t num) {

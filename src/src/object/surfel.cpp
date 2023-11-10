@@ -4,7 +4,6 @@
 
 #include "tiny-viewer/object/surfel.h"
 #include "pangolin/gl/gldraw.h"
-#include "artwork/logger/logger.h"
 
 namespace ns_viewer {
 
