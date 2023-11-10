@@ -48,6 +48,7 @@ namespace ns_viewer {
         // sub window name, entities
         std::unordered_map<std::string, std::unordered_map<std::size_t, Entity::Ptr>> _entities;
         std::unordered_map<std::string, pangolin::OpenGlRenderState> _camView;
+        bool _isActive;
 
     public:
 
@@ -60,7 +61,7 @@ namespace ns_viewer {
         static Ptr Create(const std::string &configPath);
 
         // used for load viewer from file
-        explicit MultiViewer(char) : _configor({}), _thread(nullptr) {}
+        explicit MultiViewer(char) : _configor({}), _thread(nullptr), _isActive(false) {}
 
         virtual ~MultiViewer();
 
@@ -91,6 +92,8 @@ namespace ns_viewer {
         static Ptr Load(const std::string &filename, bool binaryMode = true);
 
         MultiViewerConfigor &GetConfigor();
+
+        bool IsActive() const;
 
     protected:
 

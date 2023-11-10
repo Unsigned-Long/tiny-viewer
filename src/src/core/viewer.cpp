@@ -21,7 +21,7 @@ namespace ns_viewer {
     // public methods
     // --------------
     Viewer::Viewer(ViewerConfigor configor)
-            : _configor(std::move(configor)), _thread(nullptr) { InitViewer(true); }
+            : _configor(std::move(configor)), _thread(nullptr), _isActive(false) { InitViewer(true); }
 
     Viewer::Ptr Viewer::Create(const ViewerConfigor &configor) {
         return std::make_shared<Viewer>(configor);
@@ -37,7 +37,6 @@ namespace ns_viewer {
         if (_thread != nullptr) {
             _thread->join();
         }
-        pangolin::DestroyWindow(_configor.window.name);
     }
 
     void Viewer::RunInSingleThread() {
@@ -114,6 +113,10 @@ namespace ns_viewer {
     }
 
     void Viewer::Run() {
+        {
+            LOCKER_VIEWER
+            _isActive = true;
+        }
 
         // fetch the context and bind it to this thread
         pangolin::BindToContext(_configor.window.name);
@@ -169,6 +172,13 @@ namespace ns_viewer {
 
         // unset the current context from the main thread
         pangolin::GetBoundWindow()->RemoveCurrent();
+
+        pangolin::DestroyWindow(_configor.window.name);
+
+        {
+            LOCKER_VIEWER
+            _isActive = false;
+        }
     }
 
     void Viewer::SaveScreenShotCallBack() const {
@@ -291,5 +301,9 @@ namespace ns_viewer {
         this->_camView.SetModelViewMatrix(pangolin::ModelViewLookAt(
                 ExpandVec3(T_CamToWorld.translation), ExpandVec3(vp), ExpandVec3(-T_CamToWorld.rotation.col(1))
         ));
+    }
+
+    bool Viewer::IsActive() const {
+        return _isActive;
     }
 }

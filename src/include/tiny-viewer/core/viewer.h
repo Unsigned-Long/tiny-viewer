@@ -48,6 +48,7 @@ namespace ns_viewer {
     protected:
         std::unordered_map<std::size_t, Entity::Ptr> _entities;
         pangolin::OpenGlRenderState _camView;
+        bool _isActive;
 
     public:
 
@@ -60,7 +61,7 @@ namespace ns_viewer {
         static Ptr Create(const std::string &configPath);
 
         // used for load viewer from file
-        explicit Viewer(char) : _thread(nullptr) {}
+        explicit Viewer(char) : _thread(nullptr), _isActive(false) {}
 
         virtual ~Viewer();
 
@@ -89,6 +90,8 @@ namespace ns_viewer {
         static Ptr Load(const std::string &filename, bool binaryMode = true);
 
         ViewerConfigor &GetConfigor();
+
+        bool IsActive() const;
 
     protected:
 

@@ -21,7 +21,7 @@ namespace ns_viewer {
     // public methods
     // --------------
     MultiViewer::MultiViewer(MultiViewerConfigor configor)
-            : _configor(std::move(configor)), _thread(nullptr) { InitMultiViewer(true); }
+            : _configor(std::move(configor)), _thread(nullptr), _isActive(false) { InitMultiViewer(true); }
 
     MultiViewer::Ptr MultiViewer::Create(const MultiViewerConfigor &configor) {
         return std::make_shared<MultiViewer>(configor);
@@ -38,7 +38,6 @@ namespace ns_viewer {
         if (_thread != nullptr) {
             _thread->join();
         }
-        pangolin::DestroyWindow(_configor.window.name);
     }
 
     void MultiViewer::RunInSingleThread() {
@@ -119,6 +118,10 @@ namespace ns_viewer {
     }
 
     void MultiViewer::Run() {
+        {
+            LOCKER_MULTI_VIEWER
+            _isActive = true;
+        }
 
         // fetch the context and bind it to this thread
         pangolin::BindToContext(_configor.window.name);
@@ -185,6 +188,13 @@ namespace ns_viewer {
 
         // unset the current context from the main thread
         pangolin::GetBoundWindow()->RemoveCurrent();
+
+        pangolin::DestroyWindow(_configor.window.name);
+
+        {
+            LOCKER_MULTI_VIEWER
+            _isActive = false;
+        }
     }
 
     void MultiViewer::SaveScreenShotCallBack() const {
@@ -314,5 +324,9 @@ namespace ns_viewer {
         this->_camView.at(subWinName).SetModelViewMatrix(pangolin::ModelViewLookAt(
                 ExpandVec3(T_CamToWorld.translation), ExpandVec3(vp), ExpandVec3(-T_CamToWorld.rotation.col(1))
         ));
+    }
+
+    bool MultiViewer::IsActive() const {
+        return _isActive;
     }
 }

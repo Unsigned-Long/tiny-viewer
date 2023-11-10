@@ -207,9 +207,9 @@ void TEST_MULTI_VIEWER() {
 }
 
 int main(int argc, char **argv) {
-//    TEST_ENTITIES();
-//    TEST_VIEWER();
+    TEST_ENTITIES();
+    TEST_VIEWER();
     TEST_CAM_VIEW();
-//    TEST_MULTI_VIEWER();
+    TEST_MULTI_VIEWER();
     return 0;
 }
