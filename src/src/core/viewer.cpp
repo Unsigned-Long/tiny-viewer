@@ -40,10 +40,12 @@ namespace ns_viewer {
     }
 
     void Viewer::RunInSingleThread() {
+        _isActive = true;
         Run();
     }
 
     void Viewer::RunInMultiThread() {
+        _isActive = true;
         this->_thread = std::make_shared<std::thread>([this]() { Run(); });
     }
 
@@ -113,11 +115,6 @@ namespace ns_viewer {
     }
 
     void Viewer::Run() {
-        {
-            LOCKER_VIEWER
-            _isActive = true;
-        }
-
         // fetch the context and bind it to this thread
         pangolin::BindToContext(_configor.window.name);
 
