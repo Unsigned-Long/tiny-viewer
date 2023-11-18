@@ -29,6 +29,7 @@
 #include "tiny-viewer/object/landmark.h"
 #include "tiny-viewer/core/viewer_configor.h"
 #include "utility"
+#include <pangolin/geometry/glgeometry.h>
 
 namespace ns_viewer {
 
@@ -37,6 +38,11 @@ namespace ns_viewer {
     class Viewer {
     public:
         using Ptr = std::shared_ptr<Viewer>;
+
+        // GlSl Graphics shader program for display
+        enum class RenderMode {
+            uv = 0, tex, color, normal, matcap, vertex, num_modes
+        };
 
     protected:
         ViewerConfigor _configor;
@@ -50,6 +56,8 @@ namespace ns_viewer {
         pangolin::OpenGlRenderState _camView;
         bool _isActive;
 
+        std::optional<pangolin::Geometry> geometry;
+        Viewer::RenderMode renderMode = RenderMode::uv;
     public:
 
         explicit Viewer(ViewerConfigor configor = ViewerConfigor());
@@ -70,6 +78,8 @@ namespace ns_viewer {
         void RunInMultiThread();
 
         std::size_t AddEntity(const Entity::Ptr &entity);
+
+        void AddObjEntity(const std::string &filename, Viewer::RenderMode renderMode);
 
         std::vector<std::size_t> AddEntity(const std::vector<Entity::Ptr> &entities);
 

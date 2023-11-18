@@ -8,6 +8,8 @@
 #include "pangolin/display/view.h"
 #include "pangolin/handler/handler.h"
 #include "pangolin/gl/gldraw.h"
+#include "tiny-viewer/core/shader.h"
+#include "tiny-viewer/core/rendertree.h"
 
 namespace ns_viewer {
 
@@ -142,6 +144,38 @@ namespace ns_viewer {
                          "and [ctrl+'v'] for total viewer.\033[0m" << std::endl;
         }
 
+        // Render tree for holding object position
+        RenderNode root;
+        std::vector<std::shared_ptr<GlGeomRenderable>> renderables;
+        auto spinTransform = std::make_shared<SpinTransform>(pangolin::AxisDirection::AxisNone);
+
+        // Pull one piece of loaded geometry onto the GPU if ready
+        Eigen::AlignedBox3f totalAABB;
+        auto LoadGeometryToGpu = [&]() {
+            auto aabb = pangolin::GetAxisAlignedBox(*geometry);
+            totalAABB.extend(aabb);
+            auto renderable = std::make_shared<GlGeomRenderable>(pangolin::ToGlGeometry(*geometry), aabb);
+            renderables.push_back(renderable);
+            RenderNode::Edge edge = {spinTransform, {renderable, {}}};
+            root.edges.emplace_back(std::move(edge));
+        };
+
+        const std::string ModeNames[] = {
+                "SHOW_UV", "SHOW_TEXTURE", "SHOW_COLOR", "SHOW_NORMAL", "SHOW_MATCAP", "SHOW_VERTEX"
+        };
+        pangolin::GlSlProgram defProg;
+        auto LoadProgram = [&](const RenderMode mode) {
+            this->renderMode = mode;
+            defProg.ClearShaders();
+            std::map<std::string, std::string> prog_defines;
+            for (int i = 0; i < (int) RenderMode::num_modes - 1; ++i) {
+                prog_defines[ModeNames[i]] = std::to_string((int) mode == i);
+            }
+            defProg.AddShader(pangolin::GlSlAnnotatedShader, pangolin::default_model_shader, prog_defines);
+            defProg.Link();
+        };
+        LoadProgram(this->renderMode);
+
         while (!pangolin::ShouldQuit()) {
 
             // Clear screen and activate view to render into
@@ -158,6 +192,22 @@ namespace ns_viewer {
             {
                 LOCKER_VIEWER
                 for (const auto &item: _entities) { item.second->Draw(); }
+
+                if (geometry != std::nullopt) {
+                    LoadGeometryToGpu();
+                    if (d_cam.IsShown()) {
+                        d_cam.Activate();
+
+                        defProg.Bind();
+                        render_tree(
+                                defProg, root, _camView.GetProjectionMatrix(), _camView.GetModelViewMatrix(),
+                                nullptr
+                        );
+                        defProg.Unbind();
+
+                        _camView.Apply();
+                    }
+                }
             }
             // -----------
             // end drawing
@@ -302,5 +352,11 @@ namespace ns_viewer {
 
     bool Viewer::IsActive() const {
         return _isActive;
+    }
+
+    void Viewer::AddObjEntity(const std::string &filename, Viewer::RenderMode renderMode) {
+        LOCKER_VIEWER
+        this->geometry = pangolin::LoadGeometry(filename);
+        this->renderMode = renderMode;
     }
 }
