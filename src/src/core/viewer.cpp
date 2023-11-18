@@ -164,17 +164,13 @@ namespace ns_viewer {
                 "SHOW_UV", "SHOW_TEXTURE", "SHOW_COLOR", "SHOW_NORMAL", "SHOW_MATCAP", "SHOW_VERTEX"
         };
         pangolin::GlSlProgram defProg;
-        auto LoadProgram = [&](const RenderMode mode) {
-            this->renderMode = mode;
-            defProg.ClearShaders();
-            std::map<std::string, std::string> prog_defines;
-            for (int i = 0; i < (int) RenderMode::num_modes - 1; ++i) {
-                prog_defines[ModeNames[i]] = std::to_string((int) mode == i);
-            }
-            defProg.AddShader(pangolin::GlSlAnnotatedShader, pangolin::default_model_shader, prog_defines);
-            defProg.Link();
-        };
-        LoadProgram(this->renderMode);
+        defProg.ClearShaders();
+        std::map<std::string, std::string> progDefines;
+        for (int i = 0; i < (int) ObjRenderMode::NUM_MODES - 1; ++i) {
+            progDefines[ModeNames[i]] = std::to_string((int) this->renderMode == i);
+        }
+        defProg.AddShader(pangolin::GlSlAnnotatedShader, pangolin::default_model_shader, progDefines);
+        defProg.Link();
 
         while (!pangolin::ShouldQuit()) {
 
@@ -354,9 +350,15 @@ namespace ns_viewer {
         return _isActive;
     }
 
-    void Viewer::AddObjEntity(const std::string &filename, Viewer::RenderMode renderMode) {
+    void Viewer::AddObjEntity(const std::string &filename, ObjRenderMode mode) {
         LOCKER_VIEWER
         this->geometry = pangolin::LoadGeometry(filename);
-        this->renderMode = renderMode;
+        this->renderMode = mode;
+    }
+
+    void Viewer::RemoveObjEntity() {
+        LOCKER_VIEWER
+        this->geometry = {};
+        this->renderMode = ObjRenderMode::UV;
     }
 }

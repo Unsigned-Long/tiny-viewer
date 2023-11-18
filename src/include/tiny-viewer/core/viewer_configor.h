@@ -137,6 +137,11 @@ namespace ns_viewer {
 
         MultiViewerConfigor &WithScreenShotSaveDir(const std::string &dir);
     };
+
+    // GlSl Graphics shader program for display
+    enum class ObjRenderMode {
+        UV = 0, TEX, COLOR, NORMAL, MATCAP, VERTEX, NUM_MODES
+    };
 }
 
 

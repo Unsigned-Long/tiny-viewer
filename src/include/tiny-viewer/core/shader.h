@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TINY_VIEWER_SHADER_H
+#define TINY_VIEWER_SHADER_H
 
 namespace pangolin {
 
@@ -132,3 +133,4 @@ void main() {
 )Shader";
 
 }
+#endif

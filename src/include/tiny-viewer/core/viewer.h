@@ -39,11 +39,6 @@ namespace ns_viewer {
     public:
         using Ptr = std::shared_ptr<Viewer>;
 
-        // GlSl Graphics shader program for display
-        enum class RenderMode {
-            uv = 0, tex, color, normal, matcap, vertex, num_modes
-        };
-
     protected:
         ViewerConfigor _configor;
         std::shared_ptr<std::thread> _thread;
@@ -56,8 +51,8 @@ namespace ns_viewer {
         pangolin::OpenGlRenderState _camView;
         bool _isActive;
 
-        std::optional<pangolin::Geometry> geometry;
-        Viewer::RenderMode renderMode = RenderMode::uv;
+        std::optional<pangolin::Geometry> geometry = {};
+        ObjRenderMode renderMode = ObjRenderMode::UV;
     public:
 
         explicit Viewer(ViewerConfigor configor = ViewerConfigor());
@@ -79,7 +74,9 @@ namespace ns_viewer {
 
         std::size_t AddEntity(const Entity::Ptr &entity);
 
-        void AddObjEntity(const std::string &filename, Viewer::RenderMode renderMode);
+        void AddObjEntity(const std::string &filename, ObjRenderMode mode);
+
+        void RemoveObjEntity();
 
         std::vector<std::size_t> AddEntity(const std::vector<Entity::Ptr> &entities);
 

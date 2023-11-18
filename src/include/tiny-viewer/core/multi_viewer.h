@@ -28,6 +28,7 @@
 #include "tiny-viewer/object/radar.h"
 #include "tiny-viewer/core/viewer_configor.h"
 #include "tiny-viewer/object/landmark.h"
+#include <pangolin/geometry/glgeometry.h>
 
 namespace ns_viewer {
 
@@ -50,6 +51,8 @@ namespace ns_viewer {
         std::unordered_map<std::string, pangolin::OpenGlRenderState> _camView;
         bool _isActive;
 
+        std::pair<std::optional<pangolin::Geometry>, std::string> geometry = {};
+        ObjRenderMode renderMode = ObjRenderMode::UV;
     public:
 
         explicit MultiViewer(MultiViewerConfigor configor);
@@ -70,6 +73,10 @@ namespace ns_viewer {
         void RunInMultiThread();
 
         std::size_t AddEntity(const Entity::Ptr &entity, const std::string &subWinName);
+
+        void AddObjEntity(const std::string &filename, ObjRenderMode mode, const std::string &subWinName);
+
+        void RemoveObjEntity();
 
         std::vector<std::size_t> AddEntity(const std::vector<Entity::Ptr> &entities, const std::string &subWinName);
 
