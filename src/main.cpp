@@ -13,6 +13,8 @@ void TEST_ENTITIES() {
         // viewer
         Viewer viewer("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
 
+//        viewer.AddObjEntity("/home/csl/Documents/sim-scene.obj", ObjRenderMode::NORMAL);
+        viewer.AddObjEntity("/home/csl/ros_ws/river/src/river/model/river.obj", ObjRenderMode::UV);
         // add entities
         viewer.AddEntity(Line::Create({1.0, 1.0, 1.0}, {3.0, 4.0, 5.0}, Colour::Red().WithAlpha(0.3f)));
 
@@ -194,7 +196,6 @@ void TEST_MULTI_VIEWER() {
 
         viewer.AddEntity(Cloud<Landmark>::Random(5.0, 20, {4, 5, 4}), win2);
 
-        viewer.AddObjEntity("/home/csl/ros_ws/river/src/river/model/river.obj", ObjRenderMode::NORMAL, win2);
 
         // show (multi thread)
         viewer.RunInMultiThread();
@@ -209,9 +210,9 @@ void TEST_MULTI_VIEWER() {
 }
 
 int main(int argc, char **argv) {
-//    TEST_ENTITIES();
+    TEST_ENTITIES();
 //    TEST_VIEWER();
 //    TEST_CAM_VIEW();
-    TEST_MULTI_VIEWER();
+//    TEST_MULTI_VIEWER();
     return 0;
 }
