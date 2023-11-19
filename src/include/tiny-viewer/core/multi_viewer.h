@@ -51,8 +51,7 @@ namespace ns_viewer {
         std::unordered_map<std::string, pangolin::OpenGlRenderState> _camView;
         bool _isActive;
 
-        std::pair<std::optional<pangolin::Geometry>, std::string> geometry = {};
-        ObjRenderMode renderMode = ObjRenderMode::UV;
+        std::unordered_map<std::string, std::unordered_map<std::size_t, pangolin::Geometry>> geometry = {};
     public:
 
         explicit MultiViewer(MultiViewerConfigor configor);
@@ -74,9 +73,9 @@ namespace ns_viewer {
 
         std::size_t AddEntity(const Entity::Ptr &entity, const std::string &subWinName);
 
-        void AddObjEntity(const std::string &filename, ObjRenderMode mode, const std::string &subWinName);
+        std::size_t AddObjEntity(const std::string &filename, const std::string &subWinName);
 
-        void RemoveObjEntity();
+        void RemoveObjEntity(std::size_t id, const std::string &subWinName);
 
         std::vector<std::size_t> AddEntity(const std::vector<Entity::Ptr> &entities, const std::string &subWinName);
 

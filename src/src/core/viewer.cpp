@@ -146,11 +146,6 @@ namespace ns_viewer {
         std::map<std::size_t, RenderNode> roots;
         std::map<std::size_t, Eigen::AlignedBox3f> totalAABBs;
         std::map<std::size_t, std::vector<std::shared_ptr<GlGeomRenderable>>> renderables;
-        for (const auto &[id, geo]: geometry) {
-            roots.insert({id, {}});
-            renderables.insert({id, std::vector<std::shared_ptr<GlGeomRenderable>>{}});
-            totalAABBs.insert({id, Eigen::AlignedBox3f{}});
-        }
 
         const std::string ModeNames[] = {
                 "SHOW_UV", "SHOW_TEXTURE", "SHOW_COLOR", "SHOW_NORMAL", "SHOW_MATCAP", "SHOW_VERTEX"
@@ -159,7 +154,7 @@ namespace ns_viewer {
         defProg.ClearShaders();
         std::map<std::string, std::string> progDefines;
         for (int i = 0; i < (int) ObjRenderMode::NUM_MODES - 1; ++i) {
-            progDefines[ModeNames[i]] = std::to_string((int) this->renderMode == i);
+            progDefines[ModeNames[i]] = std::to_string((int) this->_configor.render == i);
         }
         defProg.AddShader(pangolin::GlSlAnnotatedShader, pangolin::default_model_shader, progDefines);
         defProg.Link();
@@ -183,19 +178,19 @@ namespace ns_viewer {
 
                 for (const auto &[id, geo]: geometry) {
                     auto aabb = pangolin::GetAxisAlignedBox(geo);
-                    totalAABBs.at(id).extend(aabb);
+                    totalAABBs[id].extend(aabb);
                     auto renderable = std::make_shared<GlGeomRenderable>(pangolin::ToGlGeometry(geo), aabb);
-                    renderables.at(id).push_back(renderable);
+                    renderables[id].push_back(renderable);
                     RenderNode::Edge edge = {
                             std::make_shared<SpinTransform>(pangolin::AxisDirection::AxisNone), {renderable, {}}
                     };
-                    roots.at(id).edges.emplace_back(std::move(edge));
+                    roots[id].edges.emplace_back(std::move(edge));
 
                     if (d_cam.IsShown()) {
                         d_cam.Activate();
 
                         defProg.Bind();
-                        render_tree(defProg, roots.at(id), _camView.GetProjectionMatrix(),
+                        render_tree(defProg, roots[id], _camView.GetProjectionMatrix(),
                                     _camView.GetModelViewMatrix(), nullptr);
                         defProg.Unbind();
 
@@ -348,11 +343,10 @@ namespace ns_viewer {
         return _isActive;
     }
 
-    std::size_t Viewer::AddObjEntity(const std::string &filename, ObjRenderMode mode) {
+    std::size_t Viewer::AddObjEntity(const std::string &filename) {
         LOCKER_VIEWER
         static std::size_t id = 0;
         this->geometry.insert({++id, pangolin::LoadGeometry(filename)});
-        this->renderMode = mode;
         return id;
     }
 

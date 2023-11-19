@@ -5,7 +5,8 @@ namespace ns_viewer {
     // --------------
     // ViewerConfigor
     // --------------
-    ViewerConfigor::ViewerConfigor(const std::string &winName) { window.name = winName; }
+    ViewerConfigor::ViewerConfigor(const std::string &winName)
+            : render(ObjRenderMode::NORMAL) { window.name = winName; }
 
     ViewerConfigor ViewerConfigor::LoadConfigure(const std::string &filename) {
         std::ifstream file(filename);
@@ -37,7 +38,7 @@ namespace ns_viewer {
     // -------------------
 
     MultiViewerConfigor::MultiViewerConfigor(const std::vector<std::string> &subWinNames, const std::string &winName)
-            : subWinNames(subWinNames) {
+            : subWinNames(subWinNames), render(ObjRenderMode::NORMAL) {
         window.name = winName;
         for (const auto &name: this->subWinNames) {
             camera.insert({name, {}});

@@ -51,8 +51,7 @@ namespace ns_viewer {
         pangolin::OpenGlRenderState _camView;
         bool _isActive;
 
-        std::map<std::size_t, pangolin::Geometry> geometry = {};
-        ObjRenderMode renderMode = ObjRenderMode::UV;
+        std::unordered_map<std::size_t, pangolin::Geometry> geometry = {};
     public:
 
         explicit Viewer(ViewerConfigor configor = ViewerConfigor());
@@ -74,7 +73,7 @@ namespace ns_viewer {
 
         std::size_t AddEntity(const Entity::Ptr &entity);
 
-        std::size_t AddObjEntity(const std::string &filename, ObjRenderMode mode);
+        std::size_t AddObjEntity(const std::string &filename);
 
         void RemoveObjEntity(std::size_t id);
 

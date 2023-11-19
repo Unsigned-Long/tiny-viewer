@@ -5,6 +5,11 @@
 #include "tiny-viewer/entity/utils.h"
 
 namespace ns_viewer {
+    // GlSl Graphics shader program for display
+    enum class ObjRenderMode {
+        UV = 0, TEX, COLOR, NORMAL, MATCAP, VERTEX, NUM_MODES
+    };
+
     struct Window {
         std::string name = "Tiny Viewer";
         Colour backGroundColor = Colour::White();
@@ -85,10 +90,12 @@ namespace ns_viewer {
 
         Grid grid;
 
+        ObjRenderMode render;
+
     public:
         template<class Archive>
         void serialize(Archive &ar) {
-            ar(CEREAL_NVP(window), CEREAL_NVP(output), CEREAL_NVP(camera), CEREAL_NVP(grid));
+            ar(CEREAL_NVP(window), CEREAL_NVP(output), CEREAL_NVP(camera), CEREAL_NVP(grid), CEREAL_NVP(render));
         }
 
     public:
@@ -117,10 +124,13 @@ namespace ns_viewer {
 
         std::vector<std::string> subWinNames;
 
+        ObjRenderMode render;
+
     public:
         template<class Archive>
         void serialize(Archive &ar) {
-            ar(CEREAL_NVP(window), CEREAL_NVP(output), CEREAL_NVP(camera), CEREAL_NVP(grid), CEREAL_NVP(subWinNames));
+            ar(CEREAL_NVP(window), CEREAL_NVP(output), CEREAL_NVP(camera),
+               CEREAL_NVP(grid), CEREAL_NVP(subWinNames), CEREAL_NVP(render));
         }
 
     public:
@@ -136,11 +146,6 @@ namespace ns_viewer {
         MultiViewerConfigor &WithWinName(const std::string &winName);
 
         MultiViewerConfigor &WithScreenShotSaveDir(const std::string &dir);
-    };
-
-    // GlSl Graphics shader program for display
-    enum class ObjRenderMode {
-        UV = 0, TEX, COLOR, NORMAL, MATCAP, VERTEX, NUM_MODES
     };
 }
 
