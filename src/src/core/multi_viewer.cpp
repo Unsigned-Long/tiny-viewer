@@ -73,7 +73,7 @@ namespace ns_viewer {
                                 ExpandStdVec3(c.initPos), ExpandStdVec3(c.initViewPoint), pangolin::AxisZ
                         ))});
                 _entities.insert({name, std::unordered_map<std::size_t, Entity::Ptr>{}});
-                geometry.insert({name, std::unordered_map<std::size_t, pangolin::Geometry>{}});
+                _geometries.insert({name, std::unordered_map<std::size_t, pangolin::Geometry>{}});
 
                 const auto &grid = _configor.grid.at(name);
                 if (grid.showIdentityCoord) {
@@ -193,7 +193,7 @@ namespace ns_viewer {
                     d_cam.at(name).Activate(_camView.at(name));
                     for (const auto &[id, entity]: entities) { entity->Draw(); }
                 }
-                for (const auto &[name, item]: geometry) {
+                for (const auto &[name, item]: _geometries) {
                     d_cam.at(name).Activate(_camView.at(name));
                     for (const auto &[id, geo]: item) {
                         auto aabb = pangolin::GetAxisAlignedBox(geo);
@@ -374,13 +374,13 @@ namespace ns_viewer {
     std::size_t MultiViewer::AddObjEntity(const std::string &filename, const std::string &subWinName) {
         LOCKER_MULTI_VIEWER
         static std::size_t id = 0;
-        this->geometry.at(subWinName).insert({++id, pangolin::LoadGeometry(filename)});
+        this->_geometries.at(subWinName).insert({++id, pangolin::LoadGeometry(filename)});
         return id;
     }
 
     void MultiViewer::RemoveObjEntity(std::size_t id, const std::string &subWinName) {
         LOCKER_MULTI_VIEWER
-        this->geometry.at(subWinName).erase(id);
+        this->_geometries.at(subWinName).erase(id);
     }
 
 }

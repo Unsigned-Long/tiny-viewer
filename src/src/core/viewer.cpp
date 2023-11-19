@@ -176,7 +176,7 @@ namespace ns_viewer {
                 LOCKER_VIEWER
                 for (const auto &item: _entities) { item.second->Draw(); }
 
-                for (const auto &[id, geo]: geometry) {
+                for (const auto &[id, geo]: _geometry) {
                     auto aabb = pangolin::GetAxisAlignedBox(geo);
                     totalAABBs[id].extend(aabb);
                     auto renderable = std::make_shared<GlGeomRenderable>(pangolin::ToGlGeometry(geo), aabb);
@@ -346,12 +346,12 @@ namespace ns_viewer {
     std::size_t Viewer::AddObjEntity(const std::string &filename) {
         LOCKER_VIEWER
         static std::size_t id = 0;
-        this->geometry.insert({++id, pangolin::LoadGeometry(filename)});
+        this->_geometry.insert({++id, pangolin::LoadGeometry(filename)});
         return id;
     }
 
     void Viewer::RemoveObjEntity(std::size_t id) {
         LOCKER_VIEWER
-        this->geometry.erase(id);
+        this->_geometry.erase(id);
     }
 }

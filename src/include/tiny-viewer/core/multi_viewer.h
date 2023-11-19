@@ -51,7 +51,7 @@ namespace ns_viewer {
         std::unordered_map<std::string, pangolin::OpenGlRenderState> _camView;
         bool _isActive;
 
-        std::unordered_map<std::string, std::unordered_map<std::size_t, pangolin::Geometry>> geometry = {};
+        std::unordered_map<std::string, std::unordered_map<std::size_t, pangolin::Geometry>> _geometries;
     public:
 
         explicit MultiViewer(MultiViewerConfigor configor);

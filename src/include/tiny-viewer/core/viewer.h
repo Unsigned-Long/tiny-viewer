@@ -51,7 +51,7 @@ namespace ns_viewer {
         pangolin::OpenGlRenderState _camView;
         bool _isActive;
 
-        std::unordered_map<std::size_t, pangolin::Geometry> geometry = {};
+        std::unordered_map<std::size_t, pangolin::Geometry> _geometry;
     public:
 
         explicit Viewer(ViewerConfigor configor = ViewerConfigor());
