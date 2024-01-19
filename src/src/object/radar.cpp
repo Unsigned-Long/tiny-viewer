@@ -17,21 +17,21 @@ namespace ns_viewer {
         {
             Eigen::Vector3f ep = cenVert + x * size;
             const float deltaAng = M_PI * 2.0f / 8.0f;
-            const auto r = static_cast<float>(size * std::sin(M_PI / 3.0));
+            const auto r = static_cast<float>(size * std::tan(M_PI / 5.0));
 
             for (int i = 0; i < 8; ++i) {
                 float ang = deltaAng * static_cast<float>(i);
-                Eigen::Vector3f rv = Eigen::AngleAxisf(ang, x) * y * r;
+                Eigen::Vector3f rv = y * r * std::cos(ang) + z * r * std::sin(ang);
                 tVerts.at(i) = ep + rv;
             }
         }
         {
             Eigen::Vector3f ep = cenVert - z * size;
             const float deltaAng = M_PI * 2.0f / 4.0f;
-            const auto r = static_cast<float>(size * std::sin(M_PI / 9.0));
+            const auto r = static_cast<float>(size * std::tan(M_PI / 8.0));
             for (int i = 0; i < 4; ++i) {
                 float ang = deltaAng * static_cast<float>(i);
-                Eigen::Vector3f rv = Eigen::AngleAxisf(ang, z) * y * r;
+                Eigen::Vector3f rv = x * r * std::cos(ang) + y * r * std::sin(ang);
                 bVerts.at(i) = ep + rv;
             }
         }
