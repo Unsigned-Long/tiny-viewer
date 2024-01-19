@@ -20,7 +20,7 @@ namespace ns_viewer {
 
         std::array<Eigen::Vector3f, 8> tVerts;
         Eigen::Vector3f cenVert;
-        std::array<Eigen::Vector3f, 8> bVerts;
+        std::array<Eigen::Vector3f, 4> bVerts;
 
         Colour color;
 

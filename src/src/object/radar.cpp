@@ -56,10 +56,8 @@ namespace ns_viewer {
         glPointSize(DefaultPointSize);
         glBegin(GL_POINTS);
         glVertex3f(ExpandVec3(cenVert));
-        for (int i = 0; i < 8; ++i) {
-            glVertex3f(ExpandVec3(tVerts.at(i)));
-            glVertex3f(ExpandVec3(bVerts.at(i)));
-        }
+        for (int i = 0; i < 8; ++i) { glVertex3f(ExpandVec3(tVerts.at(i))); }
+        for (int i = 0; i < 4; ++i) { glVertex3f(ExpandVec3(bVerts.at(i))); }
         glEnd();
     }
 
