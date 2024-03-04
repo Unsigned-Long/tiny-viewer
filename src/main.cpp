@@ -4,6 +4,7 @@
 #include "tiny-viewer/core/viewer.h"
 #include "pcl/io/pcd_io.h"
 #include "tiny-viewer/core/multi_viewer.h"
+#include "pangolin/handler/handler.h"
 
 void TEST_ENTITIES() {
     try {
@@ -12,6 +13,17 @@ void TEST_ENTITIES() {
 
         // viewer
         Viewer viewer("/home/csl/CppWorks/artwork/tiny-viewer/config/config.json");
+
+        viewer.GetConfigor().callBacks.insert({'a', [&viewer]() {
+            viewer.AddEntity(Path::Create(
+                    "M 3 3 3 l 0 0 -1 s 0 0 -0.5 0.5 0 0 0.5 0 0 0 0 0.5 l 0 0 1 "
+                    "m 0.25 0 0 l 0 0 -1 s 0 0 -0.5 0.5 0 0 l 0.25 0 0 "
+                    "m 0.5 0 0 s -0.5 0 0 0 0 0.5 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 0 0 -0.5 -0.5 0 0 "
+                    "m 0.5 0 0.75 l 0 0 -0.75 s 0 0 0.5 0 0 0.5 0.4 0 0 0.4 0 0 0 0 -0.5 0 0 -0.5 "
+                    "m 1 0 0.5 s 0 0 -0.5 -0.5 0 0 -0.5 0 0 0 0 0.5 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 "
+                    "s 0 0 -0.75 0 0 -0.5 -0.25 0 0 -0.5 0 0 0 0 0.25 "
+                    "m 1 0 1.25 s 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 -0.5 0 -0.5 -0.5 0 -0.25 l 0.75 0 0"));
+        }});
 
         // add entities
         viewer.AddEntity(Line::Create({1.0, 1.0, 1.0}, {3.0, 4.0, 5.0}, Colour::Red().WithAlpha(0.3f)));
@@ -63,15 +75,6 @@ void TEST_ENTITIES() {
         }
 
         viewer.AddEntity(Radar::Create(Posef::Random(5.0f)));
-
-        viewer.AddEntity(Path::Create(
-                "M 3 3 3 l 0 0 -1 s 0 0 -0.5 0.5 0 0 0.5 0 0 0 0 0.5 l 0 0 1 "
-                "m 0.25 0 0 l 0 0 -1 s 0 0 -0.5 0.5 0 0 l 0.25 0 0 "
-                "m 0.5 0 0 s -0.5 0 0 0 0 0.5 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 0 0 -0.5 -0.5 0 0 "
-                "m 0.5 0 0.75 l 0 0 -0.75 s 0 0 0.5 0 0 0.5 0.4 0 0 0.4 0 0 0 0 -0.5 0 0 -0.5 "
-                "m 1 0 0.5 s 0 0 -0.5 -0.5 0 0 -0.5 0 0 0 0 0.5 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 "
-                "s 0 0 -0.75 0 0 -0.5 -0.25 0 0 -0.5 0 0 0 0 0.25 "
-                "m 1 0 1.25 s 0 0 0.5 0.5 0 0 0.5 0 0 0 0 -0.5 -0.5 0 -0.5 -0.5 0 -0.25 l 0.75 0 0"));
 
         viewer.AddEntity(Cloud<Landmark>::Random(5.0, 20, {4, 5, 4}));
         // show (multi thread)

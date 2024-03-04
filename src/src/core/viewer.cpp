@@ -143,6 +143,25 @@ namespace ns_viewer {
                          "[ctrl+'c'] for camera view, "
                          "and [ctrl+'v'] for total viewer.\033[0m" << std::endl;
         }
+
+        bool scvrHasBeenRegistered = std::filesystem::exists(_configor.output.dataOutputPath);
+
+        for (const auto &[key, func]: _configor.callBacks) {
+            if (key == pangolin::PANGO_CTRL + 's' && scvrHasBeenRegistered) {
+                throw std::runtime_error("pangolin::PANGO_CTRL + 's' has been registered as 'SaveScreenShotCallBack'!");
+            }
+            if (key == pangolin::PANGO_CTRL + 'c' && scvrHasBeenRegistered) {
+                throw std::runtime_error("pangolin::PANGO_CTRL + 'c' has been registered as 'SaveCameraCallBack'!");
+            }
+            if (key == pangolin::PANGO_CTRL + 'v' && scvrHasBeenRegistered) {
+                throw std::runtime_error("pangolin::PANGO_CTRL + 'v' has been registered as 'SaveViewerCallBack'!");
+            }
+            if (key == pangolin::PANGO_CTRL + 'r' && scvrHasBeenRegistered) {
+                throw std::runtime_error("pangolin::PANGO_CTRL + 'r' has been registered as 'VideoRecordCallBack'!");
+            }
+            pangolin::RegisterKeyPressCallback(key, func);
+        }
+
         std::map<std::size_t, RenderNode> roots;
         std::map<std::size_t, Eigen::AlignedBox3f> totalAABBs;
         std::map<std::size_t, std::vector<std::shared_ptr<GlGeomRenderable>>> renderables;

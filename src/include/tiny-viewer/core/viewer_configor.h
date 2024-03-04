@@ -92,6 +92,7 @@ namespace ns_viewer {
 
         ObjRenderMode render;
 
+        std::map<int, std::function<void(void)>> callBacks;
     public:
         template<class Archive>
         void serialize(Archive &ar) {
@@ -126,6 +127,7 @@ namespace ns_viewer {
 
         ObjRenderMode render;
 
+        std::map<int, std::function<void(void)>> callBacks;
     public:
         template<class Archive>
         void serialize(Archive &ar) {
