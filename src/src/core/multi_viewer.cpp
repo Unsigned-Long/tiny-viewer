@@ -134,7 +134,7 @@ namespace ns_viewer {
         // Create Interactive View in window
         std::unordered_map<std::string, pangolin::View &> d_cam;
 
-        auto &display = pangolin::Display("multi").SetBounds(0.0, 1.0, 0.0, 1.0).SetLayout(pangolin::LayoutEqual);
+        auto &display = pangolin::Display("multi").SetBounds(0.0, 1.0, 0.0, 1.0).SetLayout(_configor.window.layout);
 
         for (const auto &name: _configor.subWinNames) {
             const auto &c = _configor.camera.at(name);

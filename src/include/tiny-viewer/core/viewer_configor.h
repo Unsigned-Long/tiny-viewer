@@ -3,6 +3,7 @@
 
 #include "cereal/cereal.hpp"
 #include "tiny-viewer/entity/utils.h"
+#include "pangolin/display/view.h"
 
 namespace ns_viewer {
     // GlSl Graphics shader program for display
@@ -15,13 +16,14 @@ namespace ns_viewer {
         Colour backGroundColor = Colour::White();
         int width = 640 * 2;
         int height = 480 * 2;
+        pangolin::Layout layout = pangolin::LayoutEqual;
 
     public:
         template<class Archive>
         void serialize(Archive &ar) {
             ar(
                     CEREAL_NVP(name), CEREAL_NVP(backGroundColor),
-                    CEREAL_NVP(width), CEREAL_NVP(height)
+                    CEREAL_NVP(width), CEREAL_NVP(height), CEREAL_NVP(layout)
             );
         }
     };
