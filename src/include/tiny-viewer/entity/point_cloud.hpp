@@ -63,6 +63,10 @@ namespace ns_viewer {
 
         Cloud() : cloud(new PointCloud) {}
 
+        [[nodiscard]] const PointCloudPtr &GetCloud() const {
+            return cloud;
+        }
+
     public:
 
         template<class Archive>

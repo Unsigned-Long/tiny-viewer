@@ -53,6 +53,10 @@ namespace ns_viewer {
             return AlignedCloud<pcl::PointXYZ>::Create(cloud, dir);
         }
 
+        [[nodiscard]] const Cloud<pcl::PointXYZI> &GetCloud() const {
+            return cloud;
+        }
+
     public:
 
         template<class Archive>
