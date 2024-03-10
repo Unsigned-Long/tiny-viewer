@@ -130,6 +130,10 @@ namespace ns_viewer {
 
         Cloud() : cloud(new PointCloud) {}
 
+        [[nodiscard]] const PointCloudPtr &GetCloud() const {
+            return cloud;
+        }
+
     public:
 
         template<class Archive>
@@ -195,6 +199,10 @@ namespace ns_viewer {
         }
 
         Cloud() : cloud(new PointCloud) {}
+
+        [[nodiscard]] const PointCloudPtr &GetCloud() const {
+            return cloud;
+        }
 
     public:
 
@@ -282,6 +290,10 @@ namespace ns_viewer {
         }
 
         Cloud() : cloud(new ColorPointCloud) {}
+
+        [[nodiscard]] const ColorPointCloudPtr &GetCloud() const {
+            return cloud;
+        }
 
     public:
 
