@@ -131,6 +131,8 @@ namespace ns_viewer {
                 .SetBounds(0.0, 1.0, 0.0, 1.0, -static_cast<double>(_configor.camera.width) / _configor.camera.height)
                 .SetHandler(&handler);
 
+        _viewport = d_cam.v;
+
         if (std::filesystem::exists(_configor.output.dataOutputPath)) {
 
             pangolin::RegisterKeyPressCallback(pangolin::PANGO_CTRL + 's', [this] { SaveScreenShotCallBack(); });
@@ -239,7 +241,7 @@ namespace ns_viewer {
     void Viewer::SaveScreenShotCallBack() const {
         std::int64_t curTimeStamp = std::chrono::system_clock::now().time_since_epoch().count();
         const std::string filename = _configor.output.dataOutputPath + "/" + std::to_string(curTimeStamp) + ".png";
-        pangolin::SaveWindowOnRender(filename);
+        pangolin::SaveWindowOnRender(filename, _viewport);
         std::cout << "\033[92m\033[3m[Viewer] the scene shot is saved to path: '"
                   << filename << "\033[0m" << std::endl;
     }
@@ -372,5 +374,9 @@ namespace ns_viewer {
     void Viewer::RemoveObjEntity(std::size_t id) {
         LOCKER_VIEWER
         this->_geometry.erase(id);
+    }
+
+    const pangolin::Viewport &Viewer::GetViewport() const {
+        return _viewport;
     }
 }

@@ -50,6 +50,7 @@ namespace ns_viewer {
         std::unordered_map<std::size_t, Entity::Ptr> _entities;
         pangolin::OpenGlRenderState _camView;
         bool _isActive;
+        pangolin::Viewport _viewport;
 
         std::unordered_map<std::size_t, pangolin::Geometry> _geometry;
     public:
@@ -98,6 +99,8 @@ namespace ns_viewer {
         ViewerConfigor &GetConfigor();
 
         bool IsActive() const;
+
+        const pangolin::Viewport &GetViewport() const;
 
     protected:
 
