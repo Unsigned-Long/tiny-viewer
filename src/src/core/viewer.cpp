@@ -42,12 +42,10 @@ namespace ns_viewer {
     }
 
     void Viewer::RunInSingleThread() {
-        _isActive = true;
         Run();
     }
 
     void Viewer::RunInMultiThread() {
-        _isActive = true;
         this->_thread = std::make_shared<std::thread>([this]() { Run(); });
     }
 
@@ -179,6 +177,11 @@ namespace ns_viewer {
         }
         defProg.AddShader(pangolin::GlSlAnnotatedShader, pangolin::default_model_shader, progDefines);
         defProg.Link();
+
+        {
+            LOCKER_VIEWER
+            _isActive = true;
+        }
 
         while (!pangolin::ShouldQuit()) {
 
