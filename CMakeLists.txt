@@ -1,13 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(tiny_viewer VERSION 1.0)
+project(tiny-viewer VERSION 1.0)
 
 # -----------
 # set lib name ans space
 # -----------
-set(LIBRARY_NAME tiny_viewer)
-
-set(LIBRARY_NAMESPACE TinyViewer)
+set(LIBRARY_NAME tiny-viewer)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -20,39 +18,62 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -march=native")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
 
+if(NOT DEFINED CMAKE_SUPPRESS_DEVELOPER_WARNINGS)
+    set(CMAKE_SUPPRESS_DEVELOPER_WARNINGS 1 CACHE INTERNAL "No dev warnings")
+endif()
+
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # -----------
 # for install
 # -----------
 
+# Configuration
+set(CONFIG_INSTALL_DIR "lib/cmake/${LIBRARY_NAME}")
+set(INCLUDE_INSTALL_DIR "include")
+set(VERSION_CONFIG "${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}ConfigVersion.cmake")
+set(PROJ_CONFIG "${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}Config.cmake")
+set(TARGETS_EXPORT_NAME "${LIBRARY_NAME}Targets")
+
+# Include module with function 'write_basic_package_version_file'
 include(CMakePackageConfigHelpers)
-include(GNUInstallDirs)
 
-# Export package for use from the build tree
-set(LIBRARY_CMAKE_EXPORT_DIR ${CMAKE_INSTALL_DATADIR}/${LIBRARY_NAME}/cmake)
+write_basic_package_version_file("${VERSION_CONFIG}" COMPATIBILITY SameMajorVersion)
 
-set_target_properties(${LIBRARY_NAME} PROPERTIES EXPORT_NAME ${LIBRARY_NAMESPACE})
+configure_package_config_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/config.cmake.in
+        "${PROJ_CONFIG}"
+        INSTALL_DESTINATION "${CONFIG_INSTALL_DIR}"
+)
 
 export(
         TARGETS ${LIBRARY_NAME}
-        NAMESPACE ${LIBRARY_NAMESPACE}::
-        FILE ${LIBRARY_NAMESPACE}Targets.cmake
-)
-export(
-        PACKAGE ${LIBRARY_NAMESPACE}
+        FILE "${CMAKE_CURRENT_BINARY_DIR}/${TARGETS_EXPORT_NAME}.cmake"
 )
 
-configure_package_config_file(
-        ${LIBRARY_NAMESPACE}Config.cmake.in
-        ${CMAKE_BINARY_DIR}/${LIBRARY_NAMESPACE}Config.cmake
-        INSTALL_DESTINATION ${LIBRARY_CMAKE_EXPORT_DIR}
-        NO_CHECK_REQUIRED_COMPONENTS_MACRO
+install(
+        TARGETS ${LIBRARY_NAME}
+        EXPORT "${TARGETS_EXPORT_NAME}"
+        LIBRARY DESTINATION "lib"
+        ARCHIVE DESTINATION "lib"
+        RUNTIME DESTINATION "bin"
+        INCLUDES DESTINATION "${INCLUDE_INSTALL_DIR}"
 )
 
-# Write version to file
-write_basic_package_version_file(
-        ${LIBRARY_NAMESPACE}ConfigVersion.cmake
-        VERSION ${PROJECT_VERSION}
-        COMPATIBILITY AnyNewerVersion
+install(
+        FILES "${PROJ_CONFIG}" "${VERSION_CONFIG}"
+        DESTINATION "${CONFIG_INSTALL_DIR}"
+)
+
+install(
+        EXPORT "${TARGETS_EXPORT_NAME}"
+        NAMESPACE "${namespace}"
+        DESTINATION "${CONFIG_INSTALL_DIR}"
+)
+
+install(
+        DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/include/${LIBRARY_NAME}
+        DESTINATION ${INCLUDE_INSTALL_DIR}
+        FILES_MATCHING PATTERN "*.h"
+        PATTERN "*.hpp"
 )
