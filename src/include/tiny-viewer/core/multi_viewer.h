@@ -101,6 +101,8 @@ namespace ns_viewer {
 
         bool IsActive() const;
 
+        bool WaitForActive(double waitTimeMs) const;
+
     protected:
 
         void InitMultiViewer(bool initCamViewFromConfigor);

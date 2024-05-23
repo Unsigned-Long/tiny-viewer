@@ -100,6 +100,9 @@ namespace ns_viewer {
 
         bool IsActive() const;
 
+        // negative number means waiting forever
+        bool WaitForActive(double waitTimeMs = -1.0) const;
+
         const pangolin::Viewport &GetViewport() const;
 
     protected:

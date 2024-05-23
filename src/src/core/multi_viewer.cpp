@@ -404,4 +404,14 @@ namespace ns_viewer {
         this->_geometries.at(subWinName).erase(id);
     }
 
+    bool MultiViewer::WaitForActive(double waitTimeMs) const {
+        auto startTime = std::chrono::steady_clock::now();
+        while (!this->IsActive()) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            std::chrono::duration<double, std::milli> curWaitTime = std::chrono::steady_clock::now() - startTime;
+            if (waitTimeMs > 0.0 && curWaitTime.count() > waitTimeMs) { return false; }
+        }
+        return true;
+    }
+
 }
