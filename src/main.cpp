@@ -57,6 +57,7 @@ void TEST_ENTITIES() {
         std::vector<Entity::Ptr> entities;
         for (int i = 0; i < 5; ++i) {
             entities.push_back(LiDAR::Create(Posef::Random(5.0f)));
+            entities.push_back(LivoxLiDAR::Create(Posef::Random(5.0f)));
         }
         auto ids = viewer.AddEntity(entities);
 
