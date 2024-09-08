@@ -78,5 +78,3 @@ target_link_libraries(
         ${PROJECT_NAME}_prog PRIVATE
         ${LIBRARY_NAME}
 )
-
-target_compile_options(${PROJECT_NAME}_prog PRIVATE -ftime-trace)

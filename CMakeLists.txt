@@ -32,13 +32,18 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
 project(tiny-viewer VERSION 1.0)
 
-# -----------
-# set lib name ans space
-# -----------
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall   -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -march=native")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
+
+# ----------------------
+# set lib name and space
+# ----------------------
 set(LIBRARY_NAME tiny-viewer)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -47,14 +52,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 set(CMAKE_BUILD_TYPE "Release")
 
+if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16")
+    set(CMAKE_UNITY_BUILD ON)
+    message(STATUS "use 'CMAKE_UNITY_BUILD' in building!")
+else ()
+    message(STATUS "do not use 'CMAKE_UNITY_BUILD' in building!")
+endif ()
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall   -O3")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -march=native")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
 
-if(NOT DEFINED CMAKE_SUPPRESS_DEVELOPER_WARNINGS)
+if (NOT DEFINED CMAKE_SUPPRESS_DEVELOPER_WARNINGS)
     set(CMAKE_SUPPRESS_DEVELOPER_WARNINGS 1 CACHE INTERNAL "No dev warnings")
-endif()
+endif ()
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
