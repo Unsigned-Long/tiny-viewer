@@ -35,12 +35,7 @@
 #ifndef TINY_VIEWER_ENTITY_H
 #define TINY_VIEWER_ENTITY_H
 
-#include "tiny-viewer/core/pose.hpp"
-#include "string"
-#include <memory>
-#include "set"
 #include "utils.h"
-#include "cereal/cereal.hpp"
 
 namespace ns_viewer {
 

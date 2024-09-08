@@ -34,6 +34,7 @@
 
 #include "pangolin/gl/gldraw.h"
 #include "tiny-viewer/object/plane.h"
+#include "tiny-viewer/core/pose.hpp"
 
 namespace ns_viewer {
 

@@ -39,6 +39,10 @@
 #include "coordinate.h"
 
 namespace ns_viewer {
+template <typename>
+struct Pose;
+using Posef = Pose<float>;
+
 struct Cone : public Entity {
 public:
     using Ptr = std::shared_ptr<Cone>;

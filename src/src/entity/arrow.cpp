@@ -30,10 +30,11 @@
 // INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-// POSSIBILITY OF SUCH DAMAGE.
+// POSSIBILITY OF SUCH DAMAGE.00
 
 #include "tiny-viewer/entity/arrow.h"
 #include "pangolin/gl/gldraw.h"
+#include "tiny-viewer/core/utils.hpp"
 
 namespace ns_viewer {
 Arrow::Arrow(Eigen::Vector3f sp, Eigen::Vector3f ep, float size, const Colour &color)

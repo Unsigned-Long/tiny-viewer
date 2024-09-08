@@ -34,6 +34,7 @@
 
 #include "tiny-viewer/entity/cube.h"
 #include "pangolin/gl/gldraw.h"
+#include "tiny-viewer/core/pose.hpp"
 
 namespace ns_viewer {
 

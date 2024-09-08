@@ -32,44 +32,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef TINY_VIEWER_COORDINATE_H
-#define TINY_VIEWER_COORDINATE_H
-
-#include "entity.h"
+#include "tiny-viewer/core/pose.hpp"
 
 namespace ns_viewer {
-template <typename>
-struct Pose;
-using Posef = Pose<float>;
-
-struct Coordinate : public Entity {
-public:
-    using Ptr = std::shared_ptr<Coordinate>;
-
-protected:
-    Eigen::Matrix4f pose;
-    float size{};
-
-public:
-    explicit Coordinate(const Posef &pose, float size = DefaultCoordSize);
-
-    static Ptr Create(const Posef &pose, float size = DefaultCoordSize);
-
-    ~Coordinate() override;
-
-    void Draw() const override;
-
-    Coordinate() = default;
-
-public:
-    template <class Archive>
-    void serialize(Archive &archive) {
-        Entity::serialize(archive);
-        archive(CEREAL_NVP(size), CEREAL_NVP(pose));
-    }
-};
+template struct Pose<double>;
+template struct Pose<float>;
 }  // namespace ns_viewer
-CEREAL_REGISTER_TYPE_WITH_NAME(ns_viewer::Coordinate, "Coordinate")
-CEREAL_REGISTER_POLYMORPHIC_RELATION(ns_viewer::Entity, ns_viewer::Coordinate)
-
-#endif  // TINY_VIEWER_COORDINATE_H

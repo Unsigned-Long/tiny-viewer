@@ -36,9 +36,12 @@
 #define TINY_VIEWER_CYLINDER_H
 
 #include "tiny-viewer/entity/entity.h"
-#include "tiny-viewer/entity/coordinate.h"
 
 namespace ns_viewer {
+template <typename>
+struct Pose;
+using Posef = Pose<float>;
+
 struct Cylinder : public Entity {
 public:
     using Ptr = std::shared_ptr<Cylinder>;

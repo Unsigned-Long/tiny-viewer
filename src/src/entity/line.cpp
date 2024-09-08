@@ -32,9 +32,9 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 // POSSIBILITY OF SUCH DAMAGE.
 
-#include <utility>
 #include "tiny-viewer/entity/line.h"
 #include "pangolin/gl/gldraw.h"
+#include "tiny-viewer/core/utils.hpp"
 
 namespace ns_viewer {
 

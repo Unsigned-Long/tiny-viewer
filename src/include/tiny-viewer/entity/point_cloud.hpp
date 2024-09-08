@@ -38,7 +38,8 @@
 #include "entity.h"
 #include "pcl/point_cloud.h"
 #include "pcl/point_types.h"
-#include <pangolin/gl/gl.h>
+#include "pangolin/gl/gl.h"
+#include "random"
 
 namespace ns_viewer {
 

@@ -40,6 +40,9 @@
 #include "pangolin/gl/gldraw.h"
 #include "tiny-viewer/core/shader.h"
 #include "tiny-viewer/core/rendertree.h"
+#include "tiny-viewer/entity/coordinate.h"
+#include "tiny-viewer/entity/line.h"
+#include "tiny-viewer/core/pose.hpp"
 
 namespace ns_viewer {
 

@@ -40,29 +40,18 @@
 #include "mutex"
 #include "pangolin/gl/opengl_render_state.h"
 #include "thread"
-#include "tiny-viewer/entity/arrow.h"
-#include "tiny-viewer/entity/cone.h"
-#include "tiny-viewer/entity/coordinate.h"
-#include "tiny-viewer/entity/cube.h"
-#include "tiny-viewer/entity/cylinder.h"
-#include "tiny-viewer/entity/line.h"
-#include "tiny-viewer/entity/point_cloud.hpp"
-#include "tiny-viewer/entity/polygon.h"
-#include "tiny-viewer/entity/path.h"
-#include "tiny-viewer/object/camera.h"
-#include "tiny-viewer/object/imu.h"
-#include "tiny-viewer/object/lidar.h"
-#include "tiny-viewer/object/plane.h"
-#include "tiny-viewer/object/surfel.h"
-#include "tiny-viewer/object/aligned_cloud.hpp"
-#include "tiny-viewer/object/radar.h"
 #include "tiny-viewer/core/viewer_configor.h"
-#include "tiny-viewer/object/landmark.h"
 #include <pangolin/geometry/glgeometry.h>
 
 namespace ns_viewer {
 
 #define LOCKER_MULTI_VIEWER std::unique_lock<std::mutex> viewerLock(MultiViewer::MUTEX);
+
+struct Entity;
+using EntityPtr = std::shared_ptr<Entity>;
+template <class ScalarType>
+struct Pose;
+using Posef = Pose<float>;
 
 class MultiViewer {
 public:
@@ -77,7 +66,7 @@ public:
 
 protected:
     // sub window name, entities
-    std::unordered_map<std::string, std::unordered_map<std::size_t, Entity::Ptr>> _entities;
+    std::unordered_map<std::string, std::unordered_map<std::size_t, EntityPtr>> _entities;
     std::unordered_map<std::string, pangolin::OpenGlRenderState> _camView;
     bool _isActive;
 
@@ -105,13 +94,13 @@ public:
 
     void RunInMultiThread();
 
-    std::size_t AddEntity(const Entity::Ptr &entity, const std::string &subWinName);
+    std::size_t AddEntity(const EntityPtr &entity, const std::string &subWinName);
 
     std::size_t AddObjEntity(const std::string &filename, const std::string &subWinName);
 
     void RemoveObjEntity(std::size_t id, const std::string &subWinName);
 
-    std::vector<std::size_t> AddEntity(const std::vector<Entity::Ptr> &entities,
+    std::vector<std::size_t> AddEntity(const std::vector<EntityPtr> &entities,
                                        const std::string &subWinName);
 
     bool RemoveEntity(std::size_t id, const std::string &subWinName);

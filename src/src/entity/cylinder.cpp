@@ -35,6 +35,7 @@
 #include "tiny-viewer/entity/cylinder.h"
 #include "pangolin/gl/gldraw.h"
 #include "pangolin/gl/gl.h"
+#include "tiny-viewer/core/pose.hpp"
 
 namespace ns_viewer {
 Cylinder::Cylinder(const Posef &pose, float height, float radius, const Colour &color)

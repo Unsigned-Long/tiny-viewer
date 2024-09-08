@@ -34,6 +34,9 @@
 
 #include "tiny-viewer/object/surfel.h"
 #include "pangolin/gl/gldraw.h"
+#include "tiny-viewer/core/utils.hpp"
+#include "tiny-viewer/core/pose.hpp"
+#include "random"
 
 namespace ns_viewer {
 

@@ -110,6 +110,9 @@ public:
 
 using Posed = Pose<double>;
 using Posef = Pose<float>;
+
+extern template struct Pose<double>;
+extern template struct Pose<float>;
 }  // namespace ns_viewer
 
 #endif  // SLAM_SCENE_VIEWER_POSE_H

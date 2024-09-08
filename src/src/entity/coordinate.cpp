@@ -34,6 +34,7 @@
 
 #include "tiny-viewer/entity/coordinate.h"
 #include "pangolin/gl/gldraw.h"
+#include "tiny-viewer/core/pose.hpp"
 
 namespace ns_viewer {
 Coordinate::Coordinate(const ns_viewer::Posef &pose, float size)

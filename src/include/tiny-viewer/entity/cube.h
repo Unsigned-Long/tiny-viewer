@@ -38,6 +38,10 @@
 #include "entity.h"
 
 namespace ns_viewer {
+template <typename>
+struct Pose;
+using Posef = Pose<float>;
+
 struct Cube : public Entity {
 public:
     using Ptr = std::shared_ptr<Cube>;
