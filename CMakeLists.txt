@@ -52,12 +52,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 
 set(CMAKE_BUILD_TYPE "Release")
 
-if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16")
-    set(CMAKE_UNITY_BUILD ON)
-    message(STATUS "use 'CMAKE_UNITY_BUILD' in building!")
-else ()
-    message(STATUS "do not use 'CMAKE_UNITY_BUILD' in building!")
-endif ()
+#if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16")
+#    set(CMAKE_UNITY_BUILD ON)
+#    message(STATUS "use 'CMAKE_UNITY_BUILD' in building!")
+#else ()
+#    message(STATUS "do not use 'CMAKE_UNITY_BUILD' in building!")
+#endif ()
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall   -O3")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3")
