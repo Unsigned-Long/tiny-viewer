@@ -126,7 +126,7 @@ std::pair<Eigen::Vector3f, Eigen::Vector3f> TangentBasis(const Eigen::Vector3f &
     Eigen::Vector3f b, c;
     Eigen::Vector3f a = v.normalized();
     Eigen::Vector3f tmp(0, 0, 1);
-    if (a == tmp) tmp << 1, 0, 0;
+    if (a == tmp || a == -tmp) tmp << 1, 0, 0;
     b = (tmp - a * (a.transpose() * tmp)).normalized();
     c = a.cross(b);
     return {b, c};
