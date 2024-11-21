@@ -37,6 +37,7 @@
 
 #include "tiny-viewer/entity/entity.h"
 #include "tiny-viewer/entity/point_cloud.hpp"
+#include "chrono"
 
 namespace ns_viewer {
 struct Landmark : public Entity {

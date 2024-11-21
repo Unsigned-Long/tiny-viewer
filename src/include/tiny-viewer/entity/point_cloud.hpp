@@ -39,6 +39,7 @@
 #include "pcl/point_cloud.h"
 #include "pcl/point_types.h"
 #include "pangolin/gl/gl.h"
+#include "chrono"
 #include "random"
 
 namespace ns_viewer {
