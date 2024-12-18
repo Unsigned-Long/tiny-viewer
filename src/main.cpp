@@ -54,6 +54,7 @@
 #include "tiny-viewer/object/radar.h"
 #include "tiny-viewer/object/landmark.h"
 #include "tiny-viewer/core/pose.hpp"
+#include "tiny-viewer/entity/circle.h"
 
 void TEST_ENTITIES() {
     try {
@@ -128,6 +129,8 @@ void TEST_ENTITIES() {
 
         for (int i = 0; i < 10; ++i) {
             viewer.AddEntity(Surfel::Random(5.0f));
+            viewer.AddEntity(Circle::Create(Posef::Random(5.0), 0.5f, true, true,
+                                            Entity::GetUniqueColour(), pangolin::AxisZ));
         }
 
         viewer.AddEntity(Radar::Create(Posef::Random(5.0f)));
@@ -281,8 +284,8 @@ void TEST_MULTI_VIEWER() {
 
 int main(int argc, char **argv) {
     TEST_ENTITIES();
-    TEST_VIEWER();
+    // TEST_VIEWER();
     // TEST_CAM_VIEW();
-    TEST_MULTI_VIEWER();
+    // TEST_MULTI_VIEWER();
     return 0;
 }
